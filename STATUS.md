@@ -3,7 +3,7 @@
 Updated: 2026-10-25T04:01:04Z
 Phase: 6 Analysis backend (complete), Phase 7 AI layer blocked on the API key
 Last completed task: P6.T11 Chrome verification and phase exit
-Next task: P7.T1 Prompt files and client wrapper (HARD STOP: ANTHROPIC_API_KEY is not set, see Waiting on owner)
+Next task: P7.T1 Prompt files and client wrapper, on the fake client (owner decision 2026-10-25, see Resume instructions)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -111,17 +111,16 @@ docker compose up --build                  # frontend :8080, backend :8000
 - Commit a90199a has a red CI run (one unit test); fixed in f3846f8, CI green since. Cause: a shell pipeline masked the gate's exit code. Gates now run with explicit exit codes.
 - Claude in Chrome: console reading works (clean), but script injection for screenshots and page reads times out on the Vite dev page in this session ("Page still loading"). Playwright is the gate and produces the committed screenshots; the Chrome pass is retried each UI phase.
 
-## Waiting on owner
+## Resume instructions (owner decision 2026-10-25)
 
-**Phase 7 needs an Anthropic API key and none is available.** `ANTHROPIC_API_KEY` is not set in the shell that runs Claude Code and `backend/.env` does not exist (checked at this commit; the key's value is never read or printed by the run). The AI layer calls the Claude API from the Python backend, which is billed to that key separately from the Claude Code login.
+**Build Phase 7 with the fake client. Skip the live smoke test.** The owner chose this after the Phase 7 HARD STOP (no `ANTHROPIC_API_KEY` in the shell, no `backend/.env`). Recorded as DECISIONS 54. The next session starts P7.T1 directly and does not stop again for the key:
 
-To continue, either:
+- P7.T1 to T4, T6, T7 run on `riffspaced/ai/fake_client.py`, selected by `RIFFSPACED_AI_FAKE=1`. CI sets that variable.
+- P7.T5 (live smoke test) is written and marked skipped unless `RIFFSPACED_LIVE=1`; it is not run. Leave a "Waiting on owner" line for it in this file and in docs/AI_LAYER.md.
+- Worked example for docs/AI_LAYER.md: a transcript pass. The backend writes the exact system and user messages for `/ai/analyze` on the demo walkdown to the scratchpad; the Claude Code session answers them as the model would; the answer goes through the same validator and repair step. Label it clearly as produced by Claude Code in-session, not by the API.
+- When the owner later creates a key: `export ANTHROPIC_API_KEY=...` (or `backend/.env`), run `RIFFSPACED_LIVE=1 uv run pytest tests/live`, paste the result into docs/AI_LAYER.md. No code change.
+- Then Phase 8 without a stop.
 
-1. `export ANTHROPIC_API_KEY=sk-ant-...` in the shell, then tell the run: "The key is set in the environment. Continue Phase 7."
-2. or create `backend/.env` (gitignored) with the line `ANTHROPIC_API_KEY=sk-ant-...` (copy `backend/.env.example`), then say the same.
+**Real recordings arrived.** Three files are in `injest-raw/` at the repo root (RS-Descent.m4a, RS-NM1.m4a, RS-Spider.m4a, 2.6 MB total, m4a so ffmpeg decode). That folder is gitignored as of this commit; the files are the owner's and are never deleted or committed. On resume, before or after Phase 7: copy (not move) them into `backend/audio_in/`, run the P6.T10 recipe from docs/BACKLOG.md (ingest each, compare with what the owner played if a tab exists, record findings in docs/ANALYSIS_METHOD.md and LEARNING_LOG), and ask the owner only if a recording's tuning is not Bb Standard.
 
-If you want the AI layer built without a key for now, say "Build Phase 7 with the fake client, skip the live smoke test": P7.T1 to T4 and T6 run on the deterministic fake client and only P7.T5 (the live smoke test and the worked example in docs/AI_LAYER.md) waits for the key.
-
-Also still open, not blocking: drop recordings into `backend/audio_in/` whenever you like (recipe in docs/BACKLOG.md).
-
-Heads-up: Phase 7 needs ANTHROPIC_API_KEY in the shell or in backend/.env (gitignored); the run will stop at Phase 7 if it is missing. Real recordings: drop WAV or FLAC files into backend/audio_in/ any time and run the ingest recipe in docs/BACKLOG.md.
+Also still open, not blocking: the owner can add more recordings to `injest-raw/` or `backend/audio_in/` any time.

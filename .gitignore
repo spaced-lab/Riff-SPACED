@@ -28,3 +28,6 @@ backend/debug/
 
 # OS
 .DS_Store
+
+# Owner recordings dropped at the repo root (never committed, never deleted)
+injest-raw/
