@@ -1,3 +1,4 @@
+import type { Position } from '@/music/positions';
 import type { ColorGroup, Degree } from '@/music/scales';
 import { degreeClass, groupOf } from '@/music/scales';
 import type { ScaleOverlay } from './ScaleDots';
@@ -9,6 +10,10 @@ type Props = {
   degrees: readonly Degree[];
   onToggleGroup: (group: ColorGroup) => void;
   onMode: (mode: 'off' | 'color' | 'mono') => void;
+  /** CAGED positions of the scale in this tuning (P9.T5), and the one highlighted. */
+  positions?: readonly Position[];
+  onStepPosition?: (delta: 1 | -1) => void;
+  onClearPosition?: () => void;
 };
 
 /**
@@ -17,12 +22,58 @@ type Props = {
  * legend is also the control panel (the menu has the same switches). The swatches reuse the
  * fretboard's `fb-scale--*` classes, so legend and neck can never disagree on a color.
  */
-export function ScaleLegend({ overlay, degrees, onToggleGroup, onMode }: Props) {
+export function ScaleLegend({
+  overlay,
+  degrees,
+  onToggleGroup,
+  onMode,
+  positions = [],
+  onStepPosition,
+  onClearPosition,
+}: Props) {
+  const position = overlay.position ?? null;
   return (
     <div className="scale-legend" data-testid="scale-legend" role="toolbar" aria-label="scale">
       <span className="scale-legend__title" data-testid="scale-title">
         {overlay.title}
       </span>
+      {positions.length > 0 && onStepPosition ? (
+        <span className="scale-legend__position" data-testid="scale-position">
+          <button
+            type="button"
+            className="scale-legend__step"
+            aria-label="position down"
+            title="previous hand position (shortcut: <)"
+            onClick={() => onStepPosition(-1)}
+          >
+            ◂
+          </button>
+          <button
+            type="button"
+            className="scale-legend__position-name"
+            data-testid="scale-position-name"
+            title={
+              position
+                ? 'back to the whole neck'
+                : 'step with the arrows to highlight one hand position'
+            }
+            onClick={onClearPosition}
+          >
+            {position
+              ? `${position.name}, frets ${position.fromFret}-${position.toFret} (${position.index + 1}/${positions.length})`
+              : 'whole neck'}
+          </button>
+          <button
+            type="button"
+            className="scale-legend__step"
+            aria-label="position up"
+            title="next hand position (shortcut: >)"
+            onClick={() => onStepPosition(1)}
+          >
+            ▸
+          </button>
+        </span>
+      ) : null}
       <span className="scale-legend__swatches">
         {degrees.map((d) => {
           const group = groupOf(d.role);

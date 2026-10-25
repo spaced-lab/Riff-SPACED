@@ -125,5 +125,20 @@ describe('MenuBar', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
     fireEvent.click(container.querySelector('[data-menu-item="scales.color:roots"]')!);
     expect(useStore.getState().scaleColors.roots).toBe(false);
+    // Positions: whole neck by default, each CAGED shape listed with its frets.
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    fireEvent.click(container.querySelector('[data-menu-item="scales.position"]')!);
+    expect(container.querySelector('[data-menu-item="scales.position:all"]')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    expect(
+      container.querySelector('[data-menu-item="scales.position:0"] .menu__label')?.textContent,
+    ).toMatch(/shape, frets \d+-\d+$/);
+    fireEvent.click(container.querySelector('[data-menu-item="scales.position:1"]')!);
+    expect(useStore.getState().scalePosition).toBe(1);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    fireEvent.click(container.querySelector('[data-menu-item="scales.positionUp"]')!);
+    expect(useStore.getState().scalePosition).toBe(2);
   });
 });

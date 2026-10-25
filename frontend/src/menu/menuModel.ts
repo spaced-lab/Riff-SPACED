@@ -12,7 +12,7 @@ import { selectRedoLabel, selectUndoLabel } from '@/store/riffSlice';
 import { FRET_RANGE_PRESETS } from '@/store/viewSlice';
 import { nameOf } from '@/music/naming';
 import { COLOR_GROUPS, COLOR_GROUP_LABELS, ROOTS, SCALES } from '@/music/scales';
-import { selectScaleRoot } from '@/store/scaleSlice';
+import { selectScalePosition, selectScalePositions, selectScaleRoot } from '@/store/scaleSlice';
 import type { ScaleMode } from '@/store/scaleSlice';
 
 export type MenuItem =
@@ -501,6 +501,43 @@ export function buildMenus(s: AppState): Menu[] {
               action: () => s.setScaleRoot(pc),
             })),
           ],
+        },
+        sep,
+        {
+          type: 'item',
+          id: 'scales.position',
+          label: 'Position',
+          submenu: [
+            {
+              type: 'item' as const,
+              id: 'scales.position:all',
+              label: 'Whole neck',
+              checked: s.scalePosition === null,
+              action: () => s.setScalePosition(null),
+            },
+            sep,
+            ...selectScalePositions(s).map((p) => ({
+              type: 'item' as const,
+              id: `scales.position:${p.index}`,
+              label: `${p.name}, frets ${p.fromFret}-${p.toFret}`,
+              checked: selectScalePosition(s)?.index === p.index,
+              action: () => s.setScalePosition(p.index),
+            })),
+          ],
+        },
+        {
+          type: 'item',
+          id: 'scales.positionDown',
+          label: 'Position down',
+          accelerator: '<',
+          action: () => s.stepScalePosition(-1),
+        },
+        {
+          type: 'item',
+          id: 'scales.positionUp',
+          label: 'Position up',
+          accelerator: '>',
+          action: () => s.stepScalePosition(1),
         },
         sep,
         ...COLOR_GROUPS.map((group): MenuItem => ({

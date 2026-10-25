@@ -1,14 +1,14 @@
 /* The scale legend strip (Phase 9). Colors come from the fb-scale classes in fretboard.css. */
 .scale-legend {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 2px 14px;
   padding: 2px 8px;
   border-bottom: 1px solid var(--color-dim);
   font-size: 12px;
   line-height: 20px;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 .scale-legend__title {
@@ -18,9 +18,12 @@
 
 .scale-legend__swatches {
   display: flex;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.scale-legend__modes {
+  margin-left: auto;
 }
 
 .scale-legend__swatch,
@@ -56,5 +59,27 @@
 
 .scale-legend__mode[aria-checked='true'] {
   color: var(--color-fg);
+  border-color: var(--color-mid);
+}
+
+.scale-legend__position {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.scale-legend__step,
+.scale-legend__position-name {
+  background: none;
+  border: 1px solid var(--color-dim);
+  color: var(--color-fg);
+  font: inherit;
+  line-height: 18px;
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+.scale-legend__step:hover,
+.scale-legend__position-name:hover {
   border-color: var(--color-mid);
 }

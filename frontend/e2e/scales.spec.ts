@@ -76,6 +76,24 @@ test('scale overlay: color, blues scale, root shift, toggles, mono, persistence'
   await page.reload();
   await expect(page.getByTestId('scale-title')).toHaveText('Eb Harmonic Minor');
 
+  // CAGED positions (P9.T5): step up from the whole neck, dots outside the box dim.
+  await expect(page.getByTestId('scale-position-name')).toHaveText('whole neck');
+  await page.getByLabel('position up').click();
+  await expect(page.getByTestId('scale-position-name')).toContainText('shape, frets 0-');
+  await expect(board.locator('[data-scale-dot][data-in-position="false"]').first()).toHaveClass(
+    /fb-scale--dimmed/,
+  );
+  await expect(board.locator('[data-scale-dot][data-in-position="true"]').first()).toBeVisible();
+  // Keyboard: > moves up the neck; the menu lists the same positions.
+  await page.keyboard.press('Shift+Period');
+  await expect(page.getByTestId('scale-position-name')).toContainText('(2/');
+  await menuClick(page, 'scales', 'scales.position', 'scales.position:3');
+  await expect(page.getByTestId('scale-position-name')).toContainText('(4/');
+  await page.screenshot({ path: screenshotPath('phase-09', 'position-caged'), fullPage: true });
+  await page.getByTestId('scale-position-name').click();
+  await expect(page.getByTestId('scale-position-name')).toHaveText('whole neck');
+  await expect(board.locator('[data-scale-dot][data-in-position="false"]')).toHaveCount(0);
+
   // Split view carries the overlay to every quadrant.
   await menuClick(page, 'view', 'view.split');
   await expect(page.getByTestId('scale-dots')).toHaveCount(4);

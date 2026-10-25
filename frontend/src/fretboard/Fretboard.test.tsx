@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { newNote } from '@/model/factories';
+import { positionsOf } from '@/music/positions';
 import { degreesOf, scaleById } from '@/music/scales';
 import { DEFAULT_TUNING } from '@/music/tuning';
 import type { ScaleOverlay } from './ScaleDots';
@@ -184,5 +185,36 @@ describe('Fretboard', () => {
     const { container } = render(<Fretboard {...base} notes={[]} scale={overlay} />);
     fireEvent.mouseEnter(container.querySelector('[data-cell][data-string="6"][data-fret="6"]')!);
     expect(screen.getByText('string 6 fret 6 = E2, b5 of Bb Blues')).toBeInTheDocument();
+  });
+
+  it('dims the scale dots outside the highlighted hand position', () => {
+    const scale = scaleById('minorPentatonic');
+    const positions = positionsOf(scale, 10, DEFAULT_TUNING, 12);
+    const box = positions[1]!;
+    const overlay: ScaleOverlay = {
+      table: degreesOf(scale, 10),
+      mode: 'color',
+      colored: {
+        roots: true,
+        thirds: true,
+        fifths: true,
+        sevenths: true,
+        blue: true,
+        others: true,
+      },
+      title: 'Bb Minor Pentatonic',
+      position: box,
+    };
+    const { container } = render(<Fretboard {...base} notes={[]} scale={overlay} />);
+    const inside = container.querySelectorAll('[data-scale-dot][data-in-position="true"]');
+    const outside = container.querySelectorAll('[data-scale-dot][data-in-position="false"]');
+    expect(inside.length).toBe(box.cells.size);
+    expect(outside.length).toBeGreaterThan(0);
+    expect([...outside].every((d) => d.getAttribute('class')?.includes('fb-scale--dimmed'))).toBe(
+      true,
+    );
+    expect([...inside].some((d) => d.getAttribute('class')?.includes('fb-scale--dimmed'))).toBe(
+      false,
+    );
   });
 });

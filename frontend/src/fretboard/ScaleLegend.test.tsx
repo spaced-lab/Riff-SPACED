@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { positionsOf } from '@/music/positions';
 import { degreesOf, scaleById } from '@/music/scales';
+import { presetByName } from '@/music/tuning';
 import { ScaleLegend } from './ScaleLegend';
 import type { ScaleOverlay } from './ScaleDots';
 
@@ -57,5 +59,43 @@ describe('ScaleLegend', () => {
       'aria-checked',
       'true',
     );
+  });
+
+  it('shows the position with step buttons and clears it on click', () => {
+    const positions = positionsOf(blues, 10, presetByName('Bb Standard')!, 24);
+    const onStep = vi.fn();
+    const onClear = vi.fn();
+    const { rerender } = render(
+      <ScaleLegend
+        overlay={overlay}
+        degrees={blues.degrees}
+        onToggleGroup={() => undefined}
+        onMode={() => undefined}
+        positions={positions}
+        onStepPosition={onStep}
+        onClearPosition={onClear}
+      />,
+    );
+    expect(screen.getByTestId('scale-position-name')).toHaveTextContent('whole neck');
+    fireEvent.click(screen.getByLabelText('position up'));
+    expect(onStep).toHaveBeenCalledWith(1);
+    fireEvent.click(screen.getByLabelText('position down'));
+    expect(onStep).toHaveBeenCalledWith(-1);
+    rerender(
+      <ScaleLegend
+        overlay={{ ...overlay, position: positions[0] }}
+        degrees={blues.degrees}
+        onToggleGroup={() => undefined}
+        onMode={() => undefined}
+        positions={positions}
+        onStepPosition={onStep}
+        onClearPosition={onClear}
+      />,
+    );
+    expect(screen.getByTestId('scale-position-name')).toHaveTextContent(
+      `${positions[0]!.name}, frets ${positions[0]!.fromFret}-${positions[0]!.toFret} (1/${positions.length})`,
+    );
+    fireEvent.click(screen.getByTestId('scale-position-name'));
+    expect(onClear).toHaveBeenCalled();
   });
 });

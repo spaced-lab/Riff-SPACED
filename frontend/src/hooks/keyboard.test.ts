@@ -143,4 +143,16 @@ describe('keyboard', () => {
     expect(isTypingTarget(null)).toBe(false);
     expect(SHORTCUTS.some((s) => s.keys === '0-9')).toBe(true);
   });
+
+  it('< and > step the scale position (Phase 9)', () => {
+    expect(useStore.getState().scalePosition).toBeNull();
+    expect(handleKey(key('>'), deps)).toBe(true);
+    expect(useStore.getState().scalePosition).toBe(0);
+    expect(handleKey(key('>'), deps)).toBe(true);
+    expect(useStore.getState().scalePosition).toBe(1);
+    expect(handleKey(key('<'), deps)).toBe(true);
+    expect(handleKey(key('<'), deps)).toBe(true);
+    expect(useStore.getState().scalePosition).toBeNull();
+    expect(SHORTCUTS.some((sc) => sc.keys === '< / >')).toBe(true);
+  });
 });

@@ -13,7 +13,7 @@ import { EasierTuningDialog } from '@/tuning/EasierTuningDialog';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { ScaleLegend } from '@/fretboard/ScaleLegend';
 import { scaleById } from '@/music/scales';
-import { selectScaleOverlay } from '@/store/scaleSlice';
+import { selectScaleOverlay, selectScalePositions } from '@/store/scaleSlice';
 import { SplitView } from '@/fretboard/SplitView';
 import { TabLanes } from '@/tab/TabLanes';
 import { useKeyboard } from '@/hooks/useKeyboard';
@@ -67,6 +67,9 @@ export function Shell() {
   const scaleId = useStore((s) => s.scaleId);
   const toggleScaleColor = useStore((s) => s.toggleScaleColor);
   const setScaleMode = useStore((s) => s.setScaleMode);
+  const scalePositions = useStore(selectScalePositions);
+  const stepScalePosition = useStore((s) => s.stepScalePosition);
+  const setScalePosition = useStore((s) => s.setScalePosition);
   useKeyboard();
   // The CRT look is a body class so the overlay covers dialogs and the drawer too.
   useEffect(() => {
@@ -111,6 +114,9 @@ export function Shell() {
               degrees={scaleById(scaleId).degrees}
               onToggleGroup={toggleScaleColor}
               onMode={setScaleMode}
+              positions={scalePositions}
+              onStepPosition={stepScalePosition}
+              onClearPosition={() => setScalePosition(null)}
             />
           ) : null}
           <div className="shell__board">

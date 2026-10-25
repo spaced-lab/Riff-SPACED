@@ -30,6 +30,7 @@ export const SHORTCUTS: readonly Shortcut[] = [
   { keys: '[ / ]', description: 'coarser / finer grid', phase: 3 },
   { keys: '- / =', description: 'tempo down / up by 1', phase: 4 },
   { keys: 'Tab', description: 'toggle note letters', phase: 3 },
+  { keys: '< / >', description: 'scale position down / up the neck (Scales menu)', phase: 9 },
 ];
 
 /** How long a first digit waits for a second one before the fret is committed. */
@@ -145,6 +146,12 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return true;
     case ']':
       s.cycleGrid(1);
+      return true;
+    case '<':
+      s.stepScalePosition(-1);
+      return true;
+    case '>':
+      s.stepScalePosition(1);
       return true;
     case 'a':
     case 'A':

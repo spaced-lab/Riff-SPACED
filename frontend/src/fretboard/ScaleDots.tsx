@@ -1,5 +1,7 @@
 import type { ColorGroup, Degree } from '@/music/scales';
 import { degreeClass, groupOf } from '@/music/scales';
+import { cellKey } from '@/music/positions';
+import type { Position } from '@/music/positions';
 import { pitchClass } from '@/music/pitch';
 import { pitchOf } from '@/music/tuning';
 import type { Tuning } from '@/music/tuning';
@@ -17,6 +19,8 @@ export type ScaleOverlay = {
   colored: Readonly<Record<ColorGroup, boolean>>;
   /** `Bb Minor Pentatonic`, for the legend and the tooltip. */
   title: string;
+  /** The hand position to highlight (P9.T5); dots outside it are dimmed. Null: whole neck. */
+  position?: Position | null;
 };
 
 type Props = { layout: Layout; tuning: Tuning; overlay: ScaleOverlay };
@@ -39,6 +43,8 @@ export function ScaleDots({ layout, tuning, overlay }: Props) {
         colored ? `fb-scale--${degreeClass(degree)}` : 'fb-scale--plain',
       ];
       if (degree.role === 'root') classes.push('fb-scale--is-root');
+      const inPosition = !overlay.position || overlay.position.cells.has(cellKey(s, f));
+      if (!inPosition) classes.push('fb-scale--dimmed');
       dots.push(
         <circle
           key={`${s}-${f}`}
@@ -47,6 +53,7 @@ export function ScaleDots({ layout, tuning, overlay }: Props) {
           data-string={s}
           data-fret={f}
           data-degree={degree.label}
+          data-in-position={inPosition ? 'true' : 'false'}
           cx={layout.noteX(f)}
           cy={layout.stringY(s)}
           r={layout.dotRadius * (degree.role === 'root' ? 0.62 : 0.5)}

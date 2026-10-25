@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { bootstrapStore, useStore } from '@/store';
-import { selectScaleRoot } from './scaleSlice';
+import {
+  selectScaleOverlay,
+  selectScalePosition,
+  selectScalePositions,
+  selectScaleRoot,
+} from './scaleSlice';
 
 describe('scaleSlice', () => {
   beforeEach(() => {
@@ -38,5 +43,36 @@ describe('scaleSlice', () => {
     useStore.getState().setScaleId('blues');
     expect(useStore.getState().scaleMode).toBe('mono');
     expect(useStore.getState().scaleId).toBe('blues');
+  });
+
+  it('steps through the CAGED positions and back to the whole neck (P9.T5)', () => {
+    const s = useStore.getState();
+    // Bb minor pentatonic in Bb Standard: standard intervals, so the shapes have letters.
+    const positions = selectScalePositions(s);
+    expect(positions.length).toBeGreaterThan(5);
+    expect(positions.map((p) => p.name).slice(0, 5)).toEqual([
+      'E shape',
+      'D shape',
+      'C shape',
+      'A shape',
+      'G shape',
+    ]);
+    expect(positions[0]!.fromFret).toBe(0);
+    expect(selectScalePosition(s)).toBeNull();
+    s.stepScalePosition(1);
+    expect(useStore.getState().scalePosition).toBe(0);
+    s.stepScalePosition(-1);
+    expect(useStore.getState().scalePosition).toBeNull();
+    s.stepScalePosition(-1);
+    expect(useStore.getState().scalePosition).toBe(positions.length - 1);
+    s.stepScalePosition(1);
+    expect(useStore.getState().scalePosition).toBeNull();
+    s.setScalePosition(99);
+    expect(useStore.getState().scalePosition).toBe(positions.length - 1);
+    // The overlay carries the clamped position; a scale with fewer positions clamps again.
+    s.setScaleMode('color');
+    expect(selectScaleOverlay(useStore.getState())?.position?.index).toBe(positions.length - 1);
+    s.setScalePosition(2);
+    expect(selectScaleOverlay(useStore.getState())?.position?.name).toBe('C shape');
   });
 });
