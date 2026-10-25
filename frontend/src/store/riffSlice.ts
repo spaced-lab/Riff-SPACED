@@ -1,6 +1,7 @@
 import type { StateCreator } from 'zustand';
 import { newRiff } from '@/model/factories';
 import type { Note, Riff } from '@/model/types';
+import type { Tuning } from '@/music/tuning';
 import { emptyHistory, pushHistory } from './history';
 import type { History } from './history';
 import * as ops from './riffOps';
@@ -21,6 +22,11 @@ export type RiffSlice = {
   addNote: (note: Note) => void;
   updateNote: (id: string, patch: Partial<Omit<Note, 'id'>>) => void;
   removeNotes: (ids: readonly string[]) => void;
+  /**
+   * Change tuning keeping shapes (SPEC 3.7): every (string, fret) stays, pitches move.
+   * Pitch-preserving retune arrives in Phase 8.
+   */
+  setTuning: (tuning: Tuning) => void;
 };
 
 export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, get) => ({
@@ -48,6 +54,13 @@ export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, 
 
   addNote: (note) => get().commit('add note', (riff) => ops.addNote(riff, note)),
   updateNote: (id, patch) => get().commit('edit note', (riff) => ops.updateNote(riff, id, patch)),
+  setTuning: (tuning) =>
+    get().commit('change tuning', (riff) =>
+      riff.tuning.name === tuning.name && riff.tuning.pitches.join() === tuning.pitches.join()
+        ? riff
+        : { ...riff, tuning: { name: tuning.name, pitches: [...tuning.pitches] } },
+    ),
+
   removeNotes: (ids) => {
     get().commit('remove notes', (riff) => ops.removeNotes(riff, ids));
     const drop = new Set(ids);
