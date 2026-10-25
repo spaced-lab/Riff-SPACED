@@ -3,6 +3,7 @@
  * labels (undo <label>) are always current. Items not yet implemented are disabled with a
  * `Phase N` tooltip so the whole tree exists from Phase 5 on and fills in later.
  */
+import { openAiSettings } from '@/ai/aiSettings';
 import { SHORTCUTS } from '@/hooks/keyboard';
 import { DROP_PRESETS, SEVEN_STRING_PRESETS, STANDARD_PRESETS } from '@/music/tuning';
 import type { AppState } from '@/store';
@@ -59,6 +60,26 @@ export function buildMenus(s: AppState): Menu[] {
     label: name,
     checked: pitches.join() === tuningKey,
     action: () => s.setTuning({ name, pitches: [...pitches] }),
+  });
+
+  // AI items need the backend up with a key (or the fake) and an open riff (SPEC 9).
+  const aiReason =
+    s.backend.status !== 'ok'
+      ? `backend unreachable at ${s.backend.url}`
+      : !s.backend.aiConfigured
+        ? 'ANTHROPIC_API_KEY not set'
+        : s.editing !== 'riff'
+          ? 'open a riff first'
+          : s.ai.busy
+            ? `${s.ai.busy}...`
+            : undefined;
+  const aiItem = (id: string, label: string, action: () => void): MenuItem => ({
+    type: 'item',
+    id,
+    label,
+    disabled: Boolean(aiReason),
+    reason: aiReason,
+    action,
   });
 
   return [
@@ -333,6 +354,20 @@ export function buildMenus(s: AppState): Menu[] {
           checked: s.panels.inspector,
           action: () => s.togglePanel('inspector'),
         },
+        {
+          type: 'item',
+          id: 'view.dyadLabels',
+          label: 'Dyad labels',
+          checked: s.showDyadLabels,
+          action: () => s.setShowDyadLabels(!s.showDyadLabels),
+        },
+        {
+          type: 'item',
+          id: 'view.suggestions',
+          label: 'Suggestions drawer',
+          checked: s.ai.drawerOpen,
+          action: () => s.setAiDrawerOpen(!s.ai.drawerOpen),
+        },
         sep,
         later('view.crt', 'CRT', 8),
       ],
@@ -446,15 +481,48 @@ export function buildMenus(s: AppState): Menu[] {
       id: 'ai',
       label: 'AI',
       items: [
-        later('ai.analyze', 'Analyze riff', 7),
-        later('ai.variations', 'Suggest variations', 7),
-        later('ai.counter', 'Suggest counter riff', 7),
-        later('ai.simplify', 'Simplify', 7),
-        later('ai.embellish', 'Embellish', 7),
-        later('ai.fingerings', 'Alternate fingerings', 7),
-        later('ai.tunings', 'Alternate tunings', 7),
+        aiItem('ai.analyze', 'Analyze riff', () => void s.analyzeCurrentRiff()),
         sep,
-        later('ai.settings', 'Settings...', 7),
+        aiItem(
+          'ai.variations',
+          'Suggest variations',
+          () => void s.suggestForCurrentRiff('variation', 2),
+        ),
+        aiItem(
+          'ai.counter',
+          'Suggest counter riff',
+          () => void s.suggestForCurrentRiff('counterRiff', 1),
+        ),
+        aiItem(
+          'ai.counterMelody',
+          'Suggest counter melody',
+          () => void s.suggestForCurrentRiff('counterMelody', 1),
+        ),
+        aiItem(
+          'ai.switchUp',
+          'Switch up the rhythm',
+          () => void s.suggestForCurrentRiff('switchUp', 2),
+        ),
+        aiItem('ai.simplify', 'Simplify', () => void s.suggestForCurrentRiff('simplify', 1)),
+        aiItem('ai.embellish', 'Embellish', () => void s.suggestForCurrentRiff('embellish', 2)),
+        aiItem(
+          'ai.newInStyle',
+          'New riff in this style',
+          () => void s.suggestForCurrentRiff('newInStyle', 2),
+        ),
+        aiItem(
+          'ai.fingerings',
+          'Alternate fingerings',
+          () => void s.suggestForCurrentRiff('fingerings', 2),
+        ),
+        aiItem('ai.tunings', 'Alternate tunings', () => void s.suggestForCurrentRiff('tunings', 3)),
+        sep,
+        {
+          type: 'item',
+          id: 'ai.settings',
+          label: 'Settings...',
+          action: () => openAiSettings(s),
+        },
       ],
     },
     {

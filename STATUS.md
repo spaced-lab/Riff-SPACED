@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T07:50:00Z
+Updated: 2026-10-25T08:40:00Z
 Phase: 7 AI layer (in progress, fake client, DECISIONS 54)
-Last completed task: P7.T5 Live smoke test (written and skipped; transcript worked example in docs/AI_LAYER.md)
-Next task: P7.T6 Frontend: AI menu and suggestions drawer
+Last completed task: P7.T6 Frontend: AI menu and suggestions drawer
+Next task: P7.T7 Chrome verification and phase exit
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -87,7 +87,7 @@ Phase 7:
 - [x] P7.T3 Suggest endpoint
 - [x] P7.T4 Cleanup endpoint and ingest --ai
 - [x] P7.T5 Live smoke test (written, skipped until RIFFSPACED_LIVE=1 and a key; see Waiting on owner)
-- [ ] P7.T6 Frontend: AI menu and suggestions drawer
+- [x] P7.T6 Frontend: AI menu and suggestions drawer
 - [ ] P7.T7 Chrome verification and phase exit
 
 ## How to run right now

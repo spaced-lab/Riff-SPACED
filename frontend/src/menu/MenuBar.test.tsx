@@ -19,12 +19,13 @@ describe('MenuBar', () => {
     expect(screen.queryByRole('menu')).toBeNull();
   });
 
-  it('opens a menu, shows disabled items with their phase tooltip, and closes on Escape', () => {
+  it('opens a menu, shows disabled items with their reason as a tooltip, and closes on Escape', () => {
     const { container } = render(<MenuBar />);
     fireEvent.click(screen.getByRole('menuitem', { name: 'AI' }));
     expect(screen.getByTestId('menu-ai')).toBeInTheDocument();
     const analyze = container.querySelector('[data-menu-item="ai.analyze"]')!;
-    expect(analyze).toHaveAttribute('title', 'Phase 7');
+    // With no backend reachable the AI items say so (SPEC 5.7, 9).
+    expect(analyze).toHaveAttribute('title', 'backend unreachable at http://localhost:8000');
     expect(analyze).toHaveAttribute('aria-disabled', 'true');
     fireEvent.click(analyze);
     expect(screen.getByTestId('menu-ai')).toBeInTheDocument();

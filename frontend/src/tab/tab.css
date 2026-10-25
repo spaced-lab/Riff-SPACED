@@ -168,3 +168,13 @@
 .tab[data-read-only='true'] .tab-note rect {
   cursor: default;
 }
+
+.tab-dyad-label {
+  fill: var(--color-fg);
+  font-size: 9px;
+  pointer-events: none;
+}
+
+.tab-dyad-label--computed {
+  fill: var(--color-mid);
+}

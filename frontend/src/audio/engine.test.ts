@@ -149,6 +149,7 @@ describe('Engine', () => {
       currentArrangementId: null,
       currentSongId: null,
       currentRiffId: base.currentRiffId,
+      auditionRiff: null,
     };
     expect(playableFrom({ ...inputs, riff, soloSectionId: null })).toMatchObject({
       loopStartTick: 0,
@@ -166,5 +167,10 @@ describe('Engine', () => {
       loopStartTick: 1920,
       loopEndTick: 4 * 1920,
     });
+    // An auditioned AI suggestion wins over the riff and the solo section (Phase 7).
+    const audition = { ...riff, id: 'aud', lengthBars: 8, tempo: { bpm: 77 } };
+    expect(
+      playableFrom({ ...inputs, riff: split, soloSectionId: 'y', auditionRiff: audition }),
+    ).toMatchObject({ loopStartTick: 0, loopEndTick: 8 * 1920, bpm: 77 });
   });
 });

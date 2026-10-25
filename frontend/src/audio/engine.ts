@@ -50,13 +50,26 @@ type PlayableInputs = Pick<
   | 'currentArrangementId'
   | 'currentSongId'
   | 'currentRiffId'
+  | 'auditionRiff'
 >;
 
 /**
  * Build what the scheduler plays from the store: the open riff, or the flattened arrangement
- * or song when one is being edited, with the solo section as the loop window.
+ * or song when one is being edited, with the solo section as the loop window. While an AI
+ * suggestion is being auditioned (Phase 7) it plays instead, whole, without touching the
+ * open riff.
  */
 export function playableFrom(state: PlayableInputs): Playable {
+  if (state.auditionRiff) {
+    const a = state.auditionRiff;
+    return {
+      notes: a.notes,
+      tuningPitches: a.tuning.pitches,
+      loopStartTick: 0,
+      loopEndTick: a.lengthBars * TICKS_PER_BAR,
+      bpm: a.tempo.bpm,
+    };
+  }
   const { soloSectionId } = state;
   const riff = selectDisplayRiff(state).riff;
   const section = soloSectionId ? riff.sections.find((s) => s.id === soloSectionId) : undefined;
@@ -113,6 +126,10 @@ export class Engine {
         // Loop window or instrument changed: restart at the current position, no count-in.
         const tick = this.scheduler.positionTick();
         this.startScheduler(state, tick, false);
+      }
+      if (state.auditionRiff !== previous.auditionRiff) {
+        // Switched between suggestions (or back to the riff) mid-play: restart from the top.
+        this.startScheduler(state, 0, false);
       }
     });
   }

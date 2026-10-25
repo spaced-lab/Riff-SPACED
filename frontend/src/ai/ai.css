@@ -1,0 +1,146 @@
+/* AI drawer, cards and analysis panel (SPEC 9.3). Colors come from the theme. */
+.ai-drawer {
+  position: fixed;
+  top: 44px;
+  right: 8px;
+  bottom: 34px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border: 1px solid var(--color-fg);
+  z-index: 50;
+}
+
+.ai-drawer__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--color-dim);
+}
+
+.ai-drawer__head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.ai-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-drawer__empty,
+.ai-card__notes,
+.ai-card__repairs {
+  color: var(--color-mid);
+  font-size: 12px;
+}
+
+.ai-card {
+  border: 1px solid var(--color-dim);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-card--auditioning {
+  border-color: var(--color-flash);
+}
+
+.ai-card__title {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.ai-card__kind {
+  color: var(--color-mid);
+  font-size: 11px;
+}
+
+.ai-card__rationale {
+  margin: 0;
+  font-size: 12px;
+}
+
+.ai-card__preview {
+  border: 1px solid var(--color-dim);
+  height: 110px;
+  overflow: hidden;
+}
+
+.ai-card__preview .fretboard {
+  min-height: 0;
+}
+
+.ai-card__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ai-card__buttons button {
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.ai-card__repairs ul {
+  margin: 2px 0 0;
+  padding-left: 16px;
+}
+
+.ai-analysis__dyads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ai-analysis__dyad {
+  padding: 1px 6px;
+  font-size: 11px;
+  border: 1px solid var(--color-mid);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  cursor: pointer;
+}
+
+.ai-analysis__dyad--computed {
+  border-style: dashed;
+  color: var(--color-mid);
+}
+
+.ai-analysis__dyad--inverted {
+  border-color: var(--color-fg);
+}
+
+.ai-analysis__summary {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.ai-analysis__devices {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--color-mid);
+}
+
+.ai-analysis__meta {
+  font-size: 11px;
+  color: var(--color-mid);
+}
+
+.ai-analysis__warn {
+  color: var(--color-warn);
+  font-size: 11px;
+}

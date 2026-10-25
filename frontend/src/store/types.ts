@@ -1,3 +1,4 @@
+import type { AiSlice } from './aiSlice';
 import type { BackendSlice } from './backendSlice';
 import type { DialogSlice } from './dialogSlice';
 import type { EditorSlice } from './editorSlice';
@@ -17,4 +18,5 @@ export type AppState = RiffSlice &
   DialogSlice &
   TransportSlice &
   FileSlice &
-  BackendSlice;
+  BackendSlice &
+  AiSlice;

@@ -4,6 +4,7 @@
  * keyboard handler) reads `useStore.getState()` and subscribes with `useStore.subscribe`.
  */
 import { create } from 'zustand';
+import { createAiSlice } from './aiSlice';
 import { createBackendSlice } from './backendSlice';
 import { createDialogSlice } from './dialogSlice';
 import { createEditorSlice } from './editorSlice';
@@ -29,6 +30,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createTransportSlice(...a),
   ...createFileSlice(...a),
   ...createBackendSlice(...a),
+  ...createAiSlice(...a),
 }));
 
 /**

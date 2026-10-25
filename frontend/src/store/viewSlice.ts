@@ -27,6 +27,9 @@ export type ViewSlice = {
   followPlayhead: boolean;
   setFollowPlayhead: (on: boolean) => void;
   panels: { library: boolean; inspector: boolean };
+  /** Draw the AI analysis's dyad labels above chord brackets in the tab (Phase 7). */
+  showDyadLabels: boolean;
+  setShowDyadLabels: (on: boolean) => void;
   /** Editor grid resolution: note entry duration and snapping (SPEC 3.4). */
   grid: GridName;
   /** Tab lane zoom in pixels per bar, 120..1200. */
@@ -52,6 +55,8 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   followPlayhead: true,
   setFollowPlayhead: (followPlayhead) => set({ followPlayhead }),
   panels: { library: true, inspector: true },
+  showDyadLabels: true,
+  setShowDyadLabels: (showDyadLabels) => set({ showDyadLabels }),
   grid: '1/16',
   pxPerBar: 320,
   setGrid: (grid) => set({ grid }),

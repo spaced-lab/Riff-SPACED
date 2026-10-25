@@ -1,3 +1,4 @@
+import { SuggestionsDrawer } from '@/ai/SuggestionsDrawer';
 import { Dialog } from '@/components/Dialog';
 import { Toasts } from '@/components/Toast';
 import { ImportAudioDialog } from '@/import/ImportAudioDialog';
@@ -53,19 +54,22 @@ export function Shell() {
   const isPlaying = useStore((s) => s.isPlaying);
   const positionTick = useStore((s) => s.positionTick);
   const syncJitterMs = useStore((s) => s.syncJitterMs);
+  const auditionRiff = useStore((s) => s.auditionRiff);
   useKeyboard();
 
   // While editing the fretboard shows what sounds at the edit cursor (rest of the bar as
   // ghosts); while playing it follows the playback position and the engine flashes the
-  // sounding notes through highlightIds.
+  // sounding notes through highlightIds. While an AI suggestion is auditioned (Phase 7) the
+  // fretboard shows that suggestion instead and returns to the riff when it stops.
   const viewTick = isPlaying ? positionTick : editCursorTick;
+  const shownRiff = auditionRiff ?? riff;
   const { shown, dimmedIds } = useMemo(() => {
-    const atTick = notesSoundingAt(riff, viewTick);
+    const atTick = notesSoundingAt(shownRiff, viewTick);
     if (!ghostNotes) return { shown: atTick, dimmedIds: [] as string[] };
     const ids = new Set(atTick.map((n) => n.id));
-    const ghosts = notesInBarOf(riff, viewTick).filter((n) => !ids.has(n.id));
+    const ghosts = notesInBarOf(shownRiff, viewTick).filter((n) => !ids.has(n.id));
     return { shown: [...atTick, ...ghosts], dimmedIds: ghosts.map((n) => n.id) };
-  }, [riff, viewTick, ghostNotes]);
+  }, [shownRiff, viewTick, ghostNotes]);
 
   return (
     <div className="shell" data-testid="shell">
@@ -88,7 +92,7 @@ export function Shell() {
             <SplitView />
           ) : (
             <Fretboard
-              tuning={riff.tuning}
+              tuning={shownRiff.tuning}
               notes={shown}
               dimmedIds={dimmedIds}
               selectedIds={selectedNoteIds}
@@ -123,6 +127,7 @@ export function Shell() {
       ) : null}
 
       <Dialog />
+      <SuggestionsDrawer />
       {importOpen ? <ImportAudioDialog onClose={() => setImportOpen(false)} /> : null}
       <Toasts />
       <footer className="shell__status" data-testid="status-bar">
@@ -130,6 +135,9 @@ export function Shell() {
           {riff.tuning.name}: {riff.tuning.pitches.join(' ')}
         </span>
         <span data-testid="riff-name">{riff.name}</span>
+        {auditionRiff ? (
+          <span data-testid="status-audition">auditioning: {auditionRiff.name}</span>
+        ) : null}
         {fileName ? <span data-testid="file-name">{fileName}</span> : null}
         <span data-testid="status-lane">lane {activeLane}</span>
         {syncJitterMs !== null ? (

@@ -5,6 +5,7 @@ import { TICKS_PER_BAR, snapToGrid } from '@/music/time';
 import { useStore } from '@/store';
 import { selectDisplayRiff } from '@/store/derived';
 import { ChordBrackets } from './ChordBrackets';
+import { DyadLabels } from './DyadLabels';
 import { EditCursor } from './EditCursor';
 import { GridLines } from './GridLines';
 import { Playhead } from './Playhead';
@@ -36,6 +37,9 @@ export function TabLanes() {
   const pointer = useTabPointer();
   const followPlayhead = useStore((s) => s.followPlayhead);
   const isPlaying = useStore((s) => s.isPlaying);
+  const showDyadLabels = useStore((s) => s.showDyadLabels);
+  const analysis = useStore((s) => s.ai.analysis);
+  const dyads = showDyadLabels && analysis && analysis.riffId === riff.id ? analysis.dyads : [];
 
   const stringCount = riff.tuning.pitches.length;
   const height = tabHeight(stringCount);
@@ -121,6 +125,9 @@ export function TabLanes() {
             onClickTick={(tick) => setEditCursorTick(snapToGrid(tick, grid))}
           />
           <ChordBrackets notes={riff.notes} pxPerBar={pxPerBar} />
+          {dyads.length ? (
+            <DyadLabels notes={riff.notes} dyads={dyads} pxPerBar={pxPerBar} />
+          ) : null}
           <g data-testid="tab-notes">
             {riff.notes.map((n) => {
               const isSelected = selected.has(n.id);
