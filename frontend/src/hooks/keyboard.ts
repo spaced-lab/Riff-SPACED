@@ -131,6 +131,34 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
         return true;
       }
       return false;
+    case 'c':
+    case 'C':
+      if (mod) {
+        s.copySelection();
+        return true;
+      }
+      return false;
+    case 'x':
+    case 'X':
+      if (mod) {
+        s.cutSelection();
+        return true;
+      }
+      return false;
+    case 'v':
+    case 'V':
+      if (mod) {
+        s.pasteAtCursor();
+        return true;
+      }
+      return false;
+    case 'd':
+    case 'D':
+      if (mod) {
+        s.duplicateSelection();
+        return true;
+      }
+      return false;
     default:
       return false;
   }
@@ -140,5 +168,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
 export function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   const tag = target.tagName;
-  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable === true;
+  return (
+    tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable === true
+  );
 }

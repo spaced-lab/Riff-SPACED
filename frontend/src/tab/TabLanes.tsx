@@ -9,7 +9,8 @@ import { GridLines } from './GridLines';
 import { Playhead } from './Playhead';
 import { Ruler } from './Ruler';
 import { TabNote } from './TabNote';
-import { GUTTER_WIDTH, laneY, tabHeight, tabWidth, tickToX } from './geometry';
+import { GUTTER_WIDTH, LANE_HEIGHT, laneY, tabHeight, tabWidth, tickToX } from './geometry';
+import { useTabPointer } from './useTabPointer';
 import './tab.css';
 
 /**
@@ -28,6 +29,7 @@ export function TabLanes() {
   const setEditCursorTick = useStore((s) => s.setEditCursorTick);
   const select = useStore((s) => s.select);
   const removeNotes = useStore((s) => s.removeNotes);
+  const pointer = useTabPointer();
 
   const stringCount = riff.tuning.pitches.length;
   const height = tabHeight(stringCount);
@@ -72,7 +74,17 @@ export function TabLanes() {
         </svg>
       </div>
       <div className="tab__scroll" ref={scrollRef} data-testid="tab-scroll">
-        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} data-testid="tab-svg">
+        <svg
+          width={width}
+          height={height}
+          viewBox={`0 0 ${width} ${height}`}
+          data-testid="tab-svg"
+          data-pointer-phase={pointer.phase}
+          onPointerDown={pointer.onBackgroundPointerDown}
+          onPointerMove={pointer.onPointerMove}
+          onPointerUp={pointer.onPointerUp}
+          onPointerCancel={pointer.onPointerUp}
+        >
           <rect
             className="tab-loop"
             x={0}
@@ -94,18 +106,43 @@ export function TabLanes() {
           />
           <ChordBrackets notes={riff.notes} pxPerBar={pxPerBar} />
           <g data-testid="tab-notes">
-            {riff.notes.map((n) => (
-              <TabNote
-                key={n.id}
-                note={n}
-                pxPerBar={pxPerBar}
-                selected={selected.has(n.id)}
-                sounding={sounding.has(n.id)}
-                onClick={(id, e) => select([id], e.shiftKey)}
-                onContextMenu={(id) => removeNotes([id])}
-              />
-            ))}
+            {riff.notes.map((n) => {
+              const isSelected = selected.has(n.id);
+              // Drag and resize previews: selected notes are drawn offset or stretched
+              // without touching the store until the pointer is released.
+              const preview = isSelected && pointer.dragPreview ? pointer.dragPreview : null;
+              const stretched =
+                isSelected && pointer.resizePreview !== null
+                  ? { ...n, duration: Math.max(1, n.duration + pointer.resizePreview) }
+                  : n;
+              const transform = preview
+                ? `translate(${tickToX(preview.dTicks, pxPerBar)}, ${preview.dLanes * LANE_HEIGHT})`
+                : undefined;
+              return (
+                <g key={n.id} transform={transform}>
+                  <TabNote
+                    note={stretched}
+                    pxPerBar={pxPerBar}
+                    selected={isSelected}
+                    sounding={sounding.has(n.id)}
+                    onPointerDown={pointer.onNotePointerDown}
+                    onClick={(id, e) => select([id], e.shiftKey)}
+                    onContextMenu={(id) => removeNotes([id])}
+                  />
+                </g>
+              );
+            })}
           </g>
+          {pointer.marquee ? (
+            <rect
+              className="tab-marquee"
+              data-testid="marquee"
+              x={pointer.marquee.x}
+              y={pointer.marquee.y}
+              width={pointer.marquee.width}
+              height={pointer.marquee.height}
+            />
+          ) : null}
           <EditCursor tick={editCursorTick} stringCount={stringCount} pxPerBar={pxPerBar} />
           <Playhead stringCount={stringCount} pxPerBar={pxPerBar} />
         </svg>

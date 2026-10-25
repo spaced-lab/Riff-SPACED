@@ -4,6 +4,7 @@ import { uuid } from '@/model/ids';
 import type { Note, Riff } from '@/model/types';
 import { GRID, GRID_NAMES, TICKS_PER_BAR, snapToGrid } from '@/music/time';
 import type { GridName } from '@/music/time';
+import * as ops from './riffOps';
 import type { AppState } from './types';
 
 export type EditorSlice = {
@@ -22,6 +23,14 @@ export type EditorSlice = {
   addNoteAtCursor: (string: number, fret: number, options?: { chord?: boolean }) => void;
   cycleGrid: (direction: 1 | -1) => void;
   selectAll: () => void;
+  /** Internal clipboard (not the system clipboard): notes with relative starts. */
+  clipboard: Note[];
+  moveSelection: (deltaTicks: number, deltaStrings: number, options?: ops.MoveOptions) => void;
+  resizeSelection: (deltaTicks: number) => void;
+  copySelection: () => void;
+  cutSelection: () => void;
+  pasteAtCursor: () => void;
+  duplicateSelection: () => void;
 };
 
 export function loopEndTick(riff: Riff): number {
@@ -95,4 +104,58 @@ export const createEditorSlice: StateCreator<AppState, [], [], EditorSlice> = (s
   },
 
   selectAll: () => set({ selectedNoteIds: get().riff.notes.map((n) => n.id) }),
+
+  clipboard: [],
+
+  moveSelection: (deltaTicks, deltaStrings, options) => {
+    const { selectedNoteIds, riff } = get();
+    const ids = ops.expandToChords(riff, selectedNoteIds);
+    if (!ids.length) return;
+    get().commit('move notes', (r) => ops.moveNotes(r, ids, deltaTicks, deltaStrings, options));
+    set({ selectedNoteIds: ids });
+  },
+
+  resizeSelection: (deltaTicks) => {
+    const { selectedNoteIds, grid } = get();
+    if (!selectedNoteIds.length) return;
+    get().commit('resize notes', (r) =>
+      ops.resizeNotes(r, selectedNoteIds, deltaTicks, GRID[grid]),
+    );
+  },
+
+  copySelection: () => {
+    const { riff, selectedNoteIds } = get();
+    const clip = ops.copyNotes(riff, selectedNoteIds);
+    if (clip.length) set({ clipboard: clip });
+  },
+
+  cutSelection: () => {
+    get().copySelection();
+    const ids = ops.expandToChords(get().riff, get().selectedNoteIds);
+    if (ids.length) get().removeNotes(ids);
+  },
+
+  pasteAtCursor: () => {
+    const { clipboard, editCursorTick } = get();
+    if (!clipboard.length) return;
+    let pastedIds: string[] = [];
+    get().commit('paste', (r) => {
+      const result = ops.pasteNotes(r, clipboard, editCursorTick, uuid);
+      pastedIds = result.pastedIds;
+      return result.riff;
+    });
+    if (pastedIds.length) set({ selectedNoteIds: pastedIds });
+  },
+
+  duplicateSelection: () => {
+    const { selectedNoteIds, grid } = get();
+    if (!selectedNoteIds.length) return;
+    let pastedIds: string[] = [];
+    get().commit('duplicate', (r) => {
+      const result = ops.duplicateNotes(r, selectedNoteIds, GRID[grid], uuid);
+      pastedIds = result.pastedIds;
+      return result.riff;
+    });
+    if (pastedIds.length) set({ selectedNoteIds: pastedIds });
+  },
 });
