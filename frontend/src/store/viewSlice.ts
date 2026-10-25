@@ -35,6 +35,9 @@ export type ViewSlice = {
   /** What choosing a tuning does to the notes (SPEC 3.7): shapes stay or pitches stay. */
   retuneMode: RetuneMode;
   setRetuneMode: (mode: RetuneMode) => void;
+  /** View > CRT: scanlines and a slight glow, CSS only (SPEC 5.1). Off by default. */
+  crt: boolean;
+  setCrt: (on: boolean) => void;
   /** A riff shown on the fretboard instead of the open one, for previews (never played). */
   previewRiff: Riff | null;
   setPreviewRiff: (riff: Riff | null) => void;
@@ -69,6 +72,8 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   setRetuneMode: (retuneMode) => set({ retuneMode }),
   previewRiff: null,
   setPreviewRiff: (previewRiff) => set({ previewRiff }),
+  crt: false,
+  setCrt: (crt) => set({ crt }),
   grid: '1/16',
   pxPerBar: 320,
   setGrid: (grid) => set({ grid }),

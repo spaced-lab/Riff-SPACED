@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T12:40:00Z
+Updated: 2026-10-25T13:20:00Z
 Phase: 8 Polish and backlog promotion (in progress)
-Last completed task: P8.T4 WAV export (heavy voice shipped in Phase 4)
-Next task: P8.T5 CRT toggle and visual polish
+Last completed task: P8.T5 CRT toggle and visual polish
+Next task: P8.T6 Containers and compose, final
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -95,7 +95,7 @@ Phase 8:
 - [x] P8.T2 Find easier tuning
 - [x] P8.T3 MusicXML export
 - [x] P8.T4 WAV export and heavy voice (heavy voice shipped in Phase 4, DECISIONS 48)
-- [ ] P8.T5 CRT toggle and visual polish
+- [x] P8.T5 CRT toggle and visual polish
 - [ ] P8.T6 Containers and compose, final
 - [ ] P8.T7 Public docs
 - [ ] P8.T8 Final verification and exit
@@ -106,6 +106,7 @@ cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
 npm run e2e                                # Playwright: 12 specs; RIFFSPACED_REAL_BACKEND=1 npx playwright test e2e/import-real.spec.ts runs the real-backend import (backend on :8000)
 # dev harness: http://localhost:5173/#/dev/fretboard
+# reset to the demo library: http://localhost:5173/?demo=1
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
 RIFFSPACED_AI_FAKE=1 make dev              # same, with the AI routes answered by the deterministic fake (no key needed)

@@ -45,6 +45,14 @@ Every mutation of the riff goes through `commit(label, change)` in the store. It
 
 Autosave is a store subscription that fires when the `riff` or `library` object identity changes (commit always makes a new object, nothing else does), debounced 500 ms, writing the whole library bundle to `localStorage["riffspaced.library.v1"]` with the current riff's edits folded in, plus the id of the open riff so a reload lands where the owner left off. The status bar shows `saved HH:MM:SS`. On startup the saved bundle is migrated and validated; a corrupt one is never overwritten but moved aside under `riffspaced.library.v1.corrupt.<timestamp>` while the demo library loads and the status bar explains, in amber, what happened.
 
+## Look, preferences, and the demo reset (Phase 8)
+
+View > CRT adds a scanline overlay and a slight glow on text, in CSS only: a `crt` class on `<body>` whose `::after` draws a repeating gradient that ignores the pointer. It is off by default. CRT, the retune mode and the dyad-label toggle are saved under `localStorage["riffspaced.prefs.v1"]` and restored on load, separately from the library so a broken preference can never cost a riff.
+
+Opening the app with `?demo=1` throws the saved library and preferences away and loads the demo riffs; the parameter is then removed from the address bar so a reload keeps what you do next. Screenshots and the README's live link use it.
+
+Every control is focusable and `:focus-visible` draws a two-pixel green ring. Tab itself is the note-letters shortcut, which blocks keyboard traversal with Tab; that conflict is in the backlog.
+
 ## Shortcut table
 
 | Keys | Action |

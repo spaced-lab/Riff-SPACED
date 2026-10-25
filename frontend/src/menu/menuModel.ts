@@ -390,7 +390,13 @@ export function buildMenus(s: AppState): Menu[] {
           action: () => s.setAiDrawerOpen(!s.ai.drawerOpen),
         },
         sep,
-        later('view.crt', 'CRT', 8),
+        {
+          type: 'item',
+          id: 'view.crt',
+          label: 'CRT',
+          checked: s.crt,
+          action: () => s.setCrt(!s.crt),
+        },
       ],
     },
     {

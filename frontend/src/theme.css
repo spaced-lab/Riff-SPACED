@@ -59,3 +59,31 @@ select {
 button:hover {
   border-color: var(--color-fg);
 }
+
+/*
+ * View > CRT (SPEC 5.1, Phase 8): scanlines as a fixed overlay that ignores the pointer, and
+ * a slight glow on every bit of text. CSS only; off by default.
+ */
+:root {
+  --crt-scanline: rgba(0, 0, 0, 0.18);
+  --crt-glow: rgba(51, 255, 51, 0.55);
+}
+
+body.crt {
+  text-shadow: 0 0 2px var(--crt-glow);
+}
+
+body.crt::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    var(--crt-scanline) 2px,
+    var(--crt-scanline) 3px
+  );
+}

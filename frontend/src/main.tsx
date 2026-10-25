@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { bootstrapStore } from './store';
-import { startAutosave } from './store/persist';
+import { resetIfDemoRequested, startAutosave, startPrefsSave } from './store/persist';
 import { startEngine } from './audio/engine';
 import { startHealthPolling } from './api/client';
 import { getAudioContext, hasAudioContext } from './audio/context';
@@ -16,8 +16,10 @@ if (!rootElement) {
 
 // Load the autosaved library (or the demo on first run) before the first render, then
 // keep saving it as the riff changes.
+resetIfDemoRequested(window.localStorage);
 bootstrapStore(window.localStorage);
 startAutosave();
+startPrefsSave();
 startEngine();
 useStore.getState().loadRecent();
 startHealthPolling();

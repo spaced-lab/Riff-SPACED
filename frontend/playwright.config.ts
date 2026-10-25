@@ -5,6 +5,8 @@ import { defineConfig, devices } from '@playwright/test';
 // reused instead of failing on the busy port.
 export default defineConfig({
   testDir: './e2e',
+  // Visual baselines live beside the specs, one folder per spec file (P8.T5).
+  snapshotPathTemplate: '{testDir}/__screenshots__/{testFileName}/{arg}{ext}',
   outputDir: './test-results',
   fullyParallel: false,
   retries: 0,

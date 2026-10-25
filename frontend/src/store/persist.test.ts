@@ -1,7 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { newNote } from '@/model/factories';
 import { bootstrapStore, useStore } from './index';
-import { CURRENT_KEY, STORAGE_KEY, loadInitialLibrary, startAutosave } from './persist';
+import {
+  CURRENT_KEY,
+  PREFS_KEY,
+  STORAGE_KEY,
+  loadInitialLibrary,
+  loadPrefs,
+  resetIfDemoRequested,
+  startAutosave,
+  startPrefsSave,
+} from './persist';
 import type { KeyValueStorage } from './persist';
 
 function memoryStorage(
@@ -128,5 +137,56 @@ describe('autosave', () => {
     bootstrapStore(memoryStorage({ [STORAGE_KEY]: 'garbage' }));
     expect(useStore.getState().storageWarning).toMatch(/moved to/);
     expect(useStore.getState().riff.name).toBe('Walkdown Turnaround');
+  });
+});
+
+describe('preferences and the demo reset', () => {
+  it('round-trips CRT, retune mode and dyad labels and ignores junk', () => {
+    const storage = memoryStorage();
+    useStore.setState(useStore.getInitialState(), true);
+    bootstrapStore(storage);
+    const stop = startPrefsSave(storage);
+    useStore.getState().setCrt(true);
+    useStore.getState().setRetuneMode('keepPitches');
+    expect(JSON.parse(storage.getItem(PREFS_KEY)!)).toEqual({
+      crt: true,
+      retuneMode: 'keepPitches',
+      showDyadLabels: true,
+    });
+    stop();
+    expect(loadPrefs(storage)).toEqual({
+      crt: true,
+      retuneMode: 'keepPitches',
+      showDyadLabels: true,
+    });
+    storage.setItem(PREFS_KEY, '{"crt": "yes", "retuneMode": "sideways", "showDyadLabels": false}');
+    expect(loadPrefs(storage)).toEqual({ showDyadLabels: false });
+    storage.setItem(PREFS_KEY, 'not json');
+    expect(loadPrefs(storage)).toEqual({});
+    useStore.setState(useStore.getInitialState(), true);
+    storage.setItem(PREFS_KEY, '{"crt": true}');
+    bootstrapStore(storage);
+    expect(useStore.getState().crt).toBe(true);
+  });
+
+  it('?demo=1 clears the saved library and preferences and strips the parameter', () => {
+    const storage = memoryStorage();
+    storage.setItem(STORAGE_KEY, '{}');
+    storage.setItem(CURRENT_KEY, 'x');
+    storage.setItem(PREFS_KEY, '{"crt":true}');
+    const urls: string[] = [];
+    const reset = resetIfDemoRequested(
+      storage,
+      { search: '?demo=1&other=2', pathname: '/app/', hash: '#/dev' },
+      (url) => urls.push(url),
+    );
+    expect(reset).toBe(true);
+    expect(storage.getItem(STORAGE_KEY)).toBeNull();
+    expect(storage.getItem(CURRENT_KEY)).toBeNull();
+    expect(storage.getItem(PREFS_KEY)).toBeNull();
+    expect(urls).toEqual(['/app/?other=2#/dev']);
+    expect(resetIfDemoRequested(storage, { search: '', pathname: '/', hash: '' }, () => {})).toBe(
+      false,
+    );
   });
 });

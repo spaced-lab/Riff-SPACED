@@ -16,7 +16,7 @@ import { TabLanes } from '@/tab/TabLanes';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { useStore } from '@/store';
 import { notesInBarOf, notesSoundingAt } from '@/store/riffOps';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import './shell.css';
 
 /**
@@ -59,7 +59,13 @@ export function Shell() {
   const previewRiff = useStore((s) => s.previewRiff);
   const easierOpen = useStore((s) => s.easierTuningOpen);
   const setEasierOpen = useStore((s) => s.setEasierTuningOpen);
+  const crt = useStore((s) => s.crt);
   useKeyboard();
+  // The CRT look is a body class so the overlay covers dialogs and the drawer too.
+  useEffect(() => {
+    document.body.classList.toggle('crt', crt);
+    return () => document.body.classList.remove('crt');
+  }, [crt]);
 
   // While editing the fretboard shows what sounds at the edit cursor (rest of the bar as
   // ghosts); while playing it follows the playback position and the engine flashes the

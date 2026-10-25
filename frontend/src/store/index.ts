@@ -14,7 +14,7 @@ import { createRiffSlice } from './riffSlice';
 import { createSelectionSlice } from './selectionSlice';
 import { createTransportSlice } from './transportSlice';
 import type { AppState } from './types';
-import { loadInitialLibrary } from './persist';
+import { loadInitialLibrary, loadPrefs } from './persist';
 import type { KeyValueStorage } from './persist';
 import { createViewSlice } from './viewSlice';
 
@@ -44,4 +44,11 @@ export function bootstrapStore(storage: KeyValueStorage | null | undefined = nul
   useStore.getState().loadLibrary(bundle);
   if (currentRiffId) useStore.getState().openRiff(currentRiffId);
   useStore.getState().setStorageWarning(warning);
+  // View preferences (CRT, retune mode, dyad labels) ride along, with the slice defaults
+  // for anything missing.
+  const prefs = loadPrefs(storage === undefined ? undefined : storage);
+  if (prefs.crt !== undefined) useStore.getState().setCrt(prefs.crt);
+  if (prefs.retuneMode) useStore.getState().setRetuneMode(prefs.retuneMode);
+  if (prefs.showDyadLabels !== undefined)
+    useStore.getState().setShowDyadLabels(prefs.showDyadLabels);
 }

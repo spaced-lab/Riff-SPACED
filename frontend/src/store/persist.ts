@@ -13,11 +13,14 @@ import { migrateLibrary } from '@/model/migrate';
 import type { LibraryBundle } from '@/model/types';
 import { validateLibrary } from '@/model/validate';
 import { useStore } from './index';
+import type { AppState } from './types';
 import { bundleToSave } from './librarySlice';
 
 export const STORAGE_KEY = 'riffspaced.library.v1';
 /** Which riff was open, so a reload lands where the owner left off. */
 export const CURRENT_KEY = 'riffspaced.current.v1';
+/** View preferences that survive a reload: CRT, retune mode, dyad labels (Phase 8). */
+export const PREFS_KEY = 'riffspaced.prefs.v1';
 export const AUTOSAVE_DELAY_MS = 500;
 
 /** The subset of the Storage interface we use, so tests can pass a plain object. */
@@ -26,6 +29,79 @@ export type KeyValueStorage = {
   setItem: (key: string, value: string) => void;
   removeItem: (key: string) => void;
 };
+
+export type Prefs = {
+  crt: boolean;
+  retuneMode: 'keepShapes' | 'keepPitches';
+  showDyadLabels: boolean;
+};
+
+/** The saved preferences, or nothing; a broken value is ignored rather than quarantined. */
+export function loadPrefs(storage: KeyValueStorage | null = defaultStorage()): Partial<Prefs> {
+  const raw = storage?.getItem(PREFS_KEY) ?? null;
+  if (raw === null) return {};
+  try {
+    const parsed = JSON.parse(raw) as Partial<Prefs>;
+    const out: Partial<Prefs> = {};
+    if (typeof parsed.crt === 'boolean') out.crt = parsed.crt;
+    if (parsed.retuneMode === 'keepShapes' || parsed.retuneMode === 'keepPitches')
+      out.retuneMode = parsed.retuneMode;
+    if (typeof parsed.showDyadLabels === 'boolean') out.showDyadLabels = parsed.showDyadLabels;
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+/** Write the preferences whenever one changes. Returns a stop function. */
+export function startPrefsSave(storage: KeyValueStorage | null = defaultStorage()): () => void {
+  if (!storage) return () => undefined;
+  const pick = (s: AppState): Prefs => ({
+    crt: s.crt,
+    retuneMode: s.retuneMode,
+    showDyadLabels: s.showDyadLabels,
+  });
+  return useStore.subscribe((state, previous) => {
+    const next = pick(state);
+    const before = pick(previous);
+    if (
+      next.crt === before.crt &&
+      next.retuneMode === before.retuneMode &&
+      next.showDyadLabels === before.showDyadLabels
+    )
+      return;
+    try {
+      storage.setItem(PREFS_KEY, JSON.stringify(next));
+    } catch {
+      // Storage full or blocked: preferences are a convenience, not data.
+    }
+  });
+}
+
+/**
+ * `?demo=1` in the URL throws the saved library and preferences away so the app opens on
+ * the demo riffs (screenshots, the README's live link). The parameter is removed from the
+ * address bar so a reload does not reset again.
+ */
+export function resetIfDemoRequested(
+  storage: KeyValueStorage | null = defaultStorage(),
+  location: { search: string; pathname: string; hash: string } = window.location,
+  replaceUrl: (url: string) => void = (url) => window.history.replaceState(null, '', url),
+): boolean {
+  const params = new URLSearchParams(location.search);
+  if (params.get('demo') !== '1') return false;
+  for (const key of [STORAGE_KEY, CURRENT_KEY, PREFS_KEY]) {
+    try {
+      storage?.removeItem(key);
+    } catch {
+      // ignore
+    }
+  }
+  params.delete('demo');
+  const search = params.toString();
+  replaceUrl(`${location.pathname}${search ? `?${search}` : ''}${location.hash}`);
+  return true;
+}
 
 export function loadDemoLibrary(): LibraryBundle {
   const result = validateLibrary(migrateLibrary(demo));
