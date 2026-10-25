@@ -1,6 +1,6 @@
 [project]
 name = "riffspaced"
-version = "0.0.0"
+version = "0.8.0"
 description = "RIFF-SPACED backend: audio analysis of low-tuned guitar riffs and the Claude AI layer"
 readme = "README.md"
 requires-python = ">=3.12"

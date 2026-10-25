@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T14:40:00Z
-Phase: 8 Polish and backlog promotion (in progress)
-Last completed task: P8.T7 Public docs
-Next task: P8.T8 Final verification and exit
+Updated: 2026-10-25T15:30:00Z
+Phase: All phases complete (v0.8.0). Next: the owner's real-recording pass (see After Phase 8).
+Last completed task: P8.T8 Final verification and exit
+Next task: real-recording extraction to YAML (owner request, docs/BACKLOG.md); no plan phase remains
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -90,7 +90,7 @@ Phase 7 (tag v0.7.0):
 - [x] P7.T6 Frontend: AI menu and suggestions drawer
 - [x] P7.T7 Chrome verification and phase exit (Chrome tools could not inject into the page; verified with e2e/ai-real.spec.ts against the fake backend, see Known issues)
 
-Phase 8:
+Phase 8 (tag v0.8.0):
 - [x] P8.T1 Transpose and retune tools
 - [x] P8.T2 Find easier tuning
 - [x] P8.T3 MusicXML export
@@ -98,7 +98,7 @@ Phase 8:
 - [x] P8.T5 CRT toggle and visual polish
 - [x] P8.T6 Containers and compose, final
 - [x] P8.T7 Public docs
-- [ ] P8.T8 Final verification and exit
+- [x] P8.T8 Final verification and exit (fresh clone: both gates and 23 e2e specs green; Pages checked with pages.spec.ts; tag v0.8.0)
 
 ## How to run right now
 ```
@@ -140,6 +140,13 @@ make down                                  # stop the containers; make check run
 **Real recordings arrived.** Three files are in `injest-raw/` at the repo root (RS-Descent.m4a, RS-NM1.m4a, RS-Spider.m4a, 2.6 MB total, m4a so ffmpeg decode). That folder is gitignored as of this commit; the files are the owner's and are never deleted or committed. On resume, before or after Phase 7: copy (not move) them into `backend/audio_in/`, run the P6.T10 recipe from docs/BACKLOG.md (ingest each, compare with what the owner played if a tab exists, record findings in docs/ANALYSIS_METHOD.md and LEARNING_LOG), and ask the owner only if a recording's tuning is not Bb Standard.
 
 **Real recordings: first pass done (P6.T10, 2026-10-25).** All three takes ran end to end; findings in `docs/benchmarks/real-audio-notes.md` and the postscript in `docs/ANALYSIS_METHOD.md`. The outputs are in `backend/riffs_out/` (gitignored).
+
+## Owner follow-ups
+
+- Open a MusicXML export in MuseScore or Guitar Pro once and report (P8.T3).
+- Tell the run which tuning the three recordings in `injest-raw/` were played in, and give a tab or description of one of them, so the analyzer's output can be scored.
+- Create an `ANTHROPIC_API_KEY` when ready and run the live smoke test (recipe in docs/AI_LAYER.md).
+- Consider the backlog order in docs/BACKLOG.md; the real-recording pass is first by your request.
 
 ## After Phase 8 (owner request 2026-10-25)
 
