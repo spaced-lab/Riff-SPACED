@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T05:10:00Z
+Updated: 2026-10-25T05:40:00Z
 Phase: 7 AI layer (in progress, fake client, DECISIONS 54)
-Last completed task: P7.T1 Prompt files and client wrapper
-Next task: P7.T2 Analyze endpoint
+Last completed task: P7.T2 Analyze endpoint
+Next task: P7.T3 Suggest endpoint (after the owner-requested outboard guidance folder)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -83,7 +83,7 @@ Phase 6 (tag v0.6.0):
 Phase 7:
 - [x] HARD STOP check: ANTHROPIC_API_KEY (not set; owner chose the fake client, DECISIONS 54)
 - [x] P7.T1 Prompt files and client wrapper
-- [ ] P7.T2 Analyze endpoint
+- [x] P7.T2 Analyze endpoint
 - [ ] P7.T3 Suggest endpoint
 - [ ] P7.T4 Cleanup endpoint and ingest --ai
 - [ ] P7.T5 Live smoke test (needs the key)

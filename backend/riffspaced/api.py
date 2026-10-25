@@ -5,7 +5,11 @@ Routes:
 - GET  /tunings           the preset list
 - POST /analyze           one audio file (multipart) plus options -> riff JSON and a report
 - POST /analyze/batch     several files -> a list of results, one per file, failures included
-- /ai/*                   Phase 7
+- POST /ai/analyze        riff JSON -> dyad labels and a style reading (SPEC 9.2)
+
+AI routes answer 503 `{"reason": "ANTHROPIC_API_KEY not set"}` when no key and no fake client
+is configured, 502 `{"reason": ...}` when the model's answer could not be used, and 400 when
+the riff itself is invalid. The model call runs in the threadpool like the audio analysis.
 
 Analysis runs in FastAPI's threadpool so the event loop stays responsive; uploads are
 capped at 50 MB per file and decoded from a temporary file, since soundfile and ffmpeg want
@@ -21,11 +25,14 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from riffspaced import __version__
+from riffspaced.ai.analyze import analyze_riff
+from riffspaced.ai.client import AiClient, AiError, AiNotConfiguredError, ai_configured, make_client
 from riffspaced.analysis.io import FFMPEG_EXTENSIONS, SOUNDFILE_EXTENSIONS, UnsupportedFormat
 from riffspaced.analysis.pipeline import AnalyzeOptions, analyze
 from riffspaced.model.validate import ValidationError
@@ -109,6 +116,29 @@ async def analyze_upload(upload: UploadFile, options: AnalyzeOptions) -> dict[st
     }
 
 
+def ai_client_for(model_header: str | None) -> AiClient:
+    """The AI client for one request.
+
+    The frontend's AI settings dialog can send `X-Riffspaced-Model`; it is honored only when
+    RIFFSPACED_ALLOW_MODEL_OVERRIDE=1, so a public deployment cannot be pointed at a model the
+    owner did not choose to pay for.
+    """
+    allow = os.getenv("RIFFSPACED_ALLOW_MODEL_OVERRIDE", "") in {"1", "true", "yes"}
+    return make_client(model=model_header if (allow and model_header) else None)
+
+
+async def run_ai(operation: Any, *args: Any) -> Any:
+    """Run an AI operation in the threadpool and map its failures to HTTP answers."""
+    try:
+        return await run_in_threadpool(operation, *args)
+    except AiNotConfiguredError as error:
+        return JSONResponse(status_code=503, content={"reason": error.reason})
+    except AiError as error:
+        return JSONResponse(status_code=502, content={"reason": str(error)})
+    except ValidationError as error:
+        raise HTTPException(status_code=400, detail=f"invalid riff: {error}") from error
+
+
 def create_app() -> FastAPI:
     """Build the FastAPI app. A factory keeps tests free to build fresh instances."""
     app = FastAPI(title="RIFF-SPACED backend", version=__version__)
@@ -125,7 +155,7 @@ def create_app() -> FastAPI:
         return {
             "status": "ok",
             "version": __version__,
-            "aiConfigured": bool(os.getenv("ANTHROPIC_API_KEY")),
+            "aiConfigured": ai_configured(),
         }
 
     @app.get("/tunings")
@@ -171,6 +201,18 @@ def create_app() -> FastAPI:
             "ok": sum(1 for r in results if r["ok"]),
             "failed": sum(1 for r in results if not r["ok"]),
         }
+
+    @app.post("/ai/analyze")
+    async def ai_analyze(
+        riff: dict[str, Any] = Body(...),  # noqa: B008
+        x_riffspaced_model: str | None = Header(default=None),
+    ) -> Any:
+        """Dyad labels for every chord plus a style reading (SPEC 9.2)."""
+        try:
+            client = ai_client_for(x_riffspaced_model)
+        except AiNotConfiguredError as error:
+            return JSONResponse(status_code=503, content={"reason": error.reason})
+        return await run_ai(analyze_riff, riff, client)
 
     return app
 

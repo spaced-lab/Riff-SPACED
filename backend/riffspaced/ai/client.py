@@ -253,7 +253,9 @@ def make_client(model: str | None = None) -> AiClient:
     if fake_requested():
         from riffspaced.ai.fake_client import FakeAiClient
 
-        return FakeAiClient(model=model or model_name())
+        # The fake reports "fake" as its model unless a test or the gated header asks for a
+        # name, so nothing downstream can mistake a canned answer for a real one.
+        return FakeAiClient(model=model) if model else FakeAiClient()
     if not os.getenv("ANTHROPIC_API_KEY"):
         raise AiNotConfiguredError()
     return AnthropicAiClient(model=model)
