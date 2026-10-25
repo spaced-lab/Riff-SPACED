@@ -12,6 +12,7 @@ import {
 import type { ParsedDocument } from '@/storage/documents';
 import { pushRecent, readRecent } from '@/storage/recent';
 import { riffToTextTab } from '@/export/texttab';
+import { midiBlob } from '@/export/midi';
 import { selectDisplayRiff } from './derived';
 import type { RecentEntry } from '@/storage/recent';
 import { bundleToSave } from './librarySlice';
@@ -38,6 +39,8 @@ export type FileSlice = {
   exportTextTab: () => Promise<void>;
   /** Edit > Copy as text tab: system clipboard, with a toast. */
   copyTextTab: () => Promise<void>;
+  /** File > Export > MIDI: asks about channel-per-string, then downloads <name>.mid. */
+  exportMidi: () => void;
 };
 
 export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, get) => ({
@@ -56,6 +59,35 @@ export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, 
       forceAsk: true,
     });
     if (result) get().toast(`exported ${result.name}`);
+  },
+
+  exportMidi: () => {
+    get().syncCurrentRiff();
+    const riff = selectDisplayRiff(get()).riff;
+    get().openDialog({
+      kind: 'form',
+      title: 'export MIDI',
+      message: `${riff.name}: format 0, 480 PPQ, program 30 (distortion guitar).`,
+      fields: [
+        {
+          name: 'channelPerString',
+          label: 'one channel per string',
+          type: 'checkbox',
+          value: false,
+        },
+      ],
+      confirmLabel: 'export',
+      onConfirm: (values) => {
+        const name = `${fileNameFor({ kind: 'riff', value: riff }).replace(/\.riff\.json$/, '')}.mid`;
+        void saveFile(
+          midiBlob(riff, { channelPerString: Boolean(values.channelPerString) }),
+          name,
+          { forceAsk: true },
+        ).then((result) => {
+          if (result) get().toast(`exported ${result.name}`);
+        });
+      },
+    });
   },
 
   copyTextTab: async () => {

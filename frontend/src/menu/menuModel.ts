@@ -125,7 +125,12 @@ export function buildMenus(s: AppState): Menu[] {
           id: 'file.export',
           label: 'Export',
           submenu: [
-            later('file.export.midi', 'MIDI...', 'Phase 5, task 6'),
+            {
+              type: 'item',
+              id: 'file.export.midi',
+              label: 'MIDI...',
+              action: () => s.exportMidi(),
+            },
             {
               type: 'item',
               id: 'file.export.tab',
