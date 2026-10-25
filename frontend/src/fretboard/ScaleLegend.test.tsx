@@ -98,4 +98,29 @@ describe('ScaleLegend', () => {
     fireEvent.click(screen.getByTestId('scale-position-name'));
     expect(onClear).toHaveBeenCalled();
   });
+
+  it('offers layout and riff controls when given handlers', () => {
+    const onLayout = vi.fn();
+    const onShowRiff = vi.fn();
+    render(
+      <ScaleLegend
+        overlay={overlay}
+        degrees={blues.degrees}
+        onToggleGroup={() => undefined}
+        onMode={() => undefined}
+        layout="separate"
+        onLayout={onLayout}
+        showRiff
+        onShowRiff={onShowRiff}
+      />,
+    );
+    expect(document.querySelector('[data-scale-layout="separate"]')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    fireEvent.click(document.querySelector('[data-scale-layout="superimpose"]')!);
+    expect(onLayout).toHaveBeenCalledWith('superimpose');
+    fireEvent.click(screen.getByTestId('scale-show-riff'));
+    expect(onShowRiff).toHaveBeenCalledWith(false);
+  });
 });

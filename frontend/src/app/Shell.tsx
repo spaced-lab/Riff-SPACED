@@ -74,6 +74,14 @@ export function Shell() {
   const setWideBoard = useStore((s) => s.setWideBoard);
   const scaleNeck = useStore((s) => s.scaleNeck);
   const setScaleNeck = useStore((s) => s.setScaleNeck);
+  const scaleLayout = useStore((s) => s.scaleLayout);
+  const setScaleLayout = useStore((s) => s.setScaleLayout);
+  const scaleShowRiff = useStore((s) => s.scaleShowRiff);
+  const setScaleShowRiff = useStore((s) => s.setScaleShowRiff);
+  // Scale view (Phase 9): on its own neck above the riff, or superimposed on the riff neck.
+  const separateScale = scaleOverlay !== null && scaleLayout === 'separate';
+  const superimposed = scaleOverlay !== null && scaleLayout === 'superimpose';
+  const showRiffBoard = !separateScale || scaleShowRiff;
   useKeyboard();
   // The CRT look is a body class so the overlay covers dialogs and the drawer too.
   useEffect(() => {
@@ -115,7 +123,14 @@ export function Shell() {
       <main className="shell__center">
         {editing === 'arrangement' ? <ArrangementEditor /> : null}
         {editing === 'song' ? <SongEditor /> : null}
-        <section className="shell__fretboard" aria-label="fretboard area">
+        <section
+          className={
+            separateScale && scaleShowRiff
+              ? 'shell__fretboard shell__fretboard--two'
+              : 'shell__fretboard'
+          }
+          aria-label="fretboard area"
+        >
           {scaleOverlay ? (
             <ScaleLegend
               overlay={scaleOverlay}
@@ -129,34 +144,61 @@ export function Shell() {
               onWide={setWideBoard}
               neck={scaleNeck}
               onNeck={setScaleNeck}
+              layout={scaleLayout}
+              onLayout={setScaleLayout}
+              showRiff={scaleShowRiff}
+              onShowRiff={setScaleShowRiff}
             />
           ) : null}
-          <div className="shell__board">
-            {splitView ? (
-              <SplitView />
-            ) : (
+          {separateScale ? (
+            <div className="shell__board shell__board--scale" data-testid="scale-board">
               <Fretboard
                 tuning={shownRiff.tuning}
-                notes={shown}
-                dimmedIds={dimmedIds}
-                selectedIds={selectedNoteIds}
-                highlightIds={highlightIds}
+                notes={[]}
                 range={fretRange}
                 showLetters={showLetters}
                 accidentals={accidentals}
                 realisticSpacing={realisticSpacing}
                 scale={scaleOverlay}
+                label={`scale neck, ${scaleOverlay.title}`}
                 onCellClick={
                   display.readOnly
                     ? undefined
                     : ({ string, fret, shiftKey }) =>
                         addNoteAtCursor(string, fret, { chord: shiftKey })
                 }
-                onNoteClick={(id, e) => select([id], e.shiftKey)}
-                onNoteContextMenu={display.readOnly ? undefined : (id) => removeNotes([id])}
               />
-            )}
-          </div>
+            </div>
+          ) : null}
+          {showRiffBoard ? (
+            <div className="shell__board" data-testid="riff-board">
+              {splitView ? (
+                <SplitView />
+              ) : (
+                <Fretboard
+                  tuning={shownRiff.tuning}
+                  notes={superimposed && !scaleShowRiff ? [] : shown}
+                  dimmedIds={dimmedIds}
+                  selectedIds={selectedNoteIds}
+                  highlightIds={highlightIds}
+                  range={fretRange}
+                  showLetters={showLetters}
+                  accidentals={accidentals}
+                  realisticSpacing={realisticSpacing}
+                  scale={superimposed ? scaleOverlay : null}
+                  outlineNotes={superimposed}
+                  onCellClick={
+                    display.readOnly
+                      ? undefined
+                      : ({ string, fret, shiftKey }) =>
+                          addNoteAtCursor(string, fret, { chord: shiftKey })
+                  }
+                  onNoteClick={(id, e) => select([id], e.shiftKey)}
+                  onNoteContextMenu={display.readOnly ? undefined : (id) => removeNotes([id])}
+                />
+              )}
+            </div>
+          ) : null}
         </section>
         <section className="shell__transport" aria-label="transport">
           <TransportBar />

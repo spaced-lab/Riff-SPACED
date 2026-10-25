@@ -5,6 +5,8 @@ export type NoteState = {
   selected: boolean;
   sounding: boolean;
   dimmed: boolean;
+  /** Hollow ring instead of a filled dot, so a scale dot underneath stays visible (Phase 9). */
+  outline?: boolean;
 };
 
 type Props = {
@@ -40,6 +42,7 @@ export function FretboardNote({
   if (state.selected) classes.push('fb-note--selected');
   if (state.sounding) classes.push('fb-note--sounding');
   if (state.dimmed) classes.push('fb-note--dimmed');
+  if (state.outline) classes.push('fb-note--outline');
   if ((note.confidence ?? 1) < LOW_CONFIDENCE) classes.push('fb-note--low');
   if (note.unplayable) classes.push('fb-note--unplayable');
 

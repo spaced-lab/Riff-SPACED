@@ -130,6 +130,7 @@ The Scales menu lays a scale over the fretboard so you can see where it lives in
 - **Color switches.** Roots, thirds, fifths, sevenths, blue notes, others (2, 4, 6). Switch a group off and those notes drop back to the plain ring, so "only roots in color" or "only the blue notes" is two clicks. Clicking a swatch in the legend does the same thing.
 - **Position.** The CAGED shapes: pick one and the scale notes outside that hand position dim, so you can learn one shape and see how the next one overlaps it. Step up and down the neck with `<` and `>`, the arrows in the legend, or Scales > Position. Shapes are named E, D, C, A, G from the one with the root under your first finger on the low string; in a tuning without standard intervals (drop tunings, seven strings) they are numbered from the nut. Click the position name to go back to the whole neck.
 
+- **Own neck or superimposed.** By default the scale gets its own neck above the riff neck, so the two never cover each other; the riff neck keeps working as before (clicks on either neck add notes). The *riff* button in the legend (Scales > Show the riff with the scale) hides the riff neck so only the scale is on screen. *Superimpose* puts both on one neck, with the riff notes drawn as rings around the scale dots so the colors stay visible; the riff button then hides the notes.
 - **Neck: follow or all 24.** Two buttons in the legend (also Scales > Neck). *Follow* keeps a 12-fret window that slides so the chosen position sits in the middle of the board, never below the nut or past fret 24. *All 24* shows the whole neck at once with the dots shrunk to fit, so you can see every shape and how they chain.
 - **Wide fretboard.** View > Wide fretboard, the `F` key, or the *wide* button at the right of the legend hides the library and inspector panels so the board takes the whole width. Menu bar, legend, transport and tab lanes stay, and the board keeps its height, so more frets fit at the same size. Click *show panels* to bring them back.
 
@@ -138,6 +139,10 @@ Scale dots are smaller than riff notes and sit under them. Hover any cell to see
 ![Blues scale in full color](screenshots/phase-09/blues.png)
 
 ![One CAGED position highlighted](screenshots/phase-09/position-caged.png)
+
+![Scale on its own neck above the riff](screenshots/phase-09/two-necks.png)
+
+![Superimposed: riff notes as rings over the scale](screenshots/phase-09/superimpose.png)
 
 ![Wide board, all 24 frets](screenshots/phase-09/wide-all-24.png)
 

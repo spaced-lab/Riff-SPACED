@@ -245,4 +245,15 @@ describe('Fretboard', () => {
     rerender(<Fretboard {...base} notes={[]} scale={overlay} showLetters={false} height={600} />);
     expect(letters(container)).toEqual([]);
   });
+
+  it('draws riff notes as outlines when asked (superimposed scale view)', () => {
+    const { container, rerender } = render(<Fretboard {...base} outlineNotes />);
+    expect(container.querySelector('[data-note-id="a"]')!.getAttribute('class')).toContain(
+      'fb-note--outline',
+    );
+    rerender(<Fretboard {...base} />);
+    expect(container.querySelector('[data-note-id="a"]')!.getAttribute('class')).not.toContain(
+      'fb-note--outline',
+    );
+  });
 });

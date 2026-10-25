@@ -535,6 +535,28 @@ export function buildMenus(s: AppState): Menu[] {
         },
         {
           type: 'item',
+          id: 'scales.layout:separate',
+          label: 'Layout: scale on its own neck',
+          checked: s.scaleLayout === 'separate',
+          action: () => s.setScaleLayout('separate'),
+        },
+        {
+          type: 'item',
+          id: 'scales.layout:superimpose',
+          label: 'Layout: superimposed on the riff neck',
+          checked: s.scaleLayout === 'superimpose',
+          action: () => s.setScaleLayout('superimpose'),
+        },
+        {
+          type: 'item',
+          id: 'scales.showRiff',
+          label: 'Show the riff with the scale',
+          checked: s.scaleShowRiff,
+          action: () => s.setScaleShowRiff(!s.scaleShowRiff),
+        },
+        sep,
+        {
+          type: 'item',
           id: 'scales.neck:follow',
           label: 'Neck: follow the position (12-fret window)',
           checked: s.scaleNeck === 'follow',

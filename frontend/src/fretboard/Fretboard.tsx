@@ -37,6 +37,8 @@ export type FretboardProps = {
   realisticSpacing?: boolean;
   /** Scale overlay under the notes (Phase 9); null or undefined draws none. */
   scale?: ScaleOverlay | null;
+  /** Draw riff notes as outlines so the scale dots show through (superimposed layout). */
+  outlineNotes?: boolean;
   onCellClick?: (cell: CellClick) => void;
   onNoteClick?: (noteId: string, event: { shiftKey: boolean; button: number }) => void;
   onNoteContextMenu?: (noteId: string) => void;
@@ -62,6 +64,7 @@ export function Fretboard(props: FretboardProps) {
     accidentals,
     realisticSpacing = false,
     scale = null,
+    outlineNotes = false,
     onCellClick,
     onNoteClick,
     onNoteContextMenu,
@@ -174,6 +177,7 @@ export function Fretboard(props: FretboardProps) {
                 selected: selected.has(n.id),
                 sounding: highlight.has(n.id),
                 dimmed: dimmed.has(n.id),
+                outline: outlineNotes,
               }}
               onClick={onNoteClick}
               onContextMenu={onNoteContextMenu}

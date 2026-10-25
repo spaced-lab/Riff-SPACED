@@ -12,13 +12,40 @@ test('scale overlay: color, blues scale, root shift, toggles, mono, persistence'
 }) => {
   const console = watchConsole(page);
   await page.goto('/?demo=1');
-  const board = page.getByTestId('fretboard');
+  // With the scale on its own neck (the default layout) the first fretboard is the scale neck.
+  const board = page.getByTestId('fretboard').first();
   await expect(board.locator('[data-string-line]')).toHaveCount(6);
   await expect(page.getByTestId('scale-legend')).toHaveCount(0);
+  await expect(page.getByTestId('fretboard')).toHaveCount(1);
 
   // Full color on the default scale: Bb minor pentatonic follows the Bb Standard low string.
   await menuClick(page, 'scales', 'scales.mode:color');
   await expect(page.getByTestId('scale-title')).toHaveText('Bb Minor Pentatonic');
+  // Two necks: the scale above, the riff below, neither drawn over the other.
+  await expect(page.getByTestId('fretboard')).toHaveCount(2);
+  await expect(page.getByTestId('scale-board').locator('[data-note-id]')).toHaveCount(0);
+  await expect(page.getByTestId('riff-board').locator('[data-note-id]').first()).toBeVisible();
+  await expect(page.getByTestId('riff-board').locator('[data-scale-dot]')).toHaveCount(0);
+  await page.screenshot({ path: screenshotPath('phase-09', 'two-necks'), fullPage: true });
+  // The riff toggle hides the riff neck; the scale neck stays.
+  await page.getByTestId('scale-show-riff').click();
+  await expect(page.getByTestId('riff-board')).toHaveCount(0);
+  await expect(page.getByTestId('fretboard')).toHaveCount(1);
+  await page.getByTestId('scale-show-riff').click();
+  await expect(page.getByTestId('riff-board')).toBeVisible();
+  // Superimposed: one neck, riff notes as rings over the scale dots; riff toggle empties it.
+  await page.locator('[data-scale-layout="superimpose"]').click();
+  await expect(page.getByTestId('fretboard')).toHaveCount(1);
+  await expect(page.getByTestId('riff-board').locator('[data-scale-dot]').first()).toBeVisible();
+  await expect(page.getByTestId('riff-board').locator('[data-note-id]').first()).toHaveClass(
+    /fb-note--outline/,
+  );
+  await page.screenshot({ path: screenshotPath('phase-09', 'superimpose'), fullPage: true });
+  await page.getByTestId('scale-show-riff').click();
+  await expect(page.getByTestId('riff-board').locator('[data-note-id]')).toHaveCount(0);
+  await page.getByTestId('scale-show-riff').click();
+  await page.locator('[data-scale-layout="separate"]').click();
+  await expect(page.getByTestId('fretboard')).toHaveCount(2);
   const open6 = board.locator('[data-scale-dot][data-string="6"][data-fret="0"]');
   await expect(open6).toHaveAttribute('data-degree', 'R');
   await expect(open6).toHaveClass(/fb-scale--root/);
@@ -133,9 +160,14 @@ test('scale overlay: color, blues scale, root shift, toggles, mono, persistence'
   await expect(page.getByTestId('scale-position-name')).toHaveText('whole neck');
   await expect(board.locator('[data-scale-dot][data-in-position="false"]')).toHaveCount(0);
 
-  // Split view carries the overlay to every quadrant.
+  // Split view: with the scale on its own neck the quadrants show the riff alone; when
+  // superimposed every quadrant carries the overlay.
   await menuClick(page, 'view', 'view.split');
+  await expect(page.getByTestId('fretboard')).toHaveCount(5);
+  await expect(page.getByTestId('scale-dots')).toHaveCount(1);
+  await menuClick(page, 'scales', 'scales.layout:superimpose');
   await expect(page.getByTestId('scale-dots')).toHaveCount(4);
+  await menuClick(page, 'scales', 'scales.layout:separate');
   await menuClick(page, 'view', 'view.split');
 
   // Off removes the legend and the dots.

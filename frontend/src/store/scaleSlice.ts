@@ -24,6 +24,13 @@ export type ScaleNeck = 'follow' | 'all';
 /** The window used when returning from "all 24 frets" to following the position. */
 export const FOLLOW_WIDTH = 12;
 
+/**
+ * Where the scale is drawn. `separate`: its own neck above the riff neck, so the two never
+ * cover each other. `superimpose`: one neck, scale dots under the riff notes, which are drawn
+ * as outlines so the scale colors stay visible inside them.
+ */
+export type ScaleLayout = 'separate' | 'superimpose';
+
 export type ScaleSlice = {
   scaleMode: ScaleMode;
   scaleId: ScaleId;
@@ -43,6 +50,11 @@ export type ScaleSlice = {
   setScalePosition: (index: number | null) => void;
   scaleNeck: ScaleNeck;
   setScaleNeck: (neck: ScaleNeck) => void;
+  scaleLayout: ScaleLayout;
+  setScaleLayout: (layout: ScaleLayout) => void;
+  /** Show the riff while the scale is shown: the riff neck (separate) or the notes (superimpose). */
+  scaleShowRiff: boolean;
+  setScaleShowRiff: (on: boolean) => void;
   /** Move one position up (+1) or down (-1) the neck; from the whole neck, +1 is the first. */
   stepScalePosition: (delta: 1 | -1) => void;
   setScaleMode: (mode: ScaleMode) => void;
@@ -77,6 +89,10 @@ export const createScaleSlice: StateCreator<AppState, [], [], ScaleSlice> = (set
   scaleRoot: null,
   scaleColors: allColorsOn(),
   scalePosition: null,
+  scaleLayout: 'separate',
+  setScaleLayout: (scaleLayout) => set({ scaleLayout }),
+  scaleShowRiff: true,
+  setScaleShowRiff: (scaleShowRiff) => set({ scaleShowRiff }),
   scaleNeck: 'follow',
   setScaleNeck: (neck) =>
     set((s) => {

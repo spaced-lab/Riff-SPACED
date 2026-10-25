@@ -73,6 +73,8 @@ Three modes: off, full color, and mono (every scale note the same plain ring). I
 
 Choosing a position also slides the fret range (`rangeCenteredOn` in the view slice): same width, centered on the shape, clamped to 0..24, so the board follows the hand up the neck. That is the `follow` neck option; `all` pins the range to 0-24 so every shape is on screen and the dots shrink to fit (`scaleNeck` in the scale slice, persisted).
 
+**Two necks or one.** `scaleLayout` (scale slice, persisted) is `separate` by default: the shell renders a second `Fretboard` above the riff neck with `notes={[]}` and the overlay, and the riff neck without the overlay, so nothing is drawn over anything; `scaleShowRiff` leaves the riff neck out entirely. `superimpose` is the single-neck form: the overlay goes under the riff notes and the notes get `fb-note--outline` (a ring in the foreground color, no fill), so the scale dot inside each ring stays readable. Split view follows the same rule: overlay in every quadrant only when superimposed.
+
 **Wide fretboard.** `wideBoard` in the view slice leaves the library and inspector panels out of the shell so the center column, and the board with it, takes the full width at the same height. The geometry is ready for any board size: the gutter left of the nut grows with the dot radius so the open-string dot and its label stay inside the SVG, the fret-number baseline is clamped inside the top padding, label font size follows the dot size (11 to 20 px), and scale dots carry their note letter once their radius reaches 8 px.
 
 ![Blues scale in full color](screenshots/phase-09/blues.png)

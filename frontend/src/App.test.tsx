@@ -68,4 +68,35 @@ describe('App', () => {
     expect(readHashPath('')).toBe('/');
     expect(readHashPath('#junk')).toBe('/');
   });
+
+  it('scale view: own neck above the riff, riff toggle, superimposed outlines (Phase 9)', () => {
+    const { container } = render(<App />);
+    expect(screen.queryByTestId('scale-board')).toBeNull();
+    act(() => useStore.getState().setScaleMode('color'));
+    expect(screen.getByTestId('scale-board')).toBeInTheDocument();
+    expect(screen.getByTestId('riff-board')).toBeInTheDocument();
+    expect(screen.getAllByTestId('fretboard')).toHaveLength(2);
+    // The scale neck carries the dots, the riff neck the notes; neither covers the other.
+    expect(
+      screen.getByTestId('scale-board').querySelectorAll('[data-scale-dot]').length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByTestId('scale-board').querySelectorAll('[data-note-id]')).toHaveLength(0);
+    expect(screen.getByTestId('riff-board').querySelectorAll('[data-scale-dot]')).toHaveLength(0);
+    act(() => useStore.getState().setScaleShowRiff(false));
+    expect(screen.queryByTestId('riff-board')).toBeNull();
+    expect(screen.getAllByTestId('fretboard')).toHaveLength(1);
+    act(() => {
+      useStore.getState().setScaleShowRiff(true);
+      useStore.getState().setScaleLayout('superimpose');
+    });
+    expect(screen.queryByTestId('scale-board')).toBeNull();
+    const riff = screen.getByTestId('riff-board');
+    expect(riff.querySelectorAll('[data-scale-dot]').length).toBeGreaterThan(0);
+    expect(riff.querySelector('[data-note-id]')!.getAttribute('class')).toContain(
+      'fb-note--outline',
+    );
+    act(() => useStore.getState().setScaleShowRiff(false));
+    expect(screen.getByTestId('riff-board').querySelectorAll('[data-note-id]')).toHaveLength(0);
+    expect(container.querySelectorAll('[data-scale-dot]').length).toBeGreaterThan(0);
+  });
 });

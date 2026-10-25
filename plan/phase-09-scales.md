@@ -89,3 +89,15 @@ from the position with the root under the first finger. e2e: step through positi
 Tests: rangeCenteredOn clamps; stepping moves the range; neck option sets and restores the
 range; F toggles; e2e picks a high position (numbers above 12, never above 24), goes wide
 (panels gone, tab lanes still there, board wider at the same height), all 24, back to follow.
+
+## P9.T7 Scale on its own neck, riff toggle, superimpose (owner request, same day)
+
+The owner found the riff and the scale drawn on top of each other with no way to remove the
+riff. Layout option `separate` (default): the scale on its own neck above the riff neck, both
+at 190 px so the tab lanes keep their room; `superimpose`: one neck, riff notes as outline
+rings over the scale dots. A `riff` toggle hides the riff neck (separate) or the notes
+(superimpose). Both persisted. Split view carries the overlay only when superimposed.
+
+Tests: App render test for both layouts and the toggle; Fretboard outline class; legend and
+menu controls; e2e counts necks, checks neither neck draws the other's marks, screenshots
+two-necks.png and superimpose.png.

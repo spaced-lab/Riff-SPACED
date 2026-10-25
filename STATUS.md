@@ -2,7 +2,7 @@
 
 Updated: 2026-10-25T23:30:00Z
 Phase: 9 (scale mode and CAGED positions, owner request after v1), all tasks done, tag v0.9.0.
-Last completed task: P9.T6 wide fretboard and neck option (owner correction of the full-screen attempt)
+Last completed task: P9.T7 separate scale neck, riff toggle, superimpose layout
 Next task: none scheduled; owner feedback on the scale colors and the position shapes (see Owner follow-ups)
 
 ## Preflight
@@ -107,6 +107,7 @@ Phase 9 (tag v0.9.0, plan/phase-09-scales.md):
 - [x] P9.T5 CAGED positions (music/positions.ts, Position submenu, < and > shortcuts)
 - [x] P9.T4 Docs and exit (FRETBOARD.md, USER_GUIDE.md 6a, LEARNING_LOG, DECISIONS 60-62)
 - [x] P9.T6 Follow the position (fret range slides, clamped 0..24), wide fretboard (F, side panels hidden), neck option (follow / all 24)
+- [x] P9.T7 Scale on its own neck above the riff (default), riff toggle, superimpose layout with outlined riff notes
 
 ## How to run right now
 ```
@@ -152,9 +153,9 @@ make down                                  # stop the containers; make check run
 
 ## Resume after pause (2026-10-25, end of the Phase 9 session)
 
-State: main at the commit after d0e4fb4 (wide board and neck option), tag v0.9.0 three commits behind it, CI green, working tree clean. Dev server on :5173 and the fake-client backend on :8000 were left running; if they are gone, start them with the commands under How to run right now. Repo is still private; the owner plans to make it public (Pages on a private repo needs a paid plan).
+State: main at the P9.T7 commit (separate scale neck, riff toggle, superimpose), tag v0.9.0 five commits behind it, CI green, working tree clean. Dev server on :5173 and the fake-client backend on :8000 were left running; if they are gone, start them with the commands under How to run right now. Repo is still private; the owner plans to make it public (Pages on a private repo needs a paid plan).
 
-What Phase 9 added, for orientation: Scales menu (off / full color / mono, scale, root, color switches, position, neck), legend above the board (swatches toggle colors, position arrows, follow / all 24, wide), `<` `>` for positions, `F` for the wide board. Code: `frontend/src/music/scales.ts`, `positions.ts`, `store/scaleSlice.ts`, `fretboard/ScaleDots.tsx`, `ScaleLegend.tsx`. Colors: the `--scale-*` block in `frontend/src/theme.css`.
+What Phase 9 added, for orientation: Scales menu (off / full color / mono, scale, root, color switches, position, layout own neck / superimpose, show riff, neck follow / all 24), legend above the board (swatches toggle colors, position arrows, own neck / superimpose, riff, follow / all 24, wide), `<` `>` for positions, `F` for the wide board. In the default layout the scale has its own neck above the riff neck; superimpose draws the riff as rings over the scale dots. Code: `frontend/src/music/scales.ts`, `positions.ts`, `store/scaleSlice.ts`, `fretboard/ScaleDots.tsx`, `ScaleLegend.tsx`. Colors: the `--scale-*` block in `frontend/src/theme.css`.
 
 On resume:
 1. Read Owner follow-ups. The owner was going to try the scale colors and the CAGED shapes and say what to change; a color change is a token edit in theme.css, a shape change is in `positions.ts` (DECISIONS 62 explains the derivation).

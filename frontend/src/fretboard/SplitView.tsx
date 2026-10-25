@@ -42,7 +42,10 @@ export function SplitView() {
   const positionTick = useStore((s) => s.positionTick);
   const editCursorTick = useStore((s) => s.editCursorTick);
   const select = useStore((s) => s.select);
-  const scaleOverlay = useStore(selectScaleOverlay);
+  const overlay = useStore(selectScaleOverlay);
+  const scaleLayout = useStore((s) => s.scaleLayout);
+  // With the scale on its own neck the quadrants show the riff alone.
+  const scaleOverlay = scaleLayout === 'superimpose' ? overlay : null;
 
   const ranges = useMemo(() => quadrantRanges(riff.lengthBars), [riff.lengthBars]);
   const tick = isPlaying ? positionTick : editCursorTick;
@@ -83,6 +86,7 @@ export function SplitView() {
                 accidentals={accidentals}
                 realisticSpacing={realisticSpacing}
                 scale={scaleOverlay}
+                outlineNotes={scaleOverlay !== null}
                 onNoteClick={(id, e) => select([id], e.shiftKey)}
                 label={`quadrant ${i + 1}`}
               />

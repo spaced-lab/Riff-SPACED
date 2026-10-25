@@ -20,6 +20,12 @@ type Props = {
   /** How much neck to show: follow the position, or all 24 frets. */
   neck?: 'follow' | 'all';
   onNeck?: (neck: 'follow' | 'all') => void;
+  /** Own neck for the scale, or one neck with the riff drawn as outlines over it. */
+  layout?: 'separate' | 'superimpose';
+  onLayout?: (layout: 'separate' | 'superimpose') => void;
+  /** Whether the riff is shown at all while the scale is. */
+  showRiff?: boolean;
+  onShowRiff?: (on: boolean) => void;
 };
 
 /**
@@ -40,6 +46,10 @@ export function ScaleLegend({
   onWide,
   neck = 'follow',
   onNeck,
+  layout = 'separate',
+  onLayout,
+  showRiff = true,
+  onShowRiff,
 }: Props) {
   const position = overlay.position ?? null;
   return (
@@ -154,6 +164,44 @@ export function ScaleLegend({
             all 24
           </button>
         </span>
+      ) : null}
+      {onLayout ? (
+        <span className="scale-legend__modes" role="radiogroup" aria-label="scale layout">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={layout === 'separate'}
+            className="scale-legend__mode"
+            data-scale-layout="separate"
+            title="the scale on its own neck above the riff"
+            onClick={() => onLayout('separate')}
+          >
+            own neck
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={layout === 'superimpose'}
+            className="scale-legend__mode"
+            data-scale-layout="superimpose"
+            title="one neck: riff notes as rings over the scale dots"
+            onClick={() => onLayout('superimpose')}
+          >
+            superimpose
+          </button>
+        </span>
+      ) : null}
+      {onShowRiff ? (
+        <button
+          type="button"
+          className="scale-legend__mode"
+          aria-pressed={showRiff}
+          data-testid="scale-show-riff"
+          title={showRiff ? 'hide the riff while the scale is shown' : 'show the riff again'}
+          onClick={() => onShowRiff(!showRiff)}
+        >
+          riff
+        </button>
       ) : null}
       {onWide ? (
         <button

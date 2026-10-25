@@ -167,6 +167,8 @@ describe('preferences and the demo reset', () => {
         others: false,
       },
       scaleNeck: 'follow',
+      scaleLayout: 'separate',
+      scaleShowRiff: true,
     };
     expect(JSON.parse(storage.getItem(PREFS_KEY)!)).toEqual(expected);
     stop();

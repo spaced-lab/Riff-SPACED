@@ -57,27 +57,38 @@
 .shell__fretboard {
   display: flex;
   flex-direction: column;
-  height: 240px;
   border: 1px solid var(--color-dim);
 }
 
-/* The legend (when a scale is shown) takes one or two rows; the board fills the rest. */
-.shell__fretboard:has(.scale-legend) {
-  height: 292px;
-}
-
+/*
+ * Each board has its own height; the section is the sum of its legend and boards. With the
+ * scale on its own neck above the riff neck (Phase 9) both necks shrink so the tab lanes
+ * keep their room.
+ */
+/* 238 + the section's 1 px borders keeps the 240 px the layout has always had. */
 .shell__board {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  height: 238px;
 }
 
-.shell__fretboard:has(.split-view) {
+.shell__board:has(.split-view) {
   height: 380px;
-  border: none;
 }
 
-.shell__fretboard:has(.split-view):has(.scale-legend) {
-  height: 432px;
+.shell__fretboard--two .shell__board {
+  height: 190px;
+}
+
+.shell__fretboard--two .shell__board:has(.split-view) {
+  height: 300px;
+}
+
+.shell__board--scale {
+  border-bottom: 1px solid var(--color-dim);
+}
+
+.shell__fretboard:has(.split-view):not(.shell__fretboard--two) {
+  border: none;
 }
 
 .shell__transport {

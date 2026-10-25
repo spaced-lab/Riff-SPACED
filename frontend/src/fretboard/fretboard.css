@@ -119,6 +119,26 @@
   opacity: 0.35;
 }
 
+/* Superimposed scale view: the riff is a ring around the scale dot, not a lid on it. */
+.fb-note--outline circle {
+  fill: none;
+  stroke: var(--color-fg);
+  stroke-width: 2.5;
+}
+
+.fb-note--outline text {
+  fill: var(--color-fg);
+}
+
+.fb-note--outline.fb-note--sounding circle {
+  fill: var(--color-flash);
+  stroke: var(--color-flash);
+}
+
+.fb-note--outline.fb-note--selected circle {
+  stroke: #ffffff;
+}
+
 .fb-tooltip {
   position: absolute;
   pointer-events: none;

@@ -16,7 +16,7 @@ import { COLOR_GROUPS, SCALES } from '@/music/scales';
 import type { ColorGroup, ScaleId } from '@/music/scales';
 import { useStore } from './index';
 import { allColorsOn } from './scaleSlice';
-import type { ScaleMode, ScaleNeck } from './scaleSlice';
+import type { ScaleLayout, ScaleMode, ScaleNeck } from './scaleSlice';
 import type { AppState } from './types';
 import { bundleToSave } from './librarySlice';
 
@@ -44,6 +44,8 @@ export type Prefs = {
   scaleRoot: number | null;
   scaleColors: Record<ColorGroup, boolean>;
   scaleNeck: ScaleNeck;
+  scaleLayout: ScaleLayout;
+  scaleShowRiff: boolean;
 };
 
 const SCALE_MODES: readonly ScaleMode[] = ['off', 'color', 'mono'];
@@ -76,6 +78,9 @@ export function loadPrefs(storage: KeyValueStorage | null = defaultStorage()): P
     }
     if (parsed.scaleNeck === 'follow' || parsed.scaleNeck === 'all')
       out.scaleNeck = parsed.scaleNeck;
+    if (parsed.scaleLayout === 'separate' || parsed.scaleLayout === 'superimpose')
+      out.scaleLayout = parsed.scaleLayout;
+    if (typeof parsed.scaleShowRiff === 'boolean') out.scaleShowRiff = parsed.scaleShowRiff;
     return out;
   } catch {
     return {};
@@ -94,6 +99,8 @@ export function startPrefsSave(storage: KeyValueStorage | null = defaultStorage(
     scaleRoot: s.scaleRoot,
     scaleColors: s.scaleColors,
     scaleNeck: s.scaleNeck,
+    scaleLayout: s.scaleLayout,
+    scaleShowRiff: s.scaleShowRiff,
   });
   return useStore.subscribe((state, previous) => {
     const next = pick(state);
