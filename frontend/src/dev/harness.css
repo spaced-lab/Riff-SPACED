@@ -1,0 +1,26 @@
+.harness {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.harness h1 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.harness h2 {
+  font-size: 0.9rem;
+  margin: 0 0 6px;
+  color: var(--color-mid);
+}
+
+.harness a {
+  color: var(--color-fg);
+}
+
+.harness__svg {
+  height: 220px;
+  border: 1px solid var(--color-dim);
+}

@@ -1,19 +1,23 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from './App';
+import { readHashPath } from './hooks/useHashRoute';
 import { bootstrapStore, useStore } from './store';
 
 describe('App', () => {
   beforeEach(() => {
+    window.location.hash = '';
     useStore.setState(useStore.getInitialState(), true);
     bootstrapStore();
   });
 
-  it('renders the heading and the demo riff on the fretboard', () => {
+  it('renders the shell with the demo riff on the fretboard and placeholders for later phases', () => {
     const { container } = render(<App />);
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('RIFF-SPACED');
+    expect(screen.getByText('RIFF-SPACED')).toBeInTheDocument();
     expect(container.querySelectorAll('[data-note-id]').length).toBeGreaterThan(0);
-    expect(screen.getByTestId('tuning-status')).toHaveTextContent('Bb Standard: 34 39 44 49 53 58');
+    expect(screen.getByTestId('placeholder-tab-lanes')).toBeInTheDocument();
+    expect(screen.getByTestId('placeholder-inspector')).toBeInTheDocument();
+    expect(screen.getByTestId('status-bar')).toHaveTextContent('Bb Standard');
   });
 
   it('dev toolbar toggles letters, sharps, range, and tuning (keep shapes)', () => {
@@ -31,9 +35,24 @@ describe('App', () => {
     expect(useStore.getState().history.past.at(-1)?.label).toBe('change tuning');
   });
 
-  it('dev toolbar switches riffs', () => {
+  it('dev toolbar switches riffs and panels can be hidden', () => {
     render(<App />);
     fireEvent.change(screen.getByLabelText('riff'), { target: { value: 'demo-riff-tritone' } });
     expect(useStore.getState().riff.name).toBe('Tritone Chug');
+    act(() => useStore.getState().togglePanel('library'));
+    expect(screen.queryByTestId('placeholder-library')).toBeNull();
+  });
+
+  it('routes /#/dev/fretboard to the harness with four boards', () => {
+    window.location.hash = '#/dev/fretboard';
+    const { container } = render(<App />);
+    expect(screen.getByTestId('fretboard-harness')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-testid="fretboard"]')).toHaveLength(4);
+    expect(
+      container.querySelectorAll('[data-testid="harness-board-3"] [data-string-line]'),
+    ).toHaveLength(7);
+    expect(readHashPath('#/dev/fretboard')).toBe('/dev/fretboard');
+    expect(readHashPath('')).toBe('/');
+    expect(readHashPath('#junk')).toBe('/');
   });
 });
