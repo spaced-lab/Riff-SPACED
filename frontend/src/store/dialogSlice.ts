@@ -71,6 +71,9 @@ export type DialogSlice = {
   /** File > Import from audio dialog (its own component, not a DialogSpec). */
   importDialogOpen: boolean;
   setImportDialogOpen: (open: boolean) => void;
+  /** Tuning > Find easier tuning dialog (its own component). */
+  easierTuningOpen: boolean;
+  setEasierTuningOpen: (open: boolean) => void;
   toasts: Toast[];
   /** Non-blocking status that disappears on its own. */
   toast: (text: string, kind?: Toast['kind']) => void;
@@ -104,6 +107,8 @@ export const createDialogSlice: StateCreator<AppState, [], [], DialogSlice> = (s
   },
   importDialogOpen: false,
   setImportDialogOpen: (importDialogOpen) => set({ importDialogOpen }),
+  easierTuningOpen: false,
+  setEasierTuningOpen: (easierTuningOpen) => set({ easierTuningOpen }),
   toasts: [],
   toast: (text, kind = 'info') => {
     const id = nextToastId++;

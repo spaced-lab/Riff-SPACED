@@ -89,3 +89,15 @@ Worked cases from the fixture:
 - A lone Db3 picks 4:5. With the hand already at fret 10 it picks 5:10 instead: movement outweighs height.
 
 These weights were tuned against the fixture, not the other way round, and the fixture file documents them. The Phase 6 analysis uses the same cost shape as the transition cost of its Viterbi decoder, which is why the two agree about what "the way the owner plays" means.
+
+## Transpose, retune, and the easier-tuning search (Phase 8)
+
+Transpose and retune are one operation with a different pitch target (`frontend/src/music/transpose.ts`, mirrored in `backend/riffspaced/music/transpose.py`). `refingerRiff` walks the riff group by group (notes sharing a start and a chordId sound together), asks `bestFingering` for positions that sound the wanted pitches, first within frets 0 to 12 on the low four strings and then anywhere on the neck, and carries the previous group's hand position forward so the hand does not jump when it does not have to. A note no position can reach is flagged `unplayable` and left where it was: amber in the UI, silent in playback, never deleted.
+
+- **Transpose by k**: target pitch is the current pitch plus k, same tuning.
+- **Retune, keep shapes**: positions stay, pitches move with the strings. The owner's "one click lower everything".
+- **Retune, keep pitches**: target pitch is the current pitch, new tuning.
+
+The fixture section `transpose` pins both implementations to the same answers. One of them surprised the author: transposing the demo walkdown up two puts the Eb2+Bb2 chug on the open fifth string plus 4:2 rather than 6:5+5:7, because from the open C2 before it that shape has no span and no hand movement. That is the cost model deciding (DECISIONS 45, 58), and the place to change it is `FINGERING_COST`, not the transpose tool.
+
+**Find easier tuning** (`tuningSearch.ts`) tries every preset with the same string count and every single-string change of one or two semitones, refingers the riff on each keeping the pitches, and scores it `2.0 * unreachable notes + 0.5 * total fret span + 0.2 * total hand movement`. Lower is easier. The walkdown scores better in Drop Ab than in Bb Standard because every power chord becomes a same-fret shape with no span. The current tuning is always listed so the change can be read as a difference.

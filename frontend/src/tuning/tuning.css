@@ -1,0 +1,23 @@
+.easier {
+  min-width: 640px;
+  max-width: 860px;
+}
+
+.easier__table td,
+.easier__table th {
+  white-space: nowrap;
+}
+
+.easier__row--preview td {
+  color: var(--color-flash);
+}
+
+.easier__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.easier__actions button {
+  padding: 1px 8px;
+  font-size: 12px;
+}

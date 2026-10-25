@@ -9,6 +9,7 @@ import { ArrangementEditor } from '@/arrangement/ArrangementEditor';
 import { SongEditor } from '@/song/SongEditor';
 import { selectDisplayRiff } from '@/store/derived';
 import { TransportBar } from '@/transport/TransportBar';
+import { EasierTuningDialog } from '@/tuning/EasierTuningDialog';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { SplitView } from '@/fretboard/SplitView';
 import { TabLanes } from '@/tab/TabLanes';
@@ -55,6 +56,9 @@ export function Shell() {
   const positionTick = useStore((s) => s.positionTick);
   const syncJitterMs = useStore((s) => s.syncJitterMs);
   const auditionRiff = useStore((s) => s.auditionRiff);
+  const previewRiff = useStore((s) => s.previewRiff);
+  const easierOpen = useStore((s) => s.easierTuningOpen);
+  const setEasierOpen = useStore((s) => s.setEasierTuningOpen);
   useKeyboard();
 
   // While editing the fretboard shows what sounds at the edit cursor (rest of the bar as
@@ -62,7 +66,7 @@ export function Shell() {
   // sounding notes through highlightIds. While an AI suggestion is auditioned (Phase 7) the
   // fretboard shows that suggestion instead and returns to the riff when it stops.
   const viewTick = isPlaying ? positionTick : editCursorTick;
-  const shownRiff = auditionRiff ?? riff;
+  const shownRiff = auditionRiff ?? previewRiff ?? riff;
   const { shown, dimmedIds } = useMemo(() => {
     const atTick = notesSoundingAt(shownRiff, viewTick);
     if (!ghostNotes) return { shown: atTick, dimmedIds: [] as string[] };
@@ -129,6 +133,7 @@ export function Shell() {
       <Dialog />
       <SuggestionsDrawer />
       {importOpen ? <ImportAudioDialog onClose={() => setImportOpen(false)} /> : null}
+      {easierOpen ? <EasierTuningDialog onClose={() => setEasierOpen(false)} /> : null}
       <Toasts />
       <footer className="shell__status" data-testid="status-bar">
         <span data-testid="tuning-status">
@@ -137,6 +142,9 @@ export function Shell() {
         <span data-testid="riff-name">{riff.name}</span>
         {auditionRiff ? (
           <span data-testid="status-audition">auditioning: {auditionRiff.name}</span>
+        ) : null}
+        {!auditionRiff && previewRiff ? (
+          <span data-testid="status-preview">previewing: {previewRiff.tuning.name}</span>
         ) : null}
         {fileName ? <span data-testid="file-name">{fileName}</span> : null}
         <span data-testid="status-lane">lane {activeLane}</span>

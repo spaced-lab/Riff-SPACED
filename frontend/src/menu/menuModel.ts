@@ -420,7 +420,14 @@ export function buildMenus(s: AppState): Menu[] {
           action: () =>
             s.setRetuneMode(s.retuneMode === 'keepPitches' ? 'keepShapes' : 'keepPitches'),
         },
-        later('tuning.easier', 'Find easier tuning...', 8),
+        {
+          type: 'item',
+          id: 'tuning.easier',
+          label: 'Find easier tuning...',
+          disabled: s.editing !== 'riff',
+          reason: s.editing !== 'riff' ? 'open a riff first' : undefined,
+          action: () => s.setEasierTuningOpen(true),
+        },
       ],
     },
     {

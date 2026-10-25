@@ -1,5 +1,6 @@
 import type { StateCreator } from 'zustand';
 import type { Accidentals } from '@/music/naming';
+import type { Riff } from '@/model/types';
 import type { GridName } from '@/music/time';
 import type { RetuneMode } from '@/music/transpose';
 import type { AppState } from './types';
@@ -34,6 +35,9 @@ export type ViewSlice = {
   /** What choosing a tuning does to the notes (SPEC 3.7): shapes stay or pitches stay. */
   retuneMode: RetuneMode;
   setRetuneMode: (mode: RetuneMode) => void;
+  /** A riff shown on the fretboard instead of the open one, for previews (never played). */
+  previewRiff: Riff | null;
+  setPreviewRiff: (riff: Riff | null) => void;
   /** Editor grid resolution: note entry duration and snapping (SPEC 3.4). */
   grid: GridName;
   /** Tab lane zoom in pixels per bar, 120..1200. */
@@ -63,6 +67,8 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   setShowDyadLabels: (showDyadLabels) => set({ showDyadLabels }),
   retuneMode: 'keepShapes',
   setRetuneMode: (retuneMode) => set({ retuneMode }),
+  previewRiff: null,
+  setPreviewRiff: (previewRiff) => set({ previewRiff }),
   grid: '1/16',
   pxPerBar: 320,
   setGrid: (grid) => set({ grid }),
