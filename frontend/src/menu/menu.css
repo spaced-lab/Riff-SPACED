@@ -1,0 +1,102 @@
+.menubar {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  flex: 1;
+  border: 1px solid var(--color-dim);
+  padding: 0 4px;
+}
+
+.menubar__menu {
+  position: relative;
+}
+
+.menubar__title {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  color: var(--color-fg);
+  cursor: default;
+}
+
+.menubar__title:hover,
+.menubar__title--open {
+  background: var(--color-dim);
+}
+
+.menu__list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  min-width: 240px;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-fg);
+  box-shadow: 0 0 0 1px var(--color-bg);
+}
+
+.menu__list--sub {
+  top: -5px;
+  left: 100%;
+}
+
+.menu__entry {
+  position: relative;
+}
+
+.menu__item {
+  display: grid;
+  grid-template-columns: 16px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 3px 10px 3px 6px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-fg);
+  text-align: left;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.menu__item:hover,
+.menu__entry--sub-open > .menu__item {
+  background: var(--color-dim);
+}
+
+.menu__item--disabled {
+  color: var(--color-dim);
+}
+
+.menu__item--disabled:hover {
+  background: transparent;
+}
+
+.menu__check {
+  text-align: center;
+}
+
+.menu__accel,
+.menu__reason {
+  color: var(--color-mid);
+  font-size: 11px;
+  padding-left: 12px;
+}
+
+.menu__item--disabled .menu__reason {
+  color: var(--color-dim);
+}
+
+.menu__arrow {
+  color: var(--color-mid);
+}
+
+.menu__separator {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--color-dim);
+}

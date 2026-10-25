@@ -47,3 +47,53 @@
   border-color: var(--color-warn);
   color: var(--color-warn);
 }
+
+.dialog__input {
+  width: 100%;
+  padding: 4px 6px;
+  margin-bottom: 14px;
+}
+
+.dialog__form {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.dialog__field {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog__field span {
+  color: var(--color-mid);
+}
+
+.dialog__field input,
+.dialog__field select {
+  padding: 2px 6px;
+  min-width: 0;
+}
+
+.dialog__table {
+  border-collapse: collapse;
+  margin-bottom: 14px;
+  font-size: 12px;
+  max-height: 60vh;
+  display: block;
+  overflow-y: auto;
+}
+
+.dialog__table th,
+.dialog__table td {
+  text-align: left;
+  padding: 2px 10px 2px 0;
+  border-bottom: 1px solid var(--color-dim);
+}
+
+.dialog__table th {
+  color: var(--color-mid);
+  font-weight: 400;
+}

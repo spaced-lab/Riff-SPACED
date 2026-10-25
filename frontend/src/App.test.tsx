@@ -11,34 +11,46 @@ describe('App', () => {
     bootstrapStore();
   });
 
-  it('renders the shell with the demo riff on the fretboard and placeholders for later phases', () => {
+  it('renders the shell with the menu bar, the demo riff on the fretboard, and the panels', () => {
     const { container } = render(<App />);
     expect(screen.getByText('RIFF-SPACED')).toBeInTheDocument();
+    expect(screen.getByTestId('menubar')).toBeInTheDocument();
     expect(container.querySelectorAll('[data-note-id]').length).toBeGreaterThan(0);
     expect(screen.getByTestId('tab-lanes')).toBeInTheDocument();
     expect(screen.getByTestId('inspector')).toBeInTheDocument();
     expect(screen.getByTestId('transport')).toBeInTheDocument();
-    expect(screen.getByTestId('status-bar')).toHaveTextContent('Bb Standard');
+    expect(screen.getByTestId('status-bar')).toHaveTextContent('Bb Standard: 34 39 44 49 53 58');
+    expect(screen.getByTestId('riff-name')).toHaveTextContent('Walkdown Turnaround');
   });
 
-  it('dev toolbar toggles letters, sharps, range, and tuning (keep shapes)', () => {
+  it('menus toggle letters, sharps, range, and tuning (keep shapes)', () => {
     const { container } = render(<App />);
-    fireEvent.click(screen.getByLabelText('Note letters'));
+    const click = (menu: string, item: string) => {
+      fireEvent.click(screen.getByRole('menuitem', { name: menu }));
+      fireEvent.click(container.querySelector(`[data-menu-item="${item}"]`)!);
+    };
+    click('View', 'view.letters');
     expect(container.querySelectorAll('[data-testid="notes"] text').length).toBeGreaterThan(0);
-    fireEvent.click(screen.getByLabelText('Sharps'));
+    click('View', 'view.sharps');
     expect(useStore.getState().accidentals).toBe('sharps');
-    fireEvent.change(screen.getByLabelText('fret range'), { target: { value: '0-24' } });
+    fireEvent.click(screen.getByRole('menuitem', { name: 'View' }));
+    fireEvent.click(container.querySelector('[data-menu-item="view.range"]')!);
+    fireEvent.click(container.querySelector('[data-menu-item="view.range:0-24"]')!);
     expect(container.querySelectorAll('[data-cell][data-string="6"]')).toHaveLength(25);
-    fireEvent.change(screen.getByLabelText('tuning'), { target: { value: 'Drop Ab' } });
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Tuning' }));
+    fireEvent.click(container.querySelector('[data-menu-item="tuning.drop"]')!);
+    fireEvent.click(container.querySelector('[data-menu-item="tuning:Drop Ab"]')!);
     const riff = useStore.getState().riff;
     expect(riff.tuning.pitches).toEqual([32, 39, 44, 49, 53, 58]);
     expect(riff.notes[0]).toMatchObject({ string: 6, fret: 0 });
     expect(useStore.getState().history.past.at(-1)?.label).toBe('change tuning');
   });
 
-  it('dev toolbar switches riffs and panels can be hidden', () => {
-    render(<App />);
-    fireEvent.change(screen.getByLabelText('riff'), { target: { value: 'demo-riff-tritone' } });
+  it('File > Open from library switches riffs and panels can be hidden', () => {
+    const { container } = render(<App />);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'File' }));
+    fireEvent.click(container.querySelector('[data-menu-item="file.openLibrary"]')!);
+    fireEvent.click(container.querySelector('[data-menu-item="file.open:demo-riff-tritone"]')!);
     expect(useStore.getState().riff.name).toBe('Tritone Chug');
     act(() => useStore.getState().togglePanel('library'));
     expect(screen.queryByTestId('placeholder-library')).toBeNull();

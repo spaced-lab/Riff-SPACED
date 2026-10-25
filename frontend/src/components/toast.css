@@ -1,0 +1,28 @@
+.toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 90;
+}
+
+.toast {
+  padding: 6px 10px;
+  border: 1px solid var(--color-fg);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.toast--warn {
+  border-color: var(--color-warn);
+  color: var(--color-warn);
+}
+
+.toast--error {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}

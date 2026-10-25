@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { screenshotPath, watchConsole } from './helpers';
+import { menuClick } from './menu';
 
 test.describe('fretboard', () => {
   test('shows the demo riff, toggles letters and sharps, and widens the range', async ({
@@ -13,7 +14,7 @@ test.describe('fretboard', () => {
     await expect(board.locator('[data-note-id]').first()).toBeVisible();
     await page.screenshot({ path: screenshotPath('phase-02', 'app-dots'), fullPage: true });
 
-    await page.getByLabel('Note letters').check();
+    await menuClick(page, 'view', 'view.letters');
     await expect(
       board.locator('[data-testid="notes"] text', { hasText: /^Db$/ }).first(),
     ).toBeVisible();
@@ -22,16 +23,16 @@ test.describe('fretboard', () => {
     ).toBeVisible();
     await page.screenshot({ path: screenshotPath('phase-02', 'app-letters'), fullPage: true });
 
-    await page.getByLabel('Sharps').check();
+    await menuClick(page, 'view', 'view.sharps');
     await expect(
       board.locator('[data-testid="notes"] text', { hasText: /^C#$/ }).first(),
     ).toBeVisible();
     await expect(board.locator('[data-testid="notes"] text', { hasText: /^Db$/ })).toHaveCount(0);
 
-    await page.getByLabel('fret range').selectOption('0-24');
+    await menuClick(page, 'view', 'view.range', 'view.range:0-24');
     await expect(board.locator('[data-cell][data-string="6"]')).toHaveCount(25);
 
-    await page.getByLabel('tuning').selectOption('Drop Ab');
+    await menuClick(page, 'tuning', 'tuning.drop', 'tuning:Drop Ab');
     await expect(page.getByTestId('tuning-status')).toHaveText('Drop Ab: 32 39 44 49 53 58');
     // Keep shapes: the open low string now reads Ab (G# in sharps mode).
     await expect(

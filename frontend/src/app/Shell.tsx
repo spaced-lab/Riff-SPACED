@@ -1,8 +1,9 @@
 import { Dialog } from '@/components/Dialog';
+import { Toasts } from '@/components/Toast';
+import { MenuBar } from '@/menu/MenuBar';
 import { Placeholder } from '@/components/Placeholder';
 import { Inspector } from '@/inspector/Inspector';
 import { TransportBar } from '@/transport/TransportBar';
-import { DevToolbar } from '@/dev/DevToolbar';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { SplitView } from '@/fretboard/SplitView';
 import { TabLanes } from '@/tab/TabLanes';
@@ -60,7 +61,7 @@ export function Shell() {
     <div className="shell" data-testid="shell">
       <header className="shell__menu">
         <span className="shell__brand">RIFF-SPACED</span>
-        <Placeholder name="Menu bar" phase={5} />
+        <MenuBar />
       </header>
 
       {panels.library ? (
@@ -70,7 +71,6 @@ export function Shell() {
       ) : null}
 
       <main className="shell__center">
-        <DevToolbar />
         <section className="shell__fretboard" aria-label="fretboard area">
           {splitView ? (
             <SplitView />
@@ -108,8 +108,12 @@ export function Shell() {
       ) : null}
 
       <Dialog />
+      <Toasts />
       <footer className="shell__status" data-testid="status-bar">
-        <span>{riff.tuning.name}</span>
+        <span data-testid="tuning-status">
+          {riff.tuning.name}: {riff.tuning.pitches.join(' ')}
+        </span>
+        <span data-testid="riff-name">{riff.name}</span>
         <span data-testid="status-lane">lane {activeLane}</span>
         {syncJitterMs !== null ? (
           <span

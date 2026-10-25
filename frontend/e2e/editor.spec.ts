@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { screenshotPath, watchConsole } from './helpers';
+import { menuClick } from './menu';
 
 /**
  * The Phase 3 editor flow end to end: new riff, dyad from the fretboard, typed fret,
@@ -8,7 +9,7 @@ import { screenshotPath, watchConsole } from './helpers';
 test('write a riff by hand and have it survive a reload', async ({ page }) => {
   const console = watchConsole(page);
   await page.goto('/');
-  await page.getByRole('button', { name: 'new riff' }).click();
+  await menuClick(page, 'file', 'file.newRiff');
   const tab = page.getByTestId('tab-lanes');
   await expect(tab.locator('[data-tab-note]')).toHaveCount(0);
   const board = page.getByTestId('fretboard');
@@ -61,7 +62,7 @@ test('write a riff by hand and have it survive a reload', async ({ page }) => {
   await expect(tab.locator('[data-tab-note][data-start="2160"]')).toHaveCount(1);
 
   // Loop length to 8 bars grows the ruler.
-  await page.getByLabel('loop').selectOption('8');
+  await page.getByLabel('loop length').selectOption('8');
   await expect(tab.locator('[data-bar-number="8"]')).toHaveCount(1);
   await page.screenshot({ path: screenshotPath('phase-03', 'editor'), fullPage: true });
 
@@ -71,7 +72,7 @@ test('write a riff by hand and have it survive a reload', async ({ page }) => {
   await page.reload();
   await expect(page.getByTestId('tab-lanes').locator('[data-tab-note]')).toHaveCount(3);
   await expect(page.getByTestId('tab-lanes').locator('[data-bar-number="8"]')).toHaveCount(1);
-  await expect(page.getByLabel('riff')).toHaveValue(/.+/);
+  await expect(page.getByTestId('riff-name')).toHaveText('Untitled riff');
 
   expect(console.errors).toEqual([]);
 });
@@ -79,12 +80,12 @@ test('write a riff by hand and have it survive a reload', async ({ page }) => {
 test('shortening the loop asks before removing notes', async ({ page }) => {
   const console = watchConsole(page);
   await page.goto('/');
-  await page.getByLabel('riff').selectOption({ label: 'Walkdown Turnaround' });
-  await page.getByLabel('loop').selectOption('8');
-  await page.getByLabel('loop').selectOption('4');
+  await menuClick(page, 'file', 'file.openLibrary', 'file.open:demo-riff-walkdown');
+  await page.getByLabel('loop length').selectOption('8');
+  await page.getByLabel('loop length').selectOption('4');
   await expect(page.getByRole('dialog')).toHaveCount(0);
   // Put a note in bar 6 then try to shrink: the themed dialog appears, never window.confirm.
-  await page.getByLabel('loop').selectOption('8');
+  await page.getByLabel('loop length').selectOption('8');
   await page.keyboard.press('Shift+ArrowRight');
   await page.keyboard.press('Shift+ArrowRight');
   await page.keyboard.press('Shift+ArrowRight');
@@ -92,13 +93,13 @@ test('shortening the loop asks before removing notes', async ({ page }) => {
   await page.keyboard.press('Shift+ArrowRight');
   await page.keyboard.press('3');
   await page.keyboard.press('Enter');
-  await page.getByLabel('loop').selectOption('4');
+  await page.getByLabel('loop length').selectOption('4');
   await expect(page.getByRole('dialog')).toContainText('1 note after bar 4 will be removed.');
   await page.screenshot({ path: screenshotPath('phase-03', 'confirm-dialog'), fullPage: true });
   await page.getByRole('button', { name: 'keep' }).click();
-  await expect(page.getByLabel('loop')).toHaveValue('8');
-  await page.getByLabel('loop').selectOption('4');
+  await expect(page.getByLabel('loop length')).toHaveValue('8');
+  await page.getByLabel('loop length').selectOption('4');
   await page.getByRole('button', { name: 'remove and shorten' }).click();
-  await expect(page.getByLabel('loop')).toHaveValue('4');
+  await expect(page.getByLabel('loop length')).toHaveValue('4');
   expect(console.errors).toEqual([]);
 });

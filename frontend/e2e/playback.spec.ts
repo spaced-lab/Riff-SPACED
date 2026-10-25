@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { screenshotPath, watchConsole } from './helpers';
+import { menuClick } from './menu';
 
 test('play flashes the fretboard, moves the playhead, and stop resets it', async ({ page }) => {
   const console = watchConsole(page);
   await page.goto('/');
-  await page.getByLabel('riff').selectOption({ label: 'Walkdown Turnaround' });
+  await menuClick(page, 'file', 'file.openLibrary', 'file.open:demo-riff-walkdown');
   const playhead = page.getByTestId('playhead');
   const startX = Number(await playhead.getAttribute('x1'));
 
