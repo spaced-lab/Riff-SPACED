@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:02:10Z
+Updated: 2026-10-25T03:06:48Z
 Phase: 6 Analysis backend
-Last completed task: P6.T1 Audio I/O and preprocessing
-Next task: P6.T2 Test-signal synth (ground truth generator)
+Last completed task: P6.T2 Test-signal synth (ground truth generator)
+Next task: P6.T3 STFT and onset detection
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -69,7 +69,7 @@ Phase 5 (tag v0.5.0):
 Phase 6:
 - [x] Preflight: re-check the Messages API for an audio content block (none; DECISIONS 49)
 - [x] P6.T1 Audio I/O and preprocessing
-- [ ] P6.T2 Test-signal synth (ground truth generator)
+- [x] P6.T2 Test-signal synth (ground truth generator)
 - [ ] P6.T3 STFT and onset detection
 - [ ] P6.T4 Tempo estimation
 - [ ] P6.T5 Fingering-constrained spectral template matching
@@ -89,6 +89,7 @@ npm run e2e                                # Playwright: 10 specs (smoke, fretbo
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
 make check                                 # ruff, pytest
+uv run python -m riffspaced.synth ../shared/fixtures/demo-library.json --riff "Walkdown Turnaround" --out debug/walkdown.wav --drive 8
 
 docker compose up --build                  # frontend :8080, backend :8000
 ```
