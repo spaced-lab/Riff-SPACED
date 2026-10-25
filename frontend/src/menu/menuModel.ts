@@ -366,11 +366,11 @@ export function buildMenus(s: AppState): Menu[] {
         },
         {
           type: 'item',
-          id: 'view.fullscreen',
-          label: 'Full-screen fretboard',
+          id: 'view.wide',
+          label: 'Wide fretboard (hide side panels)',
           accelerator: 'F',
-          checked: s.fullscreenBoard,
-          action: () => s.setFullscreenBoard(!s.fullscreenBoard),
+          checked: s.wideBoard,
+          action: () => s.setWideBoard(!s.wideBoard),
         },
         sep,
         {
@@ -532,6 +532,20 @@ export function buildMenus(s: AppState): Menu[] {
               action: () => s.setScalePosition(p.index),
             })),
           ],
+        },
+        {
+          type: 'item',
+          id: 'scales.neck:follow',
+          label: 'Neck: follow the position (12-fret window)',
+          checked: s.scaleNeck === 'follow',
+          action: () => s.setScaleNeck('follow'),
+        },
+        {
+          type: 'item',
+          id: 'scales.neck:all',
+          label: 'Neck: all 24 frets',
+          checked: s.scaleNeck === 'all',
+          action: () => s.setScaleNeck('all'),
         },
         {
           type: 'item',

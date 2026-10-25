@@ -95,4 +95,22 @@ describe('scaleSlice', () => {
     s.setScalePosition(high.index);
     expect(useStore.getState().fretRange).toEqual({ from: 0, to: 24 });
   });
+
+  it('neck option: all 24 frets, then back to a window around the position', () => {
+    const s = useStore.getState();
+    s.setScalePosition(5);
+    const windowed = useStore.getState().fretRange;
+    expect(windowed.to - windowed.from).toBe(12);
+    s.setScaleNeck('all');
+    expect(useStore.getState().fretRange).toEqual({ from: 0, to: 24 });
+    // Positions no longer move the range while the whole neck is shown.
+    s.setScalePosition(8);
+    expect(useStore.getState().fretRange).toEqual({ from: 0, to: 24 });
+    s.setScaleNeck('follow');
+    const back = useStore.getState().fretRange;
+    expect(back.to - back.from).toBe(12);
+    const position = selectScalePosition(useStore.getState())!;
+    expect(back.from).toBeLessThanOrEqual(position.fromFret);
+    expect(back.to).toBeGreaterThanOrEqual(position.toFret);
+  });
 });

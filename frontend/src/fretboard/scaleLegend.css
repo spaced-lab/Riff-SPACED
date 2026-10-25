@@ -23,7 +23,7 @@
   gap: 2px;
 }
 
-.scale-legend__modes {
+.scale-legend__modes:first-of-type {
   margin-left: auto;
 }
 

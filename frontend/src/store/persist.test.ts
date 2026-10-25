@@ -166,6 +166,7 @@ describe('preferences and the demo reset', () => {
         blue: true,
         others: false,
       },
+      scaleNeck: 'follow',
     };
     expect(JSON.parse(storage.getItem(PREFS_KEY)!)).toEqual(expected);
     stop();

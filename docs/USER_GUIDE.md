@@ -130,8 +130,8 @@ The Scales menu lays a scale over the fretboard so you can see where it lives in
 - **Color switches.** Roots, thirds, fifths, sevenths, blue notes, others (2, 4, 6). Switch a group off and those notes drop back to the plain ring, so "only roots in color" or "only the blue notes" is two clicks. Clicking a swatch in the legend does the same thing.
 - **Position.** The CAGED shapes: pick one and the scale notes outside that hand position dim, so you can learn one shape and see how the next one overlaps it. Step up and down the neck with `<` and `>`, the arrows in the legend, or Scales > Position. Shapes are named E, D, C, A, G from the one with the root under your first finger on the low string; in a tuning without standard intervals (drop tunings, seven strings) they are numbered from the nut. Click the position name to go back to the whole neck.
 
-- **Following the hand.** Choosing a position slides the visible fret range so the shape sits in the middle of the board, without going below the nut or past fret 24 (a 0-24 range never moves). Pick a 0-12 range in View > Fret range to get the sliding window.
-- **Full-screen fretboard.** View > Full-screen fretboard, the `F` key, or the button at the right of the legend. The side panels, transport and tab lanes go away and the neck fills the window under the menu bar; the browser's own full screen is used when it allows it (Escape leaves both). With Note letters on, the scale dots are big enough to carry their note names.
+- **Neck: follow or all 24.** Two buttons in the legend (also Scales > Neck). *Follow* keeps a 12-fret window that slides so the chosen position sits in the middle of the board, never below the nut or past fret 24. *All 24* shows the whole neck at once with the dots shrunk to fit, so you can see every shape and how they chain.
+- **Wide fretboard.** View > Wide fretboard, the `F` key, or the *wide* button at the right of the legend hides the library and inspector panels so the board takes the whole width. Menu bar, legend, transport and tab lanes stay, and the board keeps its height, so more frets fit at the same size. Click *show panels* to bring them back.
 
 Scale dots are smaller than riff notes and sit under them. Hover any cell to see its note and degree (`string 6 fret 6 = E2, b5 of Bb Blues`). Split view carries the overlay to every quadrant.
 
@@ -139,7 +139,7 @@ Scale dots are smaller than riff notes and sit under them. Hover any cell to see
 
 ![One CAGED position highlighted](screenshots/phase-09/position-caged.png)
 
-![Full-screen fretboard with letters](screenshots/phase-09/fullscreen.png)
+![Wide board, all 24 frets](screenshots/phase-09/wide-all-24.png)
 
 ## 7. Save, load, export
 
@@ -238,7 +238,7 @@ Help > Keyboard shortcuts shows this table in the app. Shortcuts do not fire whi
 | - / = | tempo down / up by 1 |
 | Tab | toggle note letters |
 | < / > | scale position down / up the neck |
-| F | full-screen fretboard on / off |
+| F | wide fretboard (hide the side panels) on / off |
 
 Ctrl/Cmd+Y also redoes. Ctrl/Cmd + mouse wheel zooms the tab lanes. In an arrangement or song view only the transport keys work; editing happens in the riff.
 

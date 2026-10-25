@@ -39,12 +39,12 @@ export type ViewSlice = {
   crt: boolean;
   setCrt: (on: boolean) => void;
   /**
-   * Full-screen fretboard (Phase 9): the neck fills the window, the side panels, transport
-   * and tab lanes are hidden, the menu bar and the scale legend stay on top. For learning
-   * shapes rather than editing.
+   * Wide fretboard (Phase 9): the library and inspector panels are hidden so the neck gets
+   * the whole width and more frets fit at the same height. Everything else stays: menu bar,
+   * scale legend, transport, tab lanes.
    */
-  fullscreenBoard: boolean;
-  setFullscreenBoard: (on: boolean) => void;
+  wideBoard: boolean;
+  setWideBoard: (on: boolean) => void;
   /** A riff shown on the fretboard instead of the open one, for previews (never played). */
   previewRiff: Riff | null;
   setPreviewRiff: (riff: Riff | null) => void;
@@ -81,8 +81,8 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   setPreviewRiff: (previewRiff) => set({ previewRiff }),
   crt: false,
   setCrt: (crt) => set({ crt }),
-  fullscreenBoard: false,
-  setFullscreenBoard: (fullscreenBoard) => set({ fullscreenBoard }),
+  wideBoard: false,
+  setWideBoard: (wideBoard) => set({ wideBoard }),
   grid: '1/16',
   pxPerBar: 320,
   setGrid: (grid) => set({ grid }),

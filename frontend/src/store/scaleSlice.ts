@@ -8,11 +8,21 @@ import type { ColorGroup, ScaleId } from '@/music/scales';
 import { COLOR_GROUPS, DEFAULT_SCALE, degreesOf, scaleById, scaleTitle } from '@/music/scales';
 import { pitchClass } from '@/music/pitch';
 import type { AppState } from './types';
-import { rangeCenteredOn } from './viewSlice';
+import { MAX_FRET, rangeCenteredOn } from './viewSlice';
 import type { FretRange } from './viewSlice';
 
 /** Off: no overlay. Color: each degree in its own color. Mono: every scale note the same. */
 export type ScaleMode = 'off' | 'color' | 'mono';
+
+/**
+ * How much neck the scale view shows. `follow`: a window of the chosen width that slides to
+ * keep the hand position in the middle. `all`: every fret from the nut to 24, with the dots
+ * shrunk to fit, so the whole run of shapes is visible at once.
+ */
+export type ScaleNeck = 'follow' | 'all';
+
+/** The window used when returning from "all 24 frets" to following the position. */
+export const FOLLOW_WIDTH = 12;
 
 export type ScaleSlice = {
   scaleMode: ScaleMode;
@@ -31,6 +41,8 @@ export type ScaleSlice = {
    */
   scalePosition: number | null;
   setScalePosition: (index: number | null) => void;
+  scaleNeck: ScaleNeck;
+  setScaleNeck: (neck: ScaleNeck) => void;
   /** Move one position up (+1) or down (-1) the neck; from the whole neck, +1 is the first. */
   stepScalePosition: (delta: 1 | -1) => void;
   setScaleMode: (mode: ScaleMode) => void;
@@ -65,6 +77,18 @@ export const createScaleSlice: StateCreator<AppState, [], [], ScaleSlice> = (set
   scaleRoot: null,
   scaleColors: allColorsOn(),
   scalePosition: null,
+  scaleNeck: 'follow',
+  setScaleNeck: (neck) =>
+    set((s) => {
+      if (neck === 'all') return { scaleNeck: neck, fretRange: { from: 0, to: MAX_FRET } };
+      // Back to following: a 12-fret window centered on the position, or from the nut.
+      const base = { from: 0, to: FOLLOW_WIDTH };
+      const position = selectScalePosition(s);
+      return {
+        scaleNeck: neck,
+        fretRange: position ? rangeCenteredOn(base, position.fromFret, position.toFret) : base,
+      };
+    }),
   setScalePosition: (index) =>
     set((s) => {
       if (index === null) return { scalePosition: null };

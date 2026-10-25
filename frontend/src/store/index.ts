@@ -57,6 +57,7 @@ export function bootstrapStore(storage: KeyValueStorage | null | undefined = nul
   if (prefs.scaleMode) useStore.getState().setScaleMode(prefs.scaleMode);
   if (prefs.scaleId) useStore.getState().setScaleId(prefs.scaleId);
   if (prefs.scaleRoot !== undefined) useStore.getState().setScaleRoot(prefs.scaleRoot);
+  if (prefs.scaleNeck) useStore.setState({ scaleNeck: prefs.scaleNeck });
   if (prefs.scaleColors)
     for (const [group, on] of Object.entries(prefs.scaleColors))
       useStore.getState().setScaleColor(group as ColorGroup, on);

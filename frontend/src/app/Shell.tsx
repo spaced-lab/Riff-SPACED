@@ -70,37 +70,11 @@ export function Shell() {
   const scalePositions = useStore(selectScalePositions);
   const stepScalePosition = useStore((s) => s.stepScalePosition);
   const setScalePosition = useStore((s) => s.setScalePosition);
-  const fullscreenBoard = useStore((s) => s.fullscreenBoard);
-  const setFullscreenBoard = useStore((s) => s.setFullscreenBoard);
+  const wideBoard = useStore((s) => s.wideBoard);
+  const setWideBoard = useStore((s) => s.setWideBoard);
+  const scaleNeck = useStore((s) => s.scaleNeck);
+  const setScaleNeck = useStore((s) => s.setScaleNeck);
   useKeyboard();
-  // Full-screen fretboard: the layout change is ours; the browser's own full screen is asked
-  // for as well when it is available (it needs a user gesture, which the menu click or key
-  // press is). Leaving browser full screen with Escape leaves the mode too.
-  useEffect(() => {
-    const doc = document;
-    const enter = async () => {
-      try {
-        if (!doc.fullscreenElement) await doc.documentElement.requestFullscreen?.();
-      } catch {
-        // Not allowed here (iframe, headless, no gesture): the layout alone is fine.
-      }
-    };
-    const leave = async () => {
-      try {
-        if (doc.fullscreenElement) await doc.exitFullscreen?.();
-      } catch {
-        // ignore
-      }
-    };
-    if (fullscreenBoard) void enter();
-    else void leave();
-    const onChange = () => {
-      if (!doc.fullscreenElement && useStore.getState().fullscreenBoard)
-        useStore.getState().setFullscreenBoard(false);
-    };
-    doc.addEventListener('fullscreenchange', onChange);
-    return () => doc.removeEventListener('fullscreenchange', onChange);
-  }, [fullscreenBoard]);
   // The CRT look is a body class so the overlay covers dialogs and the drawer too.
   useEffect(() => {
     document.body.classList.toggle('crt', crt);
@@ -123,24 +97,24 @@ export function Shell() {
 
   return (
     <div
-      className={fullscreenBoard ? 'shell shell--fullscreen' : 'shell'}
+      className={wideBoard ? 'shell shell--wide' : 'shell'}
       data-testid="shell"
-      data-fullscreen={fullscreenBoard ? 'true' : 'false'}
+      data-wide={wideBoard ? 'true' : 'false'}
     >
       <header className="shell__menu">
         <span className="shell__brand">RIFF-SPACED</span>
         <MenuBar />
       </header>
 
-      {panels.library && !fullscreenBoard ? (
+      {panels.library && !wideBoard ? (
         <aside className="shell__library">
           <LibraryPanel />
         </aside>
       ) : null}
 
       <main className="shell__center">
-        {editing === 'arrangement' && !fullscreenBoard ? <ArrangementEditor /> : null}
-        {editing === 'song' && !fullscreenBoard ? <SongEditor /> : null}
+        {editing === 'arrangement' ? <ArrangementEditor /> : null}
+        {editing === 'song' ? <SongEditor /> : null}
         <section className="shell__fretboard" aria-label="fretboard area">
           {scaleOverlay ? (
             <ScaleLegend
@@ -151,8 +125,10 @@ export function Shell() {
               positions={scalePositions}
               onStepPosition={stepScalePosition}
               onClearPosition={() => setScalePosition(null)}
-              fullscreen={fullscreenBoard}
-              onFullscreen={setFullscreenBoard}
+              wide={wideBoard}
+              onWide={setWideBoard}
+              neck={scaleNeck}
+              onNeck={setScaleNeck}
             />
           ) : null}
           <div className="shell__board">
@@ -182,19 +158,15 @@ export function Shell() {
             )}
           </div>
         </section>
-        {fullscreenBoard ? null : (
-          <>
-            <section className="shell__transport" aria-label="transport">
-              <TransportBar />
-            </section>
-            <section className="shell__tab" aria-label="tab lanes">
-              <TabLanes />
-            </section>
-          </>
-        )}
+        <section className="shell__transport" aria-label="transport">
+          <TransportBar />
+        </section>
+        <section className="shell__tab" aria-label="tab lanes">
+          <TabLanes />
+        </section>
       </main>
 
-      {panels.inspector && !fullscreenBoard ? (
+      {panels.inspector && !wideBoard ? (
         <aside className="shell__inspector">
           <Inspector />
         </aside>

@@ -126,19 +126,10 @@
 }
 
 /*
- * Full-screen fretboard (Phase 9): no side panels, no transport, no tab lanes. The menu bar
- * stays on top (the Scales menu lives there), the status bar at the bottom, and the
- * fretboard section takes every pixel in between whatever else it contains.
+ * Wide fretboard (Phase 9): the side panels are not rendered, so the center column takes
+ * the whole width. Heights are unchanged: the board keeps its proportions and simply shows
+ * more frets per pixel of height.
  */
-.shell.shell--fullscreen {
+.shell.shell--wide {
   grid-template-columns: 0 1fr 0;
-}
-
-.shell.shell--fullscreen .shell__fretboard,
-.shell.shell--fullscreen .shell__fretboard:has(.scale-legend),
-.shell.shell--fullscreen .shell__fretboard:has(.split-view),
-.shell.shell--fullscreen .shell__fretboard:has(.split-view):has(.scale-legend) {
-  flex: 1;
-  height: auto;
-  min-height: 0;
 }

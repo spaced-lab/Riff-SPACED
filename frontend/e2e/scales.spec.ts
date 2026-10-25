@@ -102,21 +102,32 @@ test('scale overlay: color, blues scale, root shift, toggles, mono, persistence'
   await expect(board.locator('[data-scale-dot][data-in-position="true"]').first()).toBeVisible();
   await page.screenshot({ path: screenshotPath('phase-09', 'position-high'), fullPage: true });
 
-  // Full-screen fretboard: panels, transport and tab lanes go away; the neck grows.
-  const heightBefore = (await board.boundingBox())!.height;
-  await menuClick(page, 'view', 'view.fullscreen');
-  await expect(page.getByTestId('shell')).toHaveAttribute('data-fullscreen', 'true');
-  await expect(page.getByLabel('tab lanes')).toHaveCount(0);
-  await expect(page.getByLabel('transport')).toHaveCount(0);
+  // Wide fretboard: the side panels go away, everything else stays, the board gets wider
+  // at the same height.
+  const before = (await board.boundingBox())!;
+  await menuClick(page, 'view', 'view.wide');
+  await expect(page.getByTestId('shell')).toHaveAttribute('data-wide', 'true');
   await expect(page.locator('.shell__library')).toHaveCount(0);
-  expect((await board.boundingBox())!.height).toBeGreaterThan(heightBefore * 1.8);
-  await menuClick(page, 'view', 'view.letters');
-  await expect(board.locator('[data-scale-dot] text').first()).toBeVisible();
-  await page.screenshot({ path: screenshotPath('phase-09', 'fullscreen'), fullPage: true });
-  await page.getByTestId('scale-fullscreen').click();
-  await expect(page.getByTestId('shell')).toHaveAttribute('data-fullscreen', 'false');
+  await expect(page.locator('.shell__inspector')).toHaveCount(0);
   await expect(page.getByLabel('tab lanes')).toBeVisible();
-  await menuClick(page, 'view', 'view.letters');
+  await expect(page.getByLabel('transport')).toBeVisible();
+  const after = (await board.boundingBox())!;
+  expect(after.width).toBeGreaterThan(before.width * 1.3);
+  // Same proportions: the only height change allowed is the legend needing one row less.
+  expect(after.height).toBeGreaterThanOrEqual(before.height);
+  expect(after.height).toBeLessThan(before.height + 40);
+  await page.screenshot({ path: screenshotPath('phase-09', 'wide-follow'), fullPage: true });
+
+  // Neck: all 24 frets at once, then back to the sliding window.
+  await page.locator('[data-scale-neck="all"]').click();
+  await expect(board.locator('.fb-fret-number', { hasText: /^24$/ })).toBeVisible();
+  await expect(board.locator('.fb-fret-number', { hasText: /^1$/ })).toBeVisible();
+  await page.screenshot({ path: screenshotPath('phase-09', 'wide-all-24'), fullPage: true });
+  await menuClick(page, 'scales', 'scales.neck:follow');
+  expect((await fretNumbers()).length).toBe(12);
+  await page.getByTestId('scale-wide').click();
+  await expect(page.getByTestId('shell')).toHaveAttribute('data-wide', 'false');
+  await expect(page.locator('.shell__library')).toBeVisible();
 
   await page.getByTestId('scale-position-name').click();
   await expect(page.getByTestId('scale-position-name')).toHaveText('whole neck');

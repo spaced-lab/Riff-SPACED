@@ -14,9 +14,12 @@ type Props = {
   positions?: readonly Position[];
   onStepPosition?: (delta: 1 | -1) => void;
   onClearPosition?: () => void;
-  /** Full-screen fretboard toggle (Phase 9); omitted in tests and previews. */
-  fullscreen?: boolean;
-  onFullscreen?: (on: boolean) => void;
+  /** Wide fretboard toggle (hide the side panels); omitted in tests and previews. */
+  wide?: boolean;
+  onWide?: (on: boolean) => void;
+  /** How much neck to show: follow the position, or all 24 frets. */
+  neck?: 'follow' | 'all';
+  onNeck?: (neck: 'follow' | 'all') => void;
 };
 
 /**
@@ -33,8 +36,10 @@ export function ScaleLegend({
   positions = [],
   onStepPosition,
   onClearPosition,
-  fullscreen = false,
-  onFullscreen,
+  wide = false,
+  onWide,
+  neck = 'follow',
+  onNeck,
 }: Props) {
   const position = overlay.position ?? null;
   return (
@@ -124,16 +129,42 @@ export function ScaleLegend({
           </button>
         ))}
       </span>
-      {onFullscreen ? (
+      {onNeck ? (
+        <span className="scale-legend__modes" role="radiogroup" aria-label="neck">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={neck === 'follow'}
+            className="scale-legend__mode"
+            data-scale-neck="follow"
+            title="a 12-fret window that slides to keep the position in the middle"
+            onClick={() => onNeck('follow')}
+          >
+            follow
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={neck === 'all'}
+            className="scale-legend__mode"
+            data-scale-neck="all"
+            title="all 24 frets at once"
+            onClick={() => onNeck('all')}
+          >
+            all 24
+          </button>
+        </span>
+      ) : null}
+      {onWide ? (
         <button
           type="button"
           className="scale-legend__mode"
-          aria-pressed={fullscreen}
-          data-testid="scale-fullscreen"
-          title="full-screen fretboard (shortcut: F)"
-          onClick={() => onFullscreen(!fullscreen)}
+          aria-pressed={wide}
+          data-testid="scale-wide"
+          title="hide the side panels so more frets fit (shortcut: F)"
+          onClick={() => onWide(!wide)}
         >
-          {fullscreen ? 'exit full screen' : 'full screen'}
+          {wide ? 'show panels' : 'wide'}
         </button>
       ) : null}
     </div>

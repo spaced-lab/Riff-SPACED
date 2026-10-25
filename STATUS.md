@@ -2,7 +2,7 @@
 
 Updated: 2026-10-25T23:30:00Z
 Phase: 9 (scale mode and CAGED positions, owner request after v1), all tasks done, tag v0.9.0.
-Last completed task: P9.T6 position-following fret range and full-screen fretboard
+Last completed task: P9.T6 wide fretboard and neck option (owner correction of the full-screen attempt)
 Next task: none scheduled; owner feedback on the scale colors and the position shapes (see Owner follow-ups)
 
 ## Preflight
@@ -106,7 +106,7 @@ Phase 9 (tag v0.9.0, plan/phase-09-scales.md):
 - [x] P9.T3 Overlay, legend, Scales menu
 - [x] P9.T5 CAGED positions (music/positions.ts, Position submenu, < and > shortcuts)
 - [x] P9.T4 Docs and exit (FRETBOARD.md, USER_GUIDE.md 6a, LEARNING_LOG, DECISIONS 60-62)
-- [x] P9.T6 Follow the position (fret range slides, clamped 0..24) and full-screen fretboard (F)
+- [x] P9.T6 Follow the position (fret range slides, clamped 0..24), wide fretboard (F, side panels hidden), neck option (follow / all 24)
 
 ## How to run right now
 ```
@@ -150,6 +150,17 @@ make down                                  # stop the containers; make check run
 
 **Real recordings: first pass done (P6.T10, 2026-10-25).** All three takes ran end to end; findings in `docs/benchmarks/real-audio-notes.md` and the postscript in `docs/ANALYSIS_METHOD.md`. The outputs are in `backend/riffs_out/` (gitignored).
 
+## Resume after pause (2026-10-25, end of the Phase 9 session)
+
+State: main at the commit after d0e4fb4 (wide board and neck option), tag v0.9.0 three commits behind it, CI green, working tree clean. Dev server on :5173 and the fake-client backend on :8000 were left running; if they are gone, start them with the commands under How to run right now. Repo is still private; the owner plans to make it public (Pages on a private repo needs a paid plan).
+
+What Phase 9 added, for orientation: Scales menu (off / full color / mono, scale, root, color switches, position, neck), legend above the board (swatches toggle colors, position arrows, follow / all 24, wide), `<` `>` for positions, `F` for the wide board. Code: `frontend/src/music/scales.ts`, `positions.ts`, `store/scaleSlice.ts`, `fretboard/ScaleDots.tsx`, `ScaleLegend.tsx`. Colors: the `--scale-*` block in `frontend/src/theme.css`.
+
+On resume:
+1. Read Owner follow-ups. The owner was going to try the scale colors and the CAGED shapes and say what to change; a color change is a token edit in theme.css, a shape change is in `positions.ts` (DECISIONS 62 explains the derivation).
+2. Possible next steps the owner mentioned or that fell out of the work: a faint band marking the position's fret span, a 3-notes-per-string position system beside CAGED, Tab-key traversal (BACKLOG, Phase 8 note), the real-recording items in BACKLOG.
+3. Otherwise take the next item from docs/BACKLOG.md.
+
 ## Resume after clear (2026-10-25, end of the autonomous run)
 
 State: main is at 0288a9a, tag v0.8.0 is three commits behind it (docs and the submenu fix), CI green, working tree clean. Nothing is waiting on code. On `resume`:
@@ -163,7 +174,7 @@ Background processes left running for the owner at the end of the run: uvicorn w
 
 ## Owner follow-ups
 
-- Scale mode (Phase 9): try Scales > Full color with Blues and a few roots, and say which colors to change. The palette is the `--scale-*` block at the top of `frontend/src/theme.css`; every degree has one token. Also check the CAGED shapes against how you learned them (Scales > Position, or `<` and `>`): the derivation is in `frontend/src/music/positions.ts` and DECISIONS 62. Ideas not built yet: show the position's fret span as a faint band, a 3-notes-per-string position system, letters inside scale dots when the neck is tall enough.
+- Scale mode (Phase 9): try Scales > Full color with Blues and a few roots, the wide board (`F`) and the all-24 neck, and say which colors to change. The palette is the `--scale-*` block at the top of `frontend/src/theme.css`; every degree has one token. Also check the CAGED shapes against how you learned them (Scales > Position, or `<` and `>`): the derivation is in `frontend/src/music/positions.ts` and DECISIONS 62. Ideas not built yet: show the position's fret span as a faint band, a 3-notes-per-string position system, letters inside scale dots when the neck is tall enough.
 
 - Open a MusicXML export in MuseScore or Guitar Pro once and report (P8.T3).
 - Record one riff you can write down (four bars, looped three or four times, played the way you play), ideally captured from the interface or amp output rather than the phone, and say which tuning. Drop it in `injest-raw/`. That is what the analyzer needs next; the three takes there now show no repeat structure the pipeline can lock onto.

@@ -141,7 +141,10 @@ describe('MenuBar', () => {
     fireEvent.click(container.querySelector('[data-menu-item="scales.positionUp"]')!);
     expect(useStore.getState().scalePosition).toBe(2);
     fireEvent.click(screen.getByRole('menuitem', { name: 'View' }));
-    fireEvent.click(container.querySelector('[data-menu-item="view.fullscreen"]')!);
-    expect(useStore.getState().fullscreenBoard).toBe(true);
+    fireEvent.click(container.querySelector('[data-menu-item="view.wide"]')!);
+    expect(useStore.getState().wideBoard).toBe(true);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    fireEvent.click(container.querySelector('[data-menu-item="scales.neck:all"]')!);
+    expect(useStore.getState().fretRange).toEqual({ from: 0, to: 24 });
   });
 });
