@@ -1,16 +1,16 @@
 # STATUS
 
-Updated: 2026-10-25T00:59:09Z
+Updated: 2026-10-25T01:05:59Z
 Phase: 0 Bootstrap
-Last completed task: (none yet)
-Next task: P0.T1 Preflight and repo init (in progress)
+Last completed task: P0.T2 Frontend skeleton
+Next task: P0.T3 Backend skeleton
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available
 
 ## Phase checklist
-- [ ] P0.T1 Preflight and repo init
-- [ ] P0.T2 Frontend skeleton
+- [x] P0.T1 Preflight and repo init
+- [x] P0.T2 Frontend skeleton
 - [ ] P0.T3 Backend skeleton
 - [ ] P0.T4 Shared schemas folder and fixtures placeholder
 - [ ] P0.T5 CI and GitHub Pages
@@ -18,10 +18,14 @@ claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3
 - [ ] P0.T7 Phase exit
 
 ## How to run right now
-Nothing runnable yet. Planning documents only.
+```
+cd frontend && npm install && npm run dev   # http://localhost:5173
+npm run check                              # lint, format, typecheck, unit tests, build
+npm run e2e                                # Playwright smoke test
+```
 
 ## Known issues
-- (none)
+- Claude in Chrome: console reading works (clean), but script injection for screenshots and page reads times out on the Vite dev page in this session ("Page still loading"). Playwright is the gate and produces the committed screenshots; the Chrome pass is retried each UI phase.
 
 ## Waiting on owner
 (none)

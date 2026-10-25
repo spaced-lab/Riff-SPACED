@@ -1,0 +1,61 @@
+/*
+ * RIFF-SPACED theme (SPEC 5.1).
+ * Every color in the app comes from these custom properties. Nothing else hardcodes a color.
+ * The look is a dark terminal: black background, phosphor-green outlines, monospace type.
+ */
+:root {
+  --color-bg: #000000;
+  --color-fg: #33ff33; /* primary phosphor green */
+  --color-dim: #0f6b0f; /* grid lines, inactive outlines */
+  --color-mid: #1fbf1f; /* secondary text */
+  --color-warn: #ffb000; /* amber: warnings, low confidence, unplayable */
+  --color-flash: #ccffcc; /* the note sounding right now */
+  --color-error: #ff4040; /* errors only */
+  --color-dot-text: #000000; /* letters inside filled dots */
+
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  --font-size: 14px;
+  --line: 1px;
+  --radius: 2px;
+  --gap: 8px;
+
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-fg);
+  outline-offset: 2px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: var(--color-fg);
+  background: var(--color-bg);
+  border: var(--line) solid var(--color-mid);
+  border-radius: var(--radius);
+}
+
+button:hover {
+  border-color: var(--color-fg);
+}
