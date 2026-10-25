@@ -75,4 +75,24 @@ describe('scaleSlice', () => {
     s.setScalePosition(2);
     expect(selectScaleOverlay(useStore.getState())?.position?.name).toBe('C shape');
   });
+
+  it('slides the fret range to keep the chosen position in the middle', () => {
+    const s = useStore.getState();
+    expect(s.fretRange).toEqual({ from: 0, to: 12 });
+    const positions = selectScalePositions(s);
+    const high = positions.find((p) => p.fromFret >= 14)!;
+    s.setScalePosition(high.index);
+    const range = useStore.getState().fretRange;
+    expect(range.to - range.from).toBe(12);
+    expect(range.from).toBeLessThanOrEqual(high.fromFret);
+    expect(range.to).toBeGreaterThanOrEqual(high.toFret);
+    expect(range.to).toBeLessThanOrEqual(24);
+    // Back to the first position: the range returns to the nut.
+    s.setScalePosition(0);
+    expect(useStore.getState().fretRange).toEqual({ from: 0, to: 12 });
+    // Whole neck does not move the range.
+    s.setFretRange({ from: 0, to: 24 });
+    s.setScalePosition(high.index);
+    expect(useStore.getState().fretRange).toEqual({ from: 0, to: 24 });
+  });
 });

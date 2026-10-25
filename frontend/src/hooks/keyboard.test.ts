@@ -155,4 +155,12 @@ describe('keyboard', () => {
     expect(useStore.getState().scalePosition).toBeNull();
     expect(SHORTCUTS.some((sc) => sc.keys === '< / >')).toBe(true);
   });
+
+  it('F toggles the full-screen fretboard, Cmd+F is left to the browser', () => {
+    expect(handleKey(key('f'), deps)).toBe(true);
+    expect(useStore.getState().fullscreenBoard).toBe(true);
+    expect(handleKey(key('F'), deps)).toBe(true);
+    expect(useStore.getState().fullscreenBoard).toBe(false);
+    expect(handleKey(key('f', { metaKey: true }), deps)).toBe(false);
+  });
 });

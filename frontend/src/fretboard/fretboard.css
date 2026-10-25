@@ -145,6 +145,19 @@
   opacity: 0.9;
 }
 
+/* Colors are set on the group and inherited by the circle; the letter is always dark. */
+.fb-scale text {
+  fill: var(--color-dot-text);
+  stroke: none;
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 700;
+}
+
+.fb-scale--plain text {
+  fill: var(--color-mid);
+}
+
 .fb-scale--root {
   fill: var(--scale-root);
   stroke: none;

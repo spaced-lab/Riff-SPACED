@@ -67,7 +67,7 @@
 }
 
 .shell__board {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
 }
 
@@ -123,4 +123,22 @@
 
 .shell__editor-placeholder {
   height: 60px;
+}
+
+/*
+ * Full-screen fretboard (Phase 9): no side panels, no transport, no tab lanes. The menu bar
+ * stays on top (the Scales menu lives there), the status bar at the bottom, and the
+ * fretboard section takes every pixel in between whatever else it contains.
+ */
+.shell.shell--fullscreen {
+  grid-template-columns: 0 1fr 0;
+}
+
+.shell.shell--fullscreen .shell__fretboard,
+.shell.shell--fullscreen .shell__fretboard:has(.scale-legend),
+.shell.shell--fullscreen .shell__fretboard:has(.split-view),
+.shell.shell--fullscreen .shell__fretboard:has(.split-view):has(.scale-legend) {
+  flex: 1;
+  height: auto;
+  min-height: 0;
 }

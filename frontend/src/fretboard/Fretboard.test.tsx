@@ -217,4 +217,32 @@ describe('Fretboard', () => {
       false,
     );
   });
+
+  it('writes note letters inside scale dots only when the board is tall enough', () => {
+    const overlay: ScaleOverlay = {
+      table: degreesOf(scaleById('minorPentatonic'), 10),
+      mode: 'color',
+      colored: {
+        roots: true,
+        thirds: true,
+        fifths: true,
+        sevenths: true,
+        blue: true,
+        others: true,
+      },
+      title: 'Bb Minor Pentatonic',
+    };
+    const letters = (c: HTMLElement) =>
+      [...c.querySelectorAll('[data-scale-dot] text')].map((t) => t.textContent);
+    const { container, rerender } = render(
+      <Fretboard {...base} notes={[]} scale={overlay} showLetters />,
+    );
+    // 1000 x 200: dot radius about 12, scale dots about 6: too small for a letter.
+    expect(letters(container)).toEqual([]);
+    rerender(<Fretboard {...base} notes={[]} scale={overlay} showLetters height={600} />);
+    expect(letters(container)).toContain('Bb');
+    expect(letters(container)).toContain('Db');
+    rerender(<Fretboard {...base} notes={[]} scale={overlay} showLetters={false} height={600} />);
+    expect(letters(container)).toEqual([]);
+  });
 });

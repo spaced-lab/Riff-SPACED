@@ -2,7 +2,7 @@
 
 Updated: 2026-10-25T23:30:00Z
 Phase: 9 (scale mode and CAGED positions, owner request after v1), all tasks done, tag v0.9.0.
-Last completed task: P9.T5 CAGED positions and P9.T4 docs
+Last completed task: P9.T6 position-following fret range and full-screen fretboard
 Next task: none scheduled; owner feedback on the scale colors and the position shapes (see Owner follow-ups)
 
 ## Preflight
@@ -106,6 +106,7 @@ Phase 9 (tag v0.9.0, plan/phase-09-scales.md):
 - [x] P9.T3 Overlay, legend, Scales menu
 - [x] P9.T5 CAGED positions (music/positions.ts, Position submenu, < and > shortcuts)
 - [x] P9.T4 Docs and exit (FRETBOARD.md, USER_GUIDE.md 6a, LEARNING_LOG, DECISIONS 60-62)
+- [x] P9.T6 Follow the position (fret range slides, clamped 0..24) and full-screen fretboard (F)
 
 ## How to run right now
 ```

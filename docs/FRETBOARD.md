@@ -71,9 +71,15 @@ Three modes: off, full color, and mono (every scale note the same plain ring). I
 
 **Hand positions (CAGED).** `music/positions.ts` cuts the scale into the shapes a hand plays without moving. The derivation: every pentatonic box has two notes per string, and the box anchored at the k-th pentatonic note on the lowest string takes, on every other string, the consecutive pair whose lower note is nearest in fret to that anchor. Seven-note scales use the same boxes built from their pentatonic skeleton (major pentatonic when the scale has a natural third, minor pentatonic otherwise), then add the remaining scale notes inside the box's fret span. That reproduces the five classic pentatonic boxes exactly, and for a major scale gives the usual CAGED positions with two or three notes per string. Positions are named E, D, C, A, G going up the neck (the E shape is the box whose low-string pair starts on the root) when the tuning has standard intervals; other tunings get Position 1, 2, 3. With a position selected, scale dots outside it are dimmed and riff notes are untouched. Step with `<` and `>`, the arrows in the legend, or Scales > Position.
 
+Choosing a position also slides the fret range (`rangeCenteredOn` in the view slice): same width, centered on the shape, clamped to 0..24, so the board follows the hand up the neck.
+
+**Full-screen fretboard.** `fullscreenBoard` in the view slice drops the side panels, transport and tab lanes from the shell and lets the fretboard section take the remaining height; the browser's Fullscreen API is requested alongside when it is allowed. The geometry adapts: the gutter left of the nut grows with the dot radius so the open-string dot and its label stay inside the SVG, the fret-number baseline is clamped inside the top padding, label font size follows the dot size (11 to 20 px), and scale dots carry their note letter once their radius reaches 8 px.
+
 ![Blues scale in full color](screenshots/phase-09/blues.png)
 
 ![One CAGED position highlighted](screenshots/phase-09/position-caged.png)
+
+![Full-screen fretboard](screenshots/phase-09/fullscreen.png)
 
 ## Interaction surface
 

@@ -90,6 +90,34 @@ test('scale overlay: color, blues scale, root shift, toggles, mono, persistence'
   await menuClick(page, 'scales', 'scales.position', 'scales.position:3');
   await expect(page.getByTestId('scale-position-name')).toContainText('(4/');
   await page.screenshot({ path: screenshotPath('phase-09', 'position-caged'), fullPage: true });
+  // A high position slides the 0-12 window up the neck, never past fret 24.
+  await menuClick(page, 'scales', 'scales.position', 'scales.position:8');
+  await expect(page.getByTestId('scale-position-name')).toContainText('(9/');
+  const fretNumbers = async () =>
+    (await board.locator('.fb-fret-number').allTextContents()).map(Number).filter((n) => !isNaN(n));
+  const numbers = await fretNumbers();
+  expect(Math.max(...numbers)).toBeGreaterThan(12);
+  expect(Math.max(...numbers)).toBeLessThanOrEqual(24);
+  expect(Math.max(...numbers) - Math.min(...numbers)).toBeLessThanOrEqual(12);
+  await expect(board.locator('[data-scale-dot][data-in-position="true"]').first()).toBeVisible();
+  await page.screenshot({ path: screenshotPath('phase-09', 'position-high'), fullPage: true });
+
+  // Full-screen fretboard: panels, transport and tab lanes go away; the neck grows.
+  const heightBefore = (await board.boundingBox())!.height;
+  await menuClick(page, 'view', 'view.fullscreen');
+  await expect(page.getByTestId('shell')).toHaveAttribute('data-fullscreen', 'true');
+  await expect(page.getByLabel('tab lanes')).toHaveCount(0);
+  await expect(page.getByLabel('transport')).toHaveCount(0);
+  await expect(page.locator('.shell__library')).toHaveCount(0);
+  expect((await board.boundingBox())!.height).toBeGreaterThan(heightBefore * 1.8);
+  await menuClick(page, 'view', 'view.letters');
+  await expect(board.locator('[data-scale-dot] text').first()).toBeVisible();
+  await page.screenshot({ path: screenshotPath('phase-09', 'fullscreen'), fullPage: true });
+  await page.getByTestId('scale-fullscreen').click();
+  await expect(page.getByTestId('shell')).toHaveAttribute('data-fullscreen', 'false');
+  await expect(page.getByLabel('tab lanes')).toBeVisible();
+  await menuClick(page, 'view', 'view.letters');
+
   await page.getByTestId('scale-position-name').click();
   await expect(page.getByTestId('scale-position-name')).toHaveText('whole neck');
   await expect(board.locator('[data-scale-dot][data-in-position="false"]')).toHaveCount(0);

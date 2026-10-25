@@ -24,7 +24,12 @@ export function StringLines({ layout, tuning, accidentals }: Props) {
           y2={y}
           strokeWidth={stringStroke(s, n)}
         />
-        <text className="fb-string-label" x={layout.nutX - layout.dotRadius * 3} y={y}>
+        <text
+          className="fb-string-label"
+          x={layout.nutX - layout.dotRadius * 3}
+          y={y}
+          fontSize={layout.labelSize}
+        >
           {nameOf(pitchOf(tuning, s, 0), accidentals, false)}
         </text>
       </g>,

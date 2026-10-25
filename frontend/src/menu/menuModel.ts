@@ -364,6 +364,14 @@ export function buildMenus(s: AppState): Menu[] {
           checked: s.splitView,
           action: () => s.setSplitView(!s.splitView),
         },
+        {
+          type: 'item',
+          id: 'view.fullscreen',
+          label: 'Full-screen fretboard',
+          accelerator: 'F',
+          checked: s.fullscreenBoard,
+          action: () => s.setFullscreenBoard(!s.fullscreenBoard),
+        },
         sep,
         {
           type: 'item',

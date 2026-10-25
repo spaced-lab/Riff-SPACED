@@ -26,6 +26,7 @@ export type Layout = {
   rightX: number;
   stringGap: number;
   dotRadius: number;
+  labelSize: number;
   /** x of fret wire `fret`, for range.from <= fret <= range.to. */
   fretX: (fret: number) => number;
   /** Width of the space ending at wire `fret` (fret > range.from). */
@@ -37,6 +38,11 @@ export type Layout = {
   /** Vertical center of the cell for (string, fret): same as stringY. */
   markers: Marker[];
 };
+
+/** Font size for fret numbers and string labels: readable on a small board, larger on a tall one. */
+function labelSizeFor(dotRadius: number): number {
+  return Math.max(11, Math.min(20, Math.round(dotRadius * 0.8)));
+}
 
 /** Distance along a real neck from the nut to wire `fret`, in units of scale length. */
 function realDistance(fret: number): number {
@@ -50,10 +56,29 @@ export function layout(
   stringCount: number,
   realistic = false,
 ): Layout {
-  const nutX = PADDING.left;
+  const fretCount = Math.max(1, range.to - range.from);
+  const stringGap = (height - PADDING.top - PADDING.bottom) / stringCount;
+
+  // The dot size follows the cell size. On a tall board (full screen) the dots grow, and
+  // the open-string dot sits left of the nut, so the gutter grows with them: it must hold
+  // the string label plus the open dot. Sized from a first pass at the dot radius.
+  const narrowestAt = (nut: number): number => {
+    const neck = Math.max(1, width - PADDING.right - nut);
+    return realistic
+      ? ((realDistance(range.to) - realDistance(range.to - 1)) /
+          (realDistance(range.to) - realDistance(range.from))) *
+          neck
+      : neck / fretCount;
+  };
+  const provisionalRadius = Math.max(
+    3,
+    Math.min(stringGap * 0.42, narrowestAt(PADDING.left) * 0.38),
+  );
+  const provisionalLabel = labelSizeFor(provisionalRadius);
+  // Gutter: the open dot (centered 1.4 radii left of the nut) and the string label beyond it.
+  const nutX = Math.max(PADDING.left, Math.round(provisionalRadius * 3 + provisionalLabel * 1.4));
   const rightX = Math.max(nutX + 1, width - PADDING.right);
   const neckWidth = rightX - nutX;
-  const fretCount = Math.max(1, range.to - range.from);
 
   // Even spacing by default so riffs read evenly; realistic spacing is normalized so
   // the requested range still fills the available width exactly.
@@ -66,9 +91,9 @@ export function layout(
   };
   const fretWidth = (fret: number): number => fretX(fret) - fretX(fret - 1);
 
-  const stringGap = (height - PADDING.top - PADDING.bottom) / stringCount;
   const narrowest = realistic ? fretWidth(range.to) : neckWidth / fretCount;
   const dotRadius = Math.max(3, Math.min(stringGap * 0.42, narrowest * 0.38));
+  const labelSize = labelSizeFor(dotRadius);
 
   const noteX = (fret: number): number =>
     fret <= range.from ? nutX - dotRadius * 1.4 : (fretX(fret - 1) + fretX(fret)) / 2;
@@ -95,6 +120,7 @@ export function layout(
     rightX,
     stringGap,
     dotRadius,
+    labelSize,
     fretX,
     fretWidth,
     noteX,

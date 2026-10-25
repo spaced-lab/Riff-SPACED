@@ -70,7 +70,37 @@ export function Shell() {
   const scalePositions = useStore(selectScalePositions);
   const stepScalePosition = useStore((s) => s.stepScalePosition);
   const setScalePosition = useStore((s) => s.setScalePosition);
+  const fullscreenBoard = useStore((s) => s.fullscreenBoard);
+  const setFullscreenBoard = useStore((s) => s.setFullscreenBoard);
   useKeyboard();
+  // Full-screen fretboard: the layout change is ours; the browser's own full screen is asked
+  // for as well when it is available (it needs a user gesture, which the menu click or key
+  // press is). Leaving browser full screen with Escape leaves the mode too.
+  useEffect(() => {
+    const doc = document;
+    const enter = async () => {
+      try {
+        if (!doc.fullscreenElement) await doc.documentElement.requestFullscreen?.();
+      } catch {
+        // Not allowed here (iframe, headless, no gesture): the layout alone is fine.
+      }
+    };
+    const leave = async () => {
+      try {
+        if (doc.fullscreenElement) await doc.exitFullscreen?.();
+      } catch {
+        // ignore
+      }
+    };
+    if (fullscreenBoard) void enter();
+    else void leave();
+    const onChange = () => {
+      if (!doc.fullscreenElement && useStore.getState().fullscreenBoard)
+        useStore.getState().setFullscreenBoard(false);
+    };
+    doc.addEventListener('fullscreenchange', onChange);
+    return () => doc.removeEventListener('fullscreenchange', onChange);
+  }, [fullscreenBoard]);
   // The CRT look is a body class so the overlay covers dialogs and the drawer too.
   useEffect(() => {
     document.body.classList.toggle('crt', crt);
@@ -92,21 +122,25 @@ export function Shell() {
   }, [shownRiff, viewTick, ghostNotes]);
 
   return (
-    <div className="shell" data-testid="shell">
+    <div
+      className={fullscreenBoard ? 'shell shell--fullscreen' : 'shell'}
+      data-testid="shell"
+      data-fullscreen={fullscreenBoard ? 'true' : 'false'}
+    >
       <header className="shell__menu">
         <span className="shell__brand">RIFF-SPACED</span>
         <MenuBar />
       </header>
 
-      {panels.library ? (
+      {panels.library && !fullscreenBoard ? (
         <aside className="shell__library">
           <LibraryPanel />
         </aside>
       ) : null}
 
       <main className="shell__center">
-        {editing === 'arrangement' ? <ArrangementEditor /> : null}
-        {editing === 'song' ? <SongEditor /> : null}
+        {editing === 'arrangement' && !fullscreenBoard ? <ArrangementEditor /> : null}
+        {editing === 'song' && !fullscreenBoard ? <SongEditor /> : null}
         <section className="shell__fretboard" aria-label="fretboard area">
           {scaleOverlay ? (
             <ScaleLegend
@@ -117,6 +151,8 @@ export function Shell() {
               positions={scalePositions}
               onStepPosition={stepScalePosition}
               onClearPosition={() => setScalePosition(null)}
+              fullscreen={fullscreenBoard}
+              onFullscreen={setFullscreenBoard}
             />
           ) : null}
           <div className="shell__board">
@@ -146,15 +182,19 @@ export function Shell() {
             )}
           </div>
         </section>
-        <section className="shell__transport" aria-label="transport">
-          <TransportBar />
-        </section>
-        <section className="shell__tab" aria-label="tab lanes">
-          <TabLanes />
-        </section>
+        {fullscreenBoard ? null : (
+          <>
+            <section className="shell__transport" aria-label="transport">
+              <TransportBar />
+            </section>
+            <section className="shell__tab" aria-label="tab lanes">
+              <TabLanes />
+            </section>
+          </>
+        )}
       </main>
 
-      {panels.inspector ? (
+      {panels.inspector && !fullscreenBoard ? (
         <aside className="shell__inspector">
           <Inspector />
         </aside>

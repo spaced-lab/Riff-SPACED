@@ -8,6 +8,8 @@ import type { ColorGroup, ScaleId } from '@/music/scales';
 import { COLOR_GROUPS, DEFAULT_SCALE, degreesOf, scaleById, scaleTitle } from '@/music/scales';
 import { pitchClass } from '@/music/pitch';
 import type { AppState } from './types';
+import { rangeCenteredOn } from './viewSlice';
+import type { FretRange } from './viewSlice';
 
 /** Off: no overlay. Color: each degree in its own color. Mono: every scale note the same. */
 export type ScaleMode = 'off' | 'color' | 'mono';
@@ -38,6 +40,22 @@ export type ScaleSlice = {
   toggleScaleColor: (group: ColorGroup) => void;
 };
 
+/**
+ * The new position, plus the fret range slid to keep it in the middle of the board (the
+ * range keeps its width and never leaves 0..24). A range that already shows the whole neck
+ * does not move.
+ */
+function followPosition(
+  s: Pick<AppState, 'scaleId' | 'scaleRoot' | 'riff' | 'fretRange'>,
+  index: number,
+): { scalePosition: number; fretRange: FretRange } {
+  const position = selectScalePositions(s)[index];
+  const fretRange = position
+    ? rangeCenteredOn(s.fretRange, position.fromFret, position.toFret)
+    : s.fretRange;
+  return { scalePosition: index, fretRange };
+}
+
 export const allColorsOn = (): Record<ColorGroup, boolean> =>
   Object.fromEntries(COLOR_GROUPS.map((g) => [g, true])) as Record<ColorGroup, boolean>;
 
@@ -52,17 +70,17 @@ export const createScaleSlice: StateCreator<AppState, [], [], ScaleSlice> = (set
       if (index === null) return { scalePosition: null };
       const count = selectScalePositions(s).length;
       if (count === 0) return { scalePosition: null };
-      return { scalePosition: Math.max(0, Math.min(count - 1, Math.floor(index))) };
+      return followPosition(s, Math.max(0, Math.min(count - 1, Math.floor(index))));
     }),
   stepScalePosition: (delta) =>
     set((s) => {
       const count = selectScalePositions(s).length;
       if (count === 0) return {};
       const current = s.scalePosition;
-      if (current === null) return { scalePosition: delta > 0 ? 0 : count - 1 };
+      if (current === null) return followPosition(s, delta > 0 ? 0 : count - 1);
       const next = current + delta;
       // Past either end the view returns to the whole neck, so stepping cycles through.
-      return { scalePosition: next < 0 || next >= count ? null : next };
+      return next < 0 || next >= count ? { scalePosition: null } : followPosition(s, next);
     }),
   setScaleMode: (scaleMode) => set({ scaleMode }),
   setScaleId: (scaleId) => set({ scaleId }),

@@ -146,7 +146,18 @@ export function Fretboard(props: FretboardProps) {
         <FretWires layout={layout} />
         <StringLines layout={layout} tuning={tuning} accidentals={accidentals} />
         <g data-testid="cells">{cells}</g>
-        {scale ? <ScaleDots layout={layout} tuning={tuning} overlay={scale} /> : null}
+        {scale ? (
+          <ScaleDots
+            layout={layout}
+            tuning={tuning}
+            overlay={scale}
+            letterOf={
+              showLetters
+                ? (string, fret) => nameOf(pitchOf(tuning, string, fret), accidentals, false)
+                : undefined
+            }
+          />
+        ) : null}
         <ChordConnectors layout={layout} notes={visible} soundingIds={highlight} />
         <g data-testid="notes">
           {visible.map((n) => (

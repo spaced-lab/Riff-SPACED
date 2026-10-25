@@ -23,7 +23,16 @@ export type ScaleOverlay = {
   position?: Position | null;
 };
 
-type Props = { layout: Layout; tuning: Tuning; overlay: ScaleOverlay };
+type Props = {
+  layout: Layout;
+  tuning: Tuning;
+  overlay: ScaleOverlay;
+  /** Note name for a cell, drawn inside the dot when the board is tall enough to read it. */
+  letterOf?: (string: number, fret: number) => string;
+};
+
+/** Below this dot radius a letter would be unreadable, so none is drawn. */
+export const MIN_LETTER_RADIUS = 8;
 
 /**
  * One small dot on every (string, fret) whose pitch is in the scale, drawn under the riff
@@ -31,7 +40,7 @@ type Props = { layout: Layout; tuning: Tuning; overlay: ScaleOverlay };
  * is the plain ring, so a player can switch everything off but roots and see only where the
  * roots sit. Roots are drawn a little larger whatever the mode: they anchor the shape.
  */
-export function ScaleDots({ layout, tuning, overlay }: Props) {
+export function ScaleDots({ layout, tuning, overlay, letterOf }: Props) {
   const dots = [];
   for (let s = 1; s <= layout.stringCount; s++) {
     for (let f = layout.range.from; f <= layout.range.to; f++) {
@@ -45,8 +54,12 @@ export function ScaleDots({ layout, tuning, overlay }: Props) {
       if (degree.role === 'root') classes.push('fb-scale--is-root');
       const inPosition = !overlay.position || overlay.position.cells.has(cellKey(s, f));
       if (!inPosition) classes.push('fb-scale--dimmed');
+      const r = layout.dotRadius * (degree.role === 'root' ? 0.62 : 0.5);
+      const x = layout.noteX(f);
+      const y = layout.stringY(s);
+      const letter = letterOf && r >= MIN_LETTER_RADIUS ? letterOf(s, f) : null;
       dots.push(
-        <circle
+        <g
           key={`${s}-${f}`}
           className={classes.join(' ')}
           data-scale-dot
@@ -54,10 +67,14 @@ export function ScaleDots({ layout, tuning, overlay }: Props) {
           data-fret={f}
           data-degree={degree.label}
           data-in-position={inPosition ? 'true' : 'false'}
-          cx={layout.noteX(f)}
-          cy={layout.stringY(s)}
-          r={layout.dotRadius * (degree.role === 'root' ? 0.62 : 0.5)}
-        />,
+        >
+          <circle cx={x} cy={y} r={r} />
+          {letter ? (
+            <text x={x} y={y} fontSize={r * 1.05}>
+              {letter}
+            </text>
+          ) : null}
+        </g>,
       );
     }
   }

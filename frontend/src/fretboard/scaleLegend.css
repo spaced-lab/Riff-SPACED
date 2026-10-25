@@ -1,6 +1,7 @@
 /* The scale legend strip (Phase 9). Colors come from the fb-scale classes in fretboard.css. */
 .scale-legend {
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: wrap;
   align-items: center;
   gap: 2px 14px;
@@ -57,6 +58,7 @@
   gap: 2px;
 }
 
+.scale-legend__mode[aria-pressed='true'],
 .scale-legend__mode[aria-checked='true'] {
   color: var(--color-fg);
   border-color: var(--color-mid);

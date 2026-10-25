@@ -14,6 +14,9 @@ type Props = {
   positions?: readonly Position[];
   onStepPosition?: (delta: 1 | -1) => void;
   onClearPosition?: () => void;
+  /** Full-screen fretboard toggle (Phase 9); omitted in tests and previews. */
+  fullscreen?: boolean;
+  onFullscreen?: (on: boolean) => void;
 };
 
 /**
@@ -30,6 +33,8 @@ export function ScaleLegend({
   positions = [],
   onStepPosition,
   onClearPosition,
+  fullscreen = false,
+  onFullscreen,
 }: Props) {
   const position = overlay.position ?? null;
   return (
@@ -119,6 +124,18 @@ export function ScaleLegend({
           </button>
         ))}
       </span>
+      {onFullscreen ? (
+        <button
+          type="button"
+          className="scale-legend__mode"
+          aria-pressed={fullscreen}
+          data-testid="scale-fullscreen"
+          title="full-screen fretboard (shortcut: F)"
+          onClick={() => onFullscreen(!fullscreen)}
+        >
+          {fullscreen ? 'exit full screen' : 'full screen'}
+        </button>
+      ) : null}
     </div>
   );
 }

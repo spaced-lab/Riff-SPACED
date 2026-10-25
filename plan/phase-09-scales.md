@@ -73,3 +73,15 @@ one at a time.
 Tests: the minor pentatonic in any tuning gives five positions whose union is every scale note
 on the neck; adjacent positions overlap on one fret column; names cycle E D C A G starting
 from the position with the root under the first finger. e2e: step through positions, screenshot.
+
+## P9.T6 Follow the position, full-screen fretboard (owner request, same day)
+
+- Choosing a position slides the fret range to center the shape, same width, clamped to the
+  nut and fret 24; a whole-neck range does not move.
+- View > Full-screen fretboard (`F`, and a button in the legend): side panels, transport and
+  tab lanes hidden, the neck fills the window under the menu bar, status bar at the bottom.
+  Browser full screen requested when allowed; leaving it leaves the mode.
+- Geometry grows with the board: gutter, label size, letters inside scale dots.
+
+Tests: rangeCenteredOn clamps; stepping moves the range; F toggles; e2e picks a high position
+(numbers above 12, never above 24), enters full screen (panels gone, board taller), screenshot.
