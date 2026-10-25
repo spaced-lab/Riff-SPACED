@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T14:00:00Z
+Updated: 2026-10-25T14:40:00Z
 Phase: 8 Polish and backlog promotion (in progress)
-Last completed task: P8.T6 Containers and compose, final
-Next task: P8.T7 Public docs
+Last completed task: P8.T7 Public docs
+Next task: P8.T8 Final verification and exit
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -97,7 +97,7 @@ Phase 8:
 - [x] P8.T4 WAV export and heavy voice (heavy voice shipped in Phase 4, DECISIONS 48)
 - [x] P8.T5 CRT toggle and visual polish
 - [x] P8.T6 Containers and compose, final
-- [ ] P8.T7 Public docs
+- [x] P8.T7 Public docs
 - [ ] P8.T8 Final verification and exit
 
 ## How to run right now

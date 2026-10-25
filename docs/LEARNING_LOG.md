@@ -2,6 +2,26 @@
 
 One entry per phase. Each entry says what was built, names the key idea, and points at the three to six commits whose messages teach it best. Read a commit with `git show <hash>` and start with its LEARN section; the WHY, WHAT, and TEST sections tell you what changed and how it was proven.
 
+## Reading order: fifteen commits
+
+If you read nothing else, read these in order with `git show <hash>`. Together they are the course the project turned into.
+
+1. `4299413` chore(shared): one fixture folder read by two languages is a contract, not test data.
+2. `55a4033` test(music): the fixture, and the fourth-versus-fifth mistake it caught before any code existed.
+3. `3ba8766` feat(music): the fingering cost model, and why it needed a new feature instead of new weights.
+4. `32416ef` feat(model): validation and migration as separate jobs with separate error vocabularies.
+5. `9ebf76f` feat(store): `commit(label, change)` as the one door every mutation walks through.
+6. `aef6bb6` feat(editor): the pointer state machine and one-commit gestures.
+7. `a90199a` feat(store): undo, autosave, and the quarantine rule: never destroy what you cannot read.
+8. `63978f6` feat(audio): the lookahead scheduler and the fake clock that proves its timing.
+9. `6733667` feat(playback): why "I want to play" and "it is playing" are different fields.
+10. `08d1c46` feat(export): the golden file that caught the author, not the code.
+11. `c07289a` feat(analysis): the matcher: search only what the hands can play.
+12. `9e44b16` feat(analysis): novel spectra, evidence-based sustain, and a parameter sweep written into history.
+13. `0de0a98` feat(ai): the directive verbatim, prompts as templates, one retry and then refusal.
+14. `efc0d32` feat(ai): enforce an edit policy by replaying declared edits from the original.
+15. `7f5ea62` feat(music): transpose and retune as one refinger, and the fixture that disagreed with the author's expectation.
+
 ## Phase 0: what a healthy repo skeleton looks like
 
 Built: a public repo under spaced-lab, a Vite + React + TypeScript frontend with a theme and two test layers, a FastAPI backend with a health probe, a shared folder both sides read, CI running both gates, GitHub Pages deploying the frontend on every push, and Docker images with compose.
@@ -120,3 +140,18 @@ Read these commits:
 - `3d74742` feat(frontend): audition as a transient playable, accept as a pure function.
 - `955fc7e` docs(analysis): a second producer gets the same contract, not a translation layer.
 - `6a9ec67` docs(analysis): what the first real recordings said about the synthetic benchmark.
+
+## Phase 8: finishing what the spec promised
+
+Built: transpose and retune (keep shapes or keep pitches) with unreachable notes flagged, the easier-tuning search with preview and apply, MusicXML export with a TAB staff, WAV export through the offline renderer, the CRT look with persisted preferences and the `?demo=1` reset, compose with an nginx API proxy and healthchecks plus CI image builds, and the public docs (README, user guide, contributing guide, this reading order).
+
+Key idea: the deferred items were small once the earlier phases had done their job. Transpose is the Phase 1 fingering search with a pitch target; the tuning search is transpose scored; MusicXML is the Phase 5 export pattern with a voice allocator; WAV export is the Phase 4 test's render with a file name. Each one took a day's worth of code because the foundations were pure functions with tests, which is the argument for building that way.
+
+Read these commits:
+
+- `7f5ea62` feat(music): one refinger for transpose and retune; the fixture answer that differed from the author's (DECISIONS 58).
+- `9027b24` feat(tuning): a score that ties constantly, and the tie-breaks where the judgment lives (DECISIONS 59).
+- `01961b9` feat(export): translating a piano roll into MusicXML voices, with the held note as the case that matters.
+- `8a663a7` feat(audio): an export is the test's render with a file name on the end.
+- `5b4e2dc` feat(ui): preferences and data on separate keys, so a bad boolean cannot cost a riff.
+- `713c26b` chore(docker): a build context wide enough to see what the bundler reads; the proxy that removes CORS.
