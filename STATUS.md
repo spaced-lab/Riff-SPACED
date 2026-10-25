@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:54:44Z
-Phase: 6 Analysis backend
-Last completed task: P6.T10 Real recordings (skipped: backend/audio_in empty, DECISIONS 39)
-Next task: P6.T11 Chrome verification and phase exit
+Updated: 2026-10-25T03:56:45Z
+Phase: 6 Analysis backend (complete), Phase 7 AI layer blocked on the API key
+Last completed task: P6.T11 Chrome verification and phase exit
+Next task: P7.T1 Prompt files and client wrapper (HARD STOP: ANTHROPIC_API_KEY is not set, see Waiting on owner)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -66,7 +66,7 @@ Phase 5 (tag v0.5.0):
 - [x] P5.T6 MIDI export
 - [x] P5.T7 e2e, Chrome verification, phase exit
 
-Phase 6:
+Phase 6 (tag v0.6.0):
 - [x] Preflight: re-check the Messages API for an audio content block (none; DECISIONS 49)
 - [x] P6.T1 Audio I/O and preprocessing
 - [x] P6.T2 Test-signal synth (ground truth generator)
@@ -80,11 +80,21 @@ Phase 6:
 - [x] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
 - [x] P6.T11 Chrome verification and phase exit
 
+Phase 7:
+- [ ] HARD STOP check: ANTHROPIC_API_KEY (not set as of this commit)
+- [ ] P7.T1 Prompt files and client wrapper
+- [ ] P7.T2 Analyze endpoint
+- [ ] P7.T3 Suggest endpoint
+- [ ] P7.T4 Cleanup endpoint and ingest --ai
+- [ ] P7.T5 Live smoke test (needs the key)
+- [ ] P7.T6 Frontend: AI menu and suggestions drawer
+- [ ] P7.T7 Chrome verification and phase exit
+
 ## How to run right now
 ```
 cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
-npm run e2e                                # Playwright: 12 specs (smoke, fretboard, editor, playback, split view, render, files, library, import)
+npm run e2e                                # Playwright: 12 specs; RIFFSPACED_REAL_BACKEND=1 npx playwright test e2e/import-real.spec.ts runs the real-backend import (backend on :8000)
 # dev harness: http://localhost:5173/#/dev/fretboard
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
@@ -101,6 +111,16 @@ docker compose up --build                  # frontend :8080, backend :8000
 - Claude in Chrome: console reading works (clean), but script injection for screenshots and page reads times out on the Vite dev page in this session ("Page still loading"). Playwright is the gate and produces the committed screenshots; the Chrome pass is retried each UI phase.
 
 ## Waiting on owner
-(none)
+
+**Phase 7 needs an Anthropic API key and none is available.** `ANTHROPIC_API_KEY` is not set in the shell that runs Claude Code and `backend/.env` does not exist (checked at this commit; the key's value is never read or printed by the run). The AI layer calls the Claude API from the Python backend, which is billed to that key separately from the Claude Code login.
+
+To continue, either:
+
+1. `export ANTHROPIC_API_KEY=sk-ant-...` in the shell, then tell the run: "The key is set in the environment. Continue Phase 7."
+2. or create `backend/.env` (gitignored) with the line `ANTHROPIC_API_KEY=sk-ant-...` (copy `backend/.env.example`), then say the same.
+
+If you want the AI layer built without a key for now, say "Build Phase 7 with the fake client, skip the live smoke test": P7.T1 to T4 and T6 run on the deterministic fake client and only P7.T5 (the live smoke test and the worked example in docs/AI_LAYER.md) waits for the key.
+
+Also still open, not blocking: drop recordings into `backend/audio_in/` whenever you like (recipe in docs/BACKLOG.md).
 
 Heads-up: Phase 7 needs ANTHROPIC_API_KEY in the shell or in backend/.env (gitignored); the run will stop at Phase 7 if it is missing. Real recordings: drop WAV or FLAC files into backend/audio_in/ any time and run the ingest recipe in docs/BACKLOG.md.

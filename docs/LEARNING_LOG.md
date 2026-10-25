@@ -86,3 +86,18 @@ Read these commits:
 - `6432053` feat(storage): one interface over pickers and downloads; keep-both rewrites references.
 - `08d1c46` feat(export): the golden that caught the author, not the code.
 - `c8643d4` feat(export): variable-length quantities and running status, verified by a forty-line reader.
+
+## Phase 6: search what the hands can play
+
+Built: the whole analysis backend in numpy and scipy: loading and band-limiting, a Karplus-Strong plus tanh test synth for ground truth, STFT with interpolated peaks, spectral-flux onsets with a short timing window, tatum-based tempo, the fingering-constrained spectral template matcher, Viterbi decoding, quantization and emission, a benchmark harness with committed results, the ingest CLI, the analyze endpoints, the import dialog with health polling, and `docs/ANALYSIS_METHOD.md`.
+
+Key idea: do not ask the signal which frequencies it contains; ask which of the few hundred shapes the owner's hands can play on this tuning it sounds most like. Templates carry harmonics, inharmonicity and the intermodulation tones distortion creates between two strings, so the fuzz that defeats pitch trackers becomes evidence. Two framing lessons mattered as much as the matcher: identify what is *new* in each slice and decide "still ringing" separately by evidence, and scale Viterbi emissions to the transition costs or the transitions become the decision. The benchmark that disagreed with the thresholds is in `docs/benchmarks/latest.md` and the gap is written down in the backlog with numbers.
+
+Read these commits:
+
+- `00c6346` feat(synth): the pick is the sound; a 1/f pluck and a sum tone that belongs to neither string.
+- `af32e58` feat(analysis): the window that is right for pitch is wrong for time.
+- `ce15533` feat(analysis): tempo is a convention; beats are binary multiples of the smallest note value.
+- `c07289a` feat(analysis): the matcher, and why line width at the low end decided the tritone.
+- `9e44b16` feat(analysis): novel spectra, evidence-based sustain, emission temperature; the parameter sweep in the commit message.
+- `3d823bf` test(analysis): a benchmark earns its keep when it disagrees with you.
