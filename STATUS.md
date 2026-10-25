@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:33:20Z
-Phase: 1 Music core (complete), starting Phase 2 Fretboard
-Last completed task: P1.T6 Docs and phase exit
-Next task: P2.T1 Store foundation
+Updated: 2026-10-25T01:36:07Z
+Phase: 2 Fretboard
+Last completed task: P2.T1 Store foundation
+Next task: P2.T2 Fretboard geometry
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -32,7 +32,7 @@ Phase 1 (tag v0.1.0):
 - [x] P1.T6 Docs and phase exit
 
 Phase 2:
-- [ ] P2.T1 Store foundation
+- [x] P2.T1 Store foundation
 - [ ] P2.T2 Fretboard geometry
 - [ ] P2.T3 Fretboard component
 - [ ] P2.T4 Tuning menu and view toggles (temporary toolbar)
