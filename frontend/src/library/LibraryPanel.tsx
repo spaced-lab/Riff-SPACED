@@ -32,6 +32,7 @@ export function LibraryPanel() {
   const createRiff = useStore((s) => s.createRiff);
   const createArrangement = useStore((s) => s.createArrangement);
   const createSong = useStore((s) => s.createSong);
+  const saveCurrent = useStore((s) => s.saveCurrent);
 
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -293,8 +294,15 @@ export function LibraryPanel() {
             </button>
           </li>
           <li>
-            <button type="button" role="menuitem" disabled title="Phase 5, task 4">
-              export
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                open(menu.tier, menu.id);
+                void saveCurrent({ saveAs: true });
+              }}
+            >
+              export...
             </button>
           </li>
         </ul>

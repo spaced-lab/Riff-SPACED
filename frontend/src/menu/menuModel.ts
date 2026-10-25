@@ -42,6 +42,12 @@ const later = (
 
 const sep: MenuItem = { type: 'separator' };
 
+function libraryHas(s: AppState, kind: 'riff' | 'arrangement' | 'song', id: string): boolean {
+  if (kind === 'riff') return s.library.riffs.some((r) => r.id === id);
+  if (kind === 'arrangement') return s.library.arrangements.some((a) => a.id === id);
+  return s.library.songs.some((x) => x.id === id);
+}
+
 export function buildMenus(s: AppState): Menu[] {
   const undoLabel = selectUndoLabel(s);
   const redoLabel = selectRedoLabel(s);
@@ -81,11 +87,38 @@ export function buildMenus(s: AppState): Menu[] {
           })),
         },
         sep,
-        later('file.open', 'Open...', 'Phase 5, task 4', 'Ctrl/Cmd+O'),
-        later('file.save', 'Save', 'Phase 5, task 4', 'Ctrl/Cmd+S'),
-        later('file.saveAs', 'Save as...', 'Phase 5, task 4'),
-        later('file.importLibrary', 'Import library...', 'Phase 5, task 4'),
-        later('file.exportLibrary', 'Export library', 'Phase 5, task 4'),
+        {
+          type: 'item',
+          id: 'file.open',
+          label: 'Open...',
+          accelerator: 'Ctrl/Cmd+O',
+          action: () => void s.openFromDisk(),
+        },
+        {
+          type: 'item',
+          id: 'file.save',
+          label: 'Save',
+          accelerator: 'Ctrl/Cmd+S',
+          action: () => void s.saveCurrent(),
+        },
+        {
+          type: 'item',
+          id: 'file.saveAs',
+          label: 'Save as...',
+          action: () => void s.saveCurrent({ saveAs: true }),
+        },
+        {
+          type: 'item',
+          id: 'file.importLibrary',
+          label: 'Import library...',
+          action: () => void s.importLibrary(),
+        },
+        {
+          type: 'item',
+          id: 'file.exportLibrary',
+          label: 'Export library',
+          action: () => void s.exportLibrary(),
+        },
         sep,
         {
           type: 'item',
@@ -100,7 +133,28 @@ export function buildMenus(s: AppState): Menu[] {
           ],
         },
         later('file.importAudio', 'Import from audio...', 6),
-        later('file.recent', 'Recent', 'Phase 5, task 4'),
+        {
+          type: 'item',
+          id: 'file.recent',
+          label: 'Recent',
+          disabled: s.recent.length === 0,
+          reason: s.recent.length === 0 ? 'nothing opened or saved yet' : undefined,
+          submenu: s.recent.map((r) => ({
+            type: 'item' as const,
+            id: `file.recent:${r.id}`,
+            label: `${r.name} (${r.kind})`,
+            disabled: r.kind !== 'library' && !libraryHas(s, r.kind, r.id),
+            reason:
+              r.kind !== 'library' && !libraryHas(s, r.kind, r.id)
+                ? 'no longer in the library'
+                : undefined,
+            action: () => {
+              if (r.kind === 'riff') s.openRiff(r.id);
+              else if (r.kind === 'arrangement') s.openArrangement(r.id);
+              else if (r.kind === 'song') s.openSong(r.id);
+            },
+          })),
+        },
       ],
     },
     {

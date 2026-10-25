@@ -18,13 +18,9 @@ if (!rootElement) {
 bootstrapStore(window.localStorage);
 startAutosave();
 startEngine();
+useStore.getState().loadRecent();
 
-// A small hook for the Playwright suite: read the store and the audio state from tests.
-declare global {
-  interface Window {
-    riffspaced?: { store: typeof useStore; audioState: () => string };
-  }
-}
+// A small hook for the Playwright suite (declared in src/types/global.d.ts).
 window.riffspaced = {
   store: useStore,
   audioState: () => (hasAudioContext() ? getAudioContext().state : 'none'),

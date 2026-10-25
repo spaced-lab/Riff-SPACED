@@ -6,6 +6,7 @@
 import { create } from 'zustand';
 import { createDialogSlice } from './dialogSlice';
 import { createEditorSlice } from './editorSlice';
+import { createFileSlice } from './fileSlice';
 import { createLibrarySlice } from './librarySlice';
 import { createRiffSlice } from './riffSlice';
 import { createSelectionSlice } from './selectionSlice';
@@ -25,6 +26,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createEditorSlice(...a),
   ...createDialogSlice(...a),
   ...createTransportSlice(...a),
+  ...createFileSlice(...a),
 }));
 
 /**

@@ -45,6 +45,7 @@ export function Shell() {
   const removeNotes = useStore((s) => s.removeNotes);
   const lastSavedAt = useStore((s) => s.lastSavedAt);
   const storageWarning = useStore((s) => s.storageWarning);
+  const fileName = useStore((s) => (s.currentRiffId ? s.fileNames[s.currentRiffId] : undefined));
   const isPlaying = useStore((s) => s.isPlaying);
   const positionTick = useStore((s) => s.positionTick);
   const syncJitterMs = useStore((s) => s.syncJitterMs);
@@ -124,6 +125,7 @@ export function Shell() {
           {riff.tuning.name}: {riff.tuning.pitches.join(' ')}
         </span>
         <span data-testid="riff-name">{riff.name}</span>
+        {fileName ? <span data-testid="file-name">{fileName}</span> : null}
         <span data-testid="status-lane">lane {activeLane}</span>
         {syncJitterMs !== null ? (
           <span

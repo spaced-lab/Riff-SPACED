@@ -25,7 +25,8 @@ export const SHORTCUTS: readonly Shortcut[] = [
   { keys: 'Ctrl/Cmd+Shift+Z', description: 'redo', phase: 3 },
   { keys: 'Ctrl/Cmd+C / X / V', description: 'copy / cut / paste at the cursor', phase: 3 },
   { keys: 'Ctrl/Cmd+D', description: 'duplicate the selection one grid step later', phase: 3 },
-  { keys: 'Ctrl/Cmd+S', description: 'save', phase: 5 },
+  { keys: 'Ctrl/Cmd+S', description: 'save (Shift: save as)', phase: 5 },
+  { keys: 'Ctrl/Cmd+O', description: 'open a file', phase: 5 },
   { keys: '[ / ]', description: 'coarser / finer grid', phase: 3 },
   { keys: '- / =', description: 'tempo down / up by 1', phase: 4 },
   { keys: 'Tab', description: 'toggle note letters', phase: 3 },
@@ -166,6 +167,20 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       if (mod && readOnly) return false;
       if (mod) {
         s.redo();
+        return true;
+      }
+      return false;
+    case 's':
+    case 'S':
+      if (mod) {
+        void s.saveCurrent({ saveAs: e.shiftKey });
+        return true;
+      }
+      return false;
+    case 'o':
+    case 'O':
+      if (mod) {
+        void s.openFromDisk();
         return true;
       }
       return false;

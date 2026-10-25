@@ -1,5 +1,6 @@
 import type { DialogSlice } from './dialogSlice';
 import type { EditorSlice } from './editorSlice';
+import type { FileSlice } from './fileSlice';
 import type { LibrarySlice } from './librarySlice';
 import type { RiffSlice } from './riffSlice';
 import type { SelectionSlice } from './selectionSlice';
@@ -13,4 +14,5 @@ export type AppState = RiffSlice &
   LibrarySlice &
   EditorSlice &
   DialogSlice &
-  TransportSlice;
+  TransportSlice &
+  FileSlice;
