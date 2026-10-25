@@ -50,13 +50,14 @@ describe('loadInitialLibrary', () => {
       [STORAGE_KEY]: JSON.stringify({
         format: 'riff-spaced/library',
         version: 1,
-        exportedAt: 'x',
-        riffs: 'no',
+        exportedAt: '2026-01-01T00:00:00Z',
+        // Migration tolerates a missing list, so the failure has to be inside a riff.
+        riffs: [{ format: 'riff-spaced/riff', version: 1, name: 'broken' }],
         arrangements: [],
         songs: [],
       }),
     });
-    expect(loadInitialLibrary(invalid).warning).toMatch(/riffs must be an array/);
+    expect(loadInitialLibrary(invalid).warning).toMatch(/riffs\[0\]: riff\.id is required/);
   });
 });
 
