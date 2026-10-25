@@ -3,7 +3,8 @@
     python -m riffspaced.ingest ./audio_in --out ./riffs_out --tuning "Bb Standard"
     (optional: --bpm 92, --max-fret 12, --strings 6,5,4, --ai)
 
-Every supported file in the folder becomes `<name>.riff.json` and `<name>.report.md`.
+Every supported file in the folder becomes `<name>.riff.json`, `<name>.riff.yaml` (the same
+notes as a readable list, for correcting by hand) and `<name>.report.md`.
 With `--ai`, the Claude cleanup pass (SPEC 9.2) also writes `<name>.clean.riff.json` and
 `<name>.cleanup.md`; the raw riff is kept so the two can be compared. Without a key (and
 without RIFFSPACED_AI_FAKE=1) the flag prints a notice and the analysis runs alone.
@@ -25,6 +26,7 @@ from riffspaced.analysis.emit import Report
 from riffspaced.analysis.io import FFMPEG_EXTENSIONS, SOUNDFILE_EXTENSIONS, UnsupportedFormat
 from riffspaced.analysis.pipeline import AnalyzeOptions, analyze
 from riffspaced.model.validate import ValidationError
+from riffspaced.yamlout import riff_to_yaml, yaml_path_for
 
 SUPPORTED = sorted(SOUNDFILE_EXTENSIONS | FFMPEG_EXTENSIONS)
 
@@ -50,6 +52,7 @@ def ingest_file(path: Path, out_dir: Path, options: AnalyzeOptions) -> IngestRes
     riff_path = out_dir / f"{path.stem}.riff.json"
     report_path = out_dir / f"{path.stem}.report.md"
     riff_path.write_text(json.dumps(riff, indent=2) + "\n")
+    yaml_path_for(riff_path).write_text(riff_to_yaml(riff))
     report_path.write_text(report.to_markdown(path.stem))
     return IngestResult(riff, report, riff_path, report_path)
 
@@ -84,6 +87,7 @@ def run_cleanup(result: IngestResult, out_dir: Path, client: AiClient) -> tuple[
     stem = result.riff_path.name.removesuffix(".riff.json")
     clean_path = out_dir / f"{stem}.clean.riff.json"
     clean_path.write_text(json.dumps(cleaned["riff"], indent=2) + "\n")
+    yaml_path_for(clean_path).write_text(riff_to_yaml(cleaned["riff"]))
     (out_dir / f"{stem}.cleanup.md").write_text(cleanup_markdown(stem, cleaned))
     return clean_path, len(cleaned["changes"])
 

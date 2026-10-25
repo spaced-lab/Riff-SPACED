@@ -1,6 +1,6 @@
 # Analysis benchmark: latest
 
-Commit `9e44b16`, 2026-10-25 03:42 UTC. 36 cases: 6 riffs x drives 3.0, 6.0, 10.0 x noise -60, -35 dB. Rendered by the Karplus-Strong test synth, scored against its own ground truth (30 ms window).
+Commit `8f47406`, 2026-10-25 06:17 UTC. 36 cases: 6 riffs x drives 3.0, 6.0, 10.0 x noise -60, -35 dB. Rendered by the Karplus-Strong test synth, scored against its own ground truth (30 ms window).
 
 ## Summary
 
@@ -12,7 +12,7 @@ Commit `9e44b16`, 2026-10-25 03:42 UTC. 36 cases: 6 riffs x drives 3.0, 6.0, 10.
 | tempo within 2 BPM | 0.694 | 0.80 | no |
 | dyad accuracy | 0.780 | (tracked) | |
 | mean confidence | 0.751 | (tracked) | |
-| total analysis time | 17.6 s | | |
+| total analysis time | 17.4 s | | |
 
 ## Cases
 
@@ -48,7 +48,7 @@ Commit `9e44b16`, 2026-10-25 03:42 UTC. 36 cases: 6 riffs x drives 3.0, 6.0, 10.
 | Octave Chug | 6 | -35 | 100 | 100.0 | 0.1 | 1.000 | 0.919 | 1.000 | 0.400 | 0.71 | 0.6 |
 | Octave Chug | 10 | -60 | 100 | 100.0 | 0.0 | 0.985 | 0.907 | 1.000 | 0.400 | 0.70 | 0.6 |
 | Octave Chug | 10 | -35 | 100 | 100.0 | 0.0 | 1.000 | 0.919 | 1.000 | 0.400 | 0.72 | 0.6 |
-| Slow Tritone | 3 | -60 | 60 | 135.3 | 15.3 | 1.000 | 1.000 | 1.000 | 1.000 | 0.88 | 0.3 |
+| Slow Tritone | 3 | -60 | 60 | 135.3 | 15.3 | 1.000 | 1.000 | 1.000 | 1.000 | 0.88 | 0.2 |
 | Slow Tritone | 3 | -35 | 60 | 90.3 | 29.7 | 1.000 | 1.000 | 1.000 | 1.000 | 0.88 | 0.2 |
 | Slow Tritone | 6 | -60 | 60 | 150.4 | 30.4 | 1.000 | 1.000 | 1.000 | 1.000 | 0.83 | 0.2 |
 | Slow Tritone | 6 | -35 | 60 | 89.7 | 29.7 | 1.000 | 1.000 | 1.000 | 1.000 | 0.83 | 0.2 |

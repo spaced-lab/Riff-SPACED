@@ -26,6 +26,9 @@ def test_ingest_folder_writes_riffs_and_reports(tmp_path, demo_library, capsys, 
         "demo-riff-walkdown.clean.riff.json",
     ]
     assert "AI cleanup" in (out / "demo-riff-walkdown.cleanup.md").read_text()
+    yaml_text = (out / "demo-riff-walkdown.riff.yaml").read_text()
+    assert yaml_text.startswith("# RIFF-SPACED riff") and "notes:" in yaml_text
+    assert (out / "demo-riff-walkdown.clean.riff.yaml").exists()
     assert "model: fake" in (out / "demo-riff-walkdown.cleanup.md").read_text()
     riffs = sorted(p for p in out.glob("*.riff.json") if ".clean." not in p.name)
     reports = sorted(out.glob("*.report.md"))

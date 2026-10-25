@@ -3,7 +3,8 @@
 Onset times in seconds become ticks on a sixteenth grid at the chosen tempo. The downbeat
 is the grid phase that puts the most onset energy on beats 1 and 3. Durations run to the
 next onset (or the segment end for the last one), clipped to the grid. A note is palm-muted
-when its level falls more than 20 dB within 120 ms of its peak. Everything that does not sit
+when its level falls more than 20 dB within 120 ms of its peak. Two segments that snap to
+the same grid line keep only the one decoded with more confidence. Everything that does not sit
 within 45 percent of a sixteenth of a grid line still snaps, but loses confidence.
 """
 
@@ -205,6 +206,16 @@ def quantize(
         if cand.is_silence:
             continue
         start = starts[i]
+        # Two segments shorter than a sixteenth apart snap to one grid line. One attack per
+        # tick: keep the one the decoder was surer about and drop the other, otherwise both
+        # events would claim the same strings at the same instant (seen on real recordings).
+        rivals = [
+            k
+            for k in range(len(starts))
+            if k != i and starts[k] == start and not candidates[path[k]].is_silence
+        ]
+        if any((confidences[k], -k) > (confidences[i], -i) for k in rivals):
+            continue
         next_start = next((starts[k] for k in range(i + 1, len(starts)) if starts[k] > start), None)
         seg_end_ticks = int(round(seconds_to_ticks(seg.end - offset, bpm)))
         end = min(next_start, seg_end_ticks) if next_start is not None else seg_end_ticks
