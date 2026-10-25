@@ -37,8 +37,10 @@ export function MenuBar() {
 
   const activate = (item: Extract<MenuItem, { type: 'item' }>) => {
     if (item.disabled) return;
-    // A click on a parent opens its submenu too, not only hover: a pointer that is already
-    // resting on the item never fires mouseenter (seen as a flaky submenu on the CI runner).
+    // A click on a parent opens its submenu, and only opens it. Hover opens it as well, and
+    // whether the hover render has landed before the click is a matter of machine speed: a
+    // toggling click closed what hover had just opened on the CI runner and timed out the
+    // e2e menu helper. Submenus close when the pointer moves to another item or the menu closes.
     if (item.submenu) {
       setSubId(item.id);
       return;
@@ -73,7 +75,7 @@ export function MenuBar() {
             className={item.disabled ? 'menu__item menu__item--disabled' : 'menu__item'}
             title={item.disabled ? item.reason : undefined}
             data-menu-item={item.id}
-            onClick={() => (hasSub ? setSubId(subId === item.id ? null : item.id) : activate(item))}
+            onClick={() => activate(item)}
           >
             <span className="menu__check">{item.checked ? '✓' : ''}</span>
             <span className="menu__label">{item.label}</span>
