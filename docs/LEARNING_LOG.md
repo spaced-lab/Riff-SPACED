@@ -28,3 +28,17 @@ Read these commits:
 - `32416ef` feat(model): validation and migration as separate jobs with separate error vocabularies.
 - `f26fa19` feat(fixtures): the demo riffs as a worked example that tests the model.
 - `124fa2f` feat(backend): the Python mirror and the two parity tests that bind the sides together.
+
+## Phase 2: a fretboard that is only a drawing
+
+Built: the Zustand store with its single `commit` door, pure fretboard geometry, the SVG fretboard component with every visual state as a CSS class, a temporary toolbar, the layout shell with phase-labeled placeholders, a dev harness route, and `docs/FRETBOARD.md`.
+
+Key idea: keep the component presentational. Coordinates come from a pure function, state comes in as props, and every interaction leaves as a callback. That is why the same component will serve the main view, the four-way split, and the AI preview cards, and why its tests can assert exact pixel positions without a browser.
+
+Read these commits:
+
+- `9ebf76f` feat(store): `commit(label, change)` as the one mutation path for undo and autosave.
+- `46e5709` feat(fretboard): geometry as a pure function, realistic spacing normalized to any range.
+- `19d6148` feat(fretboard): the component, hit rectangles for clickable neck, states as CSS classes.
+- `db8d613` feat(fretboard): two bugs worth remembering: object-returning Zustand selectors and Testing Library cleanup with globals off.
+- `4a55932` feat(app): the shell as a visible plan, and the stacked-dots hover lesson for Playwright.

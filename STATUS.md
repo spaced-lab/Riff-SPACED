@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:48:48Z
-Phase: 2 Fretboard
-Last completed task: P2.T5 App shell and dev harness route
-Next task: P2.T6 Phase exit
+Updated: 2026-10-25T01:49:06Z
+Phase: 2 Fretboard (complete), starting Phase 3 Editor
+Last completed task: P2.T6 Phase exit
+Next task: P3.T1 Tab lane geometry and rendering
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -31,19 +31,29 @@ Phase 1 (tag v0.1.0):
 - [x] P1.T5 Python mirror of the music module and schemas
 - [x] P1.T6 Docs and phase exit
 
-Phase 2:
+Phase 2 (tag v0.2.0):
 - [x] P2.T1 Store foundation
 - [x] P2.T2 Fretboard geometry
 - [x] P2.T3 Fretboard component
 - [x] P2.T4 Tuning menu and view toggles (temporary toolbar)
 - [x] P2.T5 App shell and dev harness route
-- [ ] P2.T6 Phase exit
+- [x] P2.T6 Phase exit
+
+Phase 3:
+- [ ] P3.T1 Tab lane geometry and rendering
+- [ ] P3.T2 Note entry from the fretboard and keyboard
+- [ ] P3.T3 Selection, drag, resize, clipboard
+- [ ] P3.T4 Sections, loop length, grid, quantize
+- [ ] P3.T5 Undo/redo and autosave
+- [ ] P3.T6 Inspector for notes and dyads
+- [ ] P3.T7 e2e, Chrome verification, phase exit
 
 ## How to run right now
 ```
 cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
-npm run e2e                                # Playwright smoke test
+npm run e2e                                # Playwright: smoke + fretboard specs
+# dev harness: http://localhost:5173/#/dev/fretboard
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
 make check                                 # ruff, pytest
