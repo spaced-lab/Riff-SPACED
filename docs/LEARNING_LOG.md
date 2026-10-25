@@ -14,3 +14,17 @@ Read these commits:
 - `de21236` feat(backend): the app factory, CORS from the environment, and why `.env` is a fallback rather than the source of truth.
 - `b44362e` ci: both gates on GitHub, and the `base` path trap that breaks Vite apps on project Pages sites.
 - `4299413` chore(shared): one fixture folder read by two languages is a contract, not test data.
+
+## Phase 1: why a shared fixture beats two test suites
+
+Built: the music conventions (pitch, names, tunings, ticks, dyads, fingering search) and the document model (riff, arrangement, song, library bundle with JSON Schemas, validation, migration) in both TypeScript and Python, a demo library with the owner's signature turnaround, and `docs/MUSIC_MODEL.md`.
+
+Key idea: when two codebases must agree, give them one set of expected values to agree with. `shared/fixtures/music-conventions.json` holds every input/expected pair, both test suites iterate it, and a parity test on each side asserts the same case count, so a new section on one side fails the other until it catches up. Writing the expected values from the spec's formulas rather than from code found four fret arithmetic errors in the plan before a line of music code existed.
+
+Read these commits:
+
+- `55a4033` test(music): the fixture, and the fourth-versus-fifth mistake it caught.
+- `3ba8766` feat(music): the TypeScript modules, and why the fingering cost model needed a new feature instead of new weights.
+- `32416ef` feat(model): validation and migration as separate jobs with separate error vocabularies.
+- `f26fa19` feat(fixtures): the demo riffs as a worked example that tests the model.
+- `124fa2f` feat(backend): the Python mirror and the two parity tests that bind the sides together.
