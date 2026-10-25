@@ -68,6 +68,9 @@ export type DialogSlice = {
   /** Answer the dialog: a string for prompt, values for form, nothing otherwise. */
   confirmDialog: (payload?: string | FormValues) => void;
   cancelDialog: () => void;
+  /** File > Import from audio dialog (its own component, not a DialogSpec). */
+  importDialogOpen: boolean;
+  setImportDialogOpen: (open: boolean) => void;
   toasts: Toast[];
   /** Non-blocking status that disappears on its own. */
   toast: (text: string, kind?: Toast['kind']) => void;
@@ -99,6 +102,8 @@ export const createDialogSlice: StateCreator<AppState, [], [], DialogSlice> = (s
     set({ dialog: null });
     if (d && d.kind !== 'info') d.onCancel?.();
   },
+  importDialogOpen: false,
+  setImportDialogOpen: (importDialogOpen) => set({ importDialogOpen }),
   toasts: [],
   toast: (text, kind = 'info') => {
     const id = nextToastId++;

@@ -1,0 +1,68 @@
+.import {
+  min-width: 520px;
+  max-width: 720px;
+}
+
+.import__files {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.import__files span {
+  color: var(--color-mid);
+}
+
+.import__list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.import__item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 6px;
+  border: 1px solid var(--color-dim);
+  font-size: 12px;
+}
+
+.import__item--running {
+  border-color: var(--color-mid);
+}
+
+.import__item--done {
+  border-color: var(--color-fg);
+}
+
+.import__item--failed {
+  border-color: var(--color-warn);
+  color: var(--color-warn);
+}
+
+.import__name {
+  color: var(--color-fg);
+}
+
+.import__message {
+  color: var(--color-mid);
+}
+
+.import__report {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 6px;
+  border-top: 1px solid var(--color-dim);
+  color: var(--color-mid);
+  white-space: pre-wrap;
+  font-size: 11px;
+}

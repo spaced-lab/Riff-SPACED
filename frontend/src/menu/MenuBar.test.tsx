@@ -33,7 +33,7 @@ describe('MenuBar', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'File' }));
     expect(container.querySelector('[data-menu-item="file.importAudio"]')).toHaveAttribute(
       'title',
-      'Phase 6',
+      expect.stringContaining('backend unreachable at'),
     );
     expect(container.querySelector('[data-menu-item="file.export.musicxml"]')).toBeNull();
     fireEvent.click(container.querySelector('[data-menu-item="file.export"]')!);

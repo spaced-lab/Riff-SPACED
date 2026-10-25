@@ -4,6 +4,7 @@ import { App } from './App';
 import { bootstrapStore } from './store';
 import { startAutosave } from './store/persist';
 import { startEngine } from './audio/engine';
+import { startHealthPolling } from './api/client';
 import { getAudioContext, hasAudioContext } from './audio/context';
 import { useStore } from './store';
 import './theme.css';
@@ -19,6 +20,7 @@ bootstrapStore(window.localStorage);
 startAutosave();
 startEngine();
 useStore.getState().loadRecent();
+startHealthPolling();
 
 // A small hook for the Playwright suite (declared in src/types/global.d.ts).
 window.riffspaced = {

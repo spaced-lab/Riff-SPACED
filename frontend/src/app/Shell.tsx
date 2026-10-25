@@ -1,5 +1,6 @@
 import { Dialog } from '@/components/Dialog';
 import { Toasts } from '@/components/Toast';
+import { ImportAudioDialog } from '@/import/ImportAudioDialog';
 import { MenuBar } from '@/menu/MenuBar';
 import { Inspector } from '@/inspector/Inspector';
 import { LibraryPanel } from '@/library/LibraryPanel';
@@ -46,6 +47,9 @@ export function Shell() {
   const lastSavedAt = useStore((s) => s.lastSavedAt);
   const storageWarning = useStore((s) => s.storageWarning);
   const fileName = useStore((s) => (s.currentRiffId ? s.fileNames[s.currentRiffId] : undefined));
+  const backend = useStore((s) => s.backend);
+  const importOpen = useStore((s) => s.importDialogOpen);
+  const setImportOpen = useStore((s) => s.setImportDialogOpen);
   const isPlaying = useStore((s) => s.isPlaying);
   const positionTick = useStore((s) => s.positionTick);
   const syncJitterMs = useStore((s) => s.syncJitterMs);
@@ -119,6 +123,7 @@ export function Shell() {
       ) : null}
 
       <Dialog />
+      {importOpen ? <ImportAudioDialog onClose={() => setImportOpen(false)} /> : null}
       <Toasts />
       <footer className="shell__status" data-testid="status-bar">
         <span data-testid="tuning-status">
@@ -138,7 +143,16 @@ export function Shell() {
         {pendingFret !== null ? (
           <span data-testid="status-pending">fret: {pendingFret}_</span>
         ) : null}
-        <span>backend: not checked (phase 6)</span>
+        <span
+          data-testid="status-backend"
+          className={backend.status === 'unreachable' ? 'shell__warning' : undefined}
+          title={backend.error ?? backend.url}
+        >
+          backend:{' '}
+          {backend.status === 'ok'
+            ? `ok${backend.version ? ` v${backend.version}` : ''}`
+            : backend.status}
+        </span>
         <span data-testid="status-saved">
           {lastSavedAt
             ? `saved ${new Date(lastSavedAt).toLocaleTimeString([], { hour12: false })}`

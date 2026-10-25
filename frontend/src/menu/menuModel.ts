@@ -142,7 +142,14 @@ export function buildMenus(s: AppState): Menu[] {
             later('file.export.pdf', 'PDF', 'backlog'),
           ],
         },
-        later('file.importAudio', 'Import from audio...', 6),
+        {
+          type: 'item',
+          id: 'file.importAudio',
+          label: 'Import from audio...',
+          disabled: s.backend.status !== 'ok',
+          reason: s.backend.status !== 'ok' ? `backend unreachable at ${s.backend.url}` : undefined,
+          action: () => s.setImportDialogOpen(true),
+        },
         {
           type: 'item',
           id: 'file.recent',
