@@ -89,3 +89,8 @@
 .inspector__dyad strong {
   color: var(--color-fg);
 }
+
+.inspector__section-go--solo {
+  background: var(--color-dim);
+  border-color: var(--color-fg);
+}

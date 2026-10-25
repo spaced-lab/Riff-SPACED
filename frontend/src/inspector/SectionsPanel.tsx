@@ -13,6 +13,8 @@ export function SectionsPanel() {
   const mergeWithNext = useStore((s) => s.mergeSectionWithNext);
   const updateSection = useStore((s) => s.updateSection);
   const goToSection = useStore((s) => s.goToSection);
+  const soloSectionId = useStore((s) => s.soloSectionId);
+  const toggleSolo = useStore((s) => s.toggleSoloSection);
   const sections = sortedSections(riff.sections);
 
   return (
@@ -25,9 +27,21 @@ export function SectionsPanel() {
             <li key={s.id} data-section={s.id}>
               <button
                 type="button"
-                className="inspector__section-go"
-                onClick={() => goToSection(s.id)}
-                title="go to section"
+                className={
+                  soloSectionId === s.id
+                    ? 'inspector__section-go inspector__section-go--solo'
+                    : 'inspector__section-go'
+                }
+                onClick={() => {
+                  goToSection(s.id);
+                  toggleSolo(s.id);
+                }}
+                title={
+                  soloSectionId === s.id
+                    ? 'soloed: click to loop the whole riff'
+                    : 'go to section and loop only it'
+                }
+                aria-pressed={soloSectionId === s.id}
               >
                 bars {s.startBar + 1}-{end}
               </button>

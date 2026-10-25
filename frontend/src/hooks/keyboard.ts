@@ -90,6 +90,22 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
   }
 
   switch (e.key) {
+    case ' ':
+      s.togglePlay();
+      return true;
+    case 'l':
+    case 'L':
+      if (mod) return false;
+      s.setLoopEnabled(!s.loopEnabled);
+      return true;
+    case '-':
+    case '_':
+      s.nudgeBpm(-1);
+      return true;
+    case '=':
+    case '+':
+      s.nudgeBpm(1);
+      return true;
     case 'Enter':
       commitPendingFret(deps);
       return true;

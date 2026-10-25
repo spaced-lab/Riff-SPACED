@@ -43,6 +43,8 @@ export class Scheduler {
   private pendingOffs: { time: number; tick: number; noteId: string }[] = [];
   private visualQueue: VisualEvent[] = [];
   private endTime: number | null = null;
+  /** `${pass}:${noteId}` of every note already handed out, so a cursor rewind never doubles a note. */
+  private scheduled = new Set<string>();
 
   private readonly clock: SchedulerClock;
   private readonly sink: VoiceSink;
@@ -91,6 +93,7 @@ export class Scheduler {
     this.pendingOffs = [];
     this.visualQueue = [];
     this.endTime = null;
+    this.scheduled.clear();
     this.running = true;
     this.scheduleAhead();
     this.intervalId = this.clock.setInterval(() => this.scheduleAhead(), this.intervalMs);
@@ -124,13 +127,22 @@ export class Scheduler {
     // window continues from the new mapping. A 100 ms seam is inaudible for a tempo nudge.
   }
 
-  /** Replace the notes without stopping (editing while playing). */
+  /**
+   * Replace the notes without stopping (editing while playing). The cursor rewinds to the
+   * current position so a note added just ahead of the playhead sounds this pass; the
+   * scheduled-key set keeps notes already handed out from sounding twice.
+   */
   setPlayable(playable: Playable): void {
-    if (!this.running || !this.playable) {
+    if (!this.running || !this.playable || !this.tempo) {
       this.playable = playable;
       return;
     }
     this.playable = { ...playable, bpm: this.playable.bpm };
+    const nowTick = Math.floor(this.tempo.tickAt(this.clock.now()));
+    this.cursor = {
+      absoluteTick: Math.max(this.contentOriginTick, nowTick),
+      pass: this.cursor.pass,
+    };
   }
 
   /** Current loop-relative tick, or the start tick when stopped. */
@@ -219,10 +231,18 @@ export class Scheduler {
         this.sink.schedule({ kind: 'click', time, tick: loopTick, accent: beatInBar === 0 });
       }
 
-      const starting = p.notes.filter((n) => n.start === loopTick);
+      if (pass !== this.cursor.pass) {
+        // New pass: forget keys from two passes back so the set stays small.
+        for (const key of this.scheduled)
+          if (Number(key.split(':')[0]) < pass - 1) this.scheduled.delete(key);
+      }
+      const starting = p.notes.filter(
+        (n) => n.start === loopTick && !this.scheduled.has(`${pass}:${n.id}`),
+      );
       if (starting.length) {
         const ids: string[] = [];
         for (const n of starting) {
+          this.scheduled.add(`${pass}:${n.id}`);
           const offAbsolute = a + n.duration;
           const offTime = this.tempo.timeOf(offAbsolute);
           this.sink.schedule({

@@ -114,6 +114,20 @@ describe('keyboard', () => {
     expect(useStore.getState().riff.notes).toHaveLength(1);
   });
 
+  it('Space toggles play, L toggles loop, - and = nudge the tempo', () => {
+    handleKey(key(' '), deps);
+    expect(useStore.getState().isPlaying).toBe(true);
+    handleKey(key(' '), deps);
+    expect(useStore.getState().isPlaying).toBe(false);
+    handleKey(key('l'), deps);
+    expect(useStore.getState().loopEnabled).toBe(false);
+    const bpm = useStore.getState().riff.tempo.bpm;
+    handleKey(key('='), deps);
+    handleKey(key('='), deps);
+    handleKey(key('-'), deps);
+    expect(useStore.getState().riff.tempo.bpm).toBe(bpm + 1);
+  });
+
   it('knows which targets are typing targets and lists the shortcut table', () => {
     const input = document.createElement('input');
     expect(isTypingTarget(input)).toBe(true);

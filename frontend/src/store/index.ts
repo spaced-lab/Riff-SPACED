@@ -9,6 +9,7 @@ import { createEditorSlice } from './editorSlice';
 import { createLibrarySlice } from './librarySlice';
 import { createRiffSlice } from './riffSlice';
 import { createSelectionSlice } from './selectionSlice';
+import { createTransportSlice } from './transportSlice';
 import type { AppState } from './types';
 import { loadInitialLibrary } from './persist';
 import type { KeyValueStorage } from './persist';
@@ -23,6 +24,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createLibrarySlice(...a),
   ...createEditorSlice(...a),
   ...createDialogSlice(...a),
+  ...createTransportSlice(...a),
 }));
 
 /**

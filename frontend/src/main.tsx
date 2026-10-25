@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { bootstrapStore } from './store';
 import { startAutosave } from './store/persist';
+import { startEngine } from './audio/engine';
 import './theme.css';
 
 const rootElement = document.getElementById('root');
@@ -14,6 +15,7 @@ if (!rootElement) {
 // keep saving it as the riff changes.
 bootstrapStore(window.localStorage);
 startAutosave();
+startEngine();
 
 createRoot(rootElement).render(
   <StrictMode>

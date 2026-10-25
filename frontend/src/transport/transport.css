@@ -22,3 +22,42 @@
   color: var(--color-dim);
   border-color: var(--color-dim);
 }
+
+.transport__play {
+  min-width: 80px;
+  font-weight: 700;
+}
+
+.transport__play--on {
+  background: var(--color-dim);
+  color: var(--color-flash);
+  border-color: var(--color-flash);
+}
+
+.transport__toggle--on {
+  background: var(--color-dim);
+  border-color: var(--color-fg);
+}
+
+.transport__bpm input {
+  width: 56px;
+  text-align: center;
+  padding: 2px 4px;
+  margin: 0 2px;
+}
+
+.transport__bpm button {
+  padding: 2px 5px;
+}
+
+.transport__position {
+  margin-left: auto;
+  color: var(--color-fg);
+  font-variant-numeric: tabular-nums;
+  min-width: 80px;
+  text-align: right;
+}
+
+.transport__hint {
+  color: var(--color-warn);
+}

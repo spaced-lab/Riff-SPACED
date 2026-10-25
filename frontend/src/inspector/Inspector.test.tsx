@@ -51,8 +51,9 @@ describe('Inspector', () => {
     render(<Inspector />);
     fireEvent.click(screen.getByText('split'));
     expect(useStore.getState().riff.sections).toHaveLength(2);
-    fireEvent.click(screen.getAllByTitle('go to section')[1]!);
+    fireEvent.click(screen.getAllByRole('button', { name: /^bars / })[1]!);
     expect(useStore.getState().editCursorTick).toBe(2 * 1920);
+    expect(useStore.getState().soloSectionId).toBe(useStore.getState().riff.sections[1]!.id);
     fireEvent.change(screen.getByLabelText('section 2 kind'), { target: { value: 'turnaround' } });
     expect(useStore.getState().riff.sections[1]!.kind).toBe('turnaround');
     fireEvent.click(screen.getAllByText('merge')[0]!);

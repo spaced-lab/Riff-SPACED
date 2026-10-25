@@ -3,6 +3,7 @@ import type { EditorSlice } from './editorSlice';
 import type { LibrarySlice } from './librarySlice';
 import type { RiffSlice } from './riffSlice';
 import type { SelectionSlice } from './selectionSlice';
+import type { TransportSlice } from './transportSlice';
 import type { ViewSlice } from './viewSlice';
 
 /** The whole store: one Zustand state object composed of slices. */
@@ -11,4 +12,5 @@ export type AppState = RiffSlice &
   SelectionSlice &
   LibrarySlice &
   EditorSlice &
-  DialogSlice;
+  DialogSlice &
+  TransportSlice;

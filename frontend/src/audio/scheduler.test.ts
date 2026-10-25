@@ -168,3 +168,26 @@ describe('Scheduler', () => {
     expect(rec.ons()).toHaveLength(56);
   });
 });
+
+describe('Scheduler edits while playing', () => {
+  it('a note added just ahead of the playhead sounds this pass, and nothing doubles', () => {
+    const clock = new FakeClock();
+    const rec = new Recorder();
+    const s = new Scheduler(clock, rec);
+    const p = fourBarRiff();
+    s.start(p, { loop: true });
+    clock.advance(0.1);
+    // The cursor already jumped past tick 480 (next start is n1 at 1920); add a note there.
+    const added: Note = {
+      ...newNote({ string: 6, fret: 5, start: 480, duration: 120 }),
+      id: 'added',
+    };
+    s.setPlayable({ ...p, notes: [...p.notes, added] });
+    clock.advance(0.6);
+    expect(rec.ons().filter((e) => e.noteId === 'added')).toHaveLength(1);
+    expect(rec.ons().filter((e) => e.noteId === 'n0')).toHaveLength(1);
+    clock.advance(8);
+    expect(rec.ons().filter((e) => e.noteId === 'added')).toHaveLength(2);
+    expect(rec.ons().filter((e) => e.noteId === 'n0')).toHaveLength(2);
+  });
+});
