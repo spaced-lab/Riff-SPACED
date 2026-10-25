@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spaced-lab.github.io/Riff-SPACED/schema/riff.schema.json",
+  "title": "RIFF-SPACED riff",
+  "description": "One riff: a loop of 4, 8, 12 or 16 bars of notes on a tuned guitar (SPEC 4.1).",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "id",
+    "name",
+    "createdAt",
+    "updatedAt",
+    "tuning",
+    "tempo",
+    "timeSignature",
+    "ppq",
+    "lengthBars",
+    "sections",
+    "notes"
+  ],
+  "properties": {
+    "format": { "const": "riff-spaced/riff" },
+    "version": { "const": 1 },
+    "id": { "$ref": "#/$defs/id" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "tuning": { "$ref": "#/$defs/tuning" },
+    "tempo": {
+      "type": "object",
+      "required": ["bpm"],
+      "properties": {
+        "bpm": { "type": "number", "minimum": 30, "maximum": 300 }
+      },
+      "additionalProperties": false
+    },
+    "timeSignature": {
+      "type": "object",
+      "required": ["beats", "unit"],
+      "properties": {
+        "beats": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "unit": { "enum": [1, 2, 4, 8, 16] }
+      },
+      "additionalProperties": false
+    },
+    "ppq": { "const": 480 },
+    "lengthBars": { "type": "integer", "minimum": 1, "maximum": 64 },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "notes": { "type": "array", "items": { "$ref": "#/$defs/note" } },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "style": {
+      "type": "object",
+      "properties": {
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "namingPrefs": {
+      "type": "object",
+      "properties": { "accidentals": { "enum": ["flats", "sharps"] } },
+      "additionalProperties": false
+    },
+    "source": { "$ref": "#/$defs/source" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "tuning": {
+      "type": "object",
+      "required": ["name", "pitches"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "pitches": {
+          "description": "Open-string MIDI pitches, low to high.",
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 8,
+          "items": { "type": "integer", "minimum": 20, "maximum": 70 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "required": ["id", "label", "startBar", "lengthBars", "kind"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" },
+        "startBar": { "type": "integer", "minimum": 0 },
+        "lengthBars": { "type": "integer", "minimum": 1 },
+        "kind": {
+          "enum": ["main", "variation", "turnaround", "bridge", "other"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "technique": {
+      "enum": [
+        "palmMute",
+        "letRing",
+        "slideUp",
+        "slideDown",
+        "bend",
+        "hammerOn",
+        "pullOff",
+        "vibrato",
+        "dead",
+        "harmonic",
+        "tremolo"
+      ]
+    },
+    "note": {
+      "type": "object",
+      "required": ["id", "string", "fret", "start", "duration"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "string": {
+          "description": "Guitarist numbering: 1 is the highest string, N the lowest.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "fret": { "type": "integer", "minimum": 0, "maximum": 24 },
+        "start": {
+          "description": "Ticks from the start of the riff.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "duration": { "type": "integer", "minimum": 1 },
+        "velocity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 127,
+          "default": 100
+        },
+        "techniques": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/technique" }
+        },
+        "chordId": {
+          "description": "Notes sharing a chordId sound together and must share a start.",
+          "$ref": "#/$defs/id"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1
+        },
+        "unplayable": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["manual", "audio", "ai"] },
+        "audioFile": { "type": "string" },
+        "analysisVersion": { "type": "string" },
+        "bpmDetected": { "type": "number" },
+        "model": { "type": "string" },
+        "promptVersion": { "type": "integer" },
+        "parentRiffId": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

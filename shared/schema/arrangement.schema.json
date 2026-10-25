@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spaced-lab.github.io/Riff-SPACED/schema/arrangement.schema.json",
+  "title": "RIFF-SPACED arrangement",
+  "description": "An ordered sequence of riff references with repeats and per-entry overrides (SPEC 4.2).",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "id",
+    "name",
+    "tempo",
+    "entries",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "format": { "const": "riff-spaced/arrangement" },
+    "version": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "tempo": {
+      "type": "object",
+      "required": ["bpm"],
+      "properties": {
+        "bpm": { "type": "number", "minimum": 30, "maximum": 300 }
+      },
+      "additionalProperties": false
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["riffId", "repeats"],
+        "properties": {
+          "riffId": { "type": "string", "minLength": 1 },
+          "repeats": { "type": "integer", "minimum": 1, "maximum": 64 },
+          "transpose": {
+            "type": "integer",
+            "minimum": -24,
+            "maximum": 24,
+            "default": 0
+          },
+          "label": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

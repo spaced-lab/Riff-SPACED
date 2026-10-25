@@ -1,0 +1,16 @@
+{
+  "format": "riff-spaced/riff",
+  "version": 0,
+  "id": "legacy-v0-riff",
+  "name": "Old shape",
+  "createdAt": "2026-01-01T00:00:00Z",
+  "updatedAt": "2026-01-01T00:00:00Z",
+  "tuning": { "name": "Bb Standard", "pitches": [34, 39, 44, 49, 53, 58] },
+  "tempo": { "bpm": 100 },
+  "ppq": 480,
+  "bars": 8,
+  "notes": [
+    { "id": "legacy-n1", "string": 6, "fret": 3, "start": 0, "duration": 240 },
+    { "id": "legacy-n2", "string": 5, "fret": 5, "start": 0, "duration": 240 }
+  ]
+}

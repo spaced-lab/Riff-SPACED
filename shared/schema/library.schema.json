@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spaced-lab.github.io/Riff-SPACED/schema/library.schema.json",
+  "title": "RIFF-SPACED library bundle",
+  "description": "Everything in one file for autosave, export and import (SPEC 4.4).",
+  "type": "object",
+  "required": [
+    "format",
+    "version",
+    "exportedAt",
+    "riffs",
+    "arrangements",
+    "songs"
+  ],
+  "properties": {
+    "format": { "const": "riff-spaced/library" },
+    "version": { "const": 1 },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "riffs": { "type": "array", "items": { "$ref": "riff.schema.json" } },
+    "arrangements": {
+      "type": "array",
+      "items": { "$ref": "arrangement.schema.json" }
+    },
+    "songs": { "type": "array", "items": { "$ref": "song.schema.json" } }
+  },
+  "additionalProperties": false
+}
