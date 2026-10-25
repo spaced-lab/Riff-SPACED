@@ -12,6 +12,7 @@ import {
 import type { ParsedDocument } from '@/storage/documents';
 import { pushRecent, readRecent } from '@/storage/recent';
 import { riffToTextTab } from '@/export/texttab';
+import { renderRiffToWav } from '@/audio/render';
 import { musicXmlBlob } from '@/export/musicxml';
 import { midiBlob } from '@/export/midi';
 import { selectDisplayRiff } from './derived';
@@ -44,6 +45,8 @@ export type FileSlice = {
   exportMidi: () => void;
   /** File > Export > MusicXML: downloads <name>.musicxml, a part-wise score with a TAB staff. */
   exportMusicXml: () => Promise<void>;
+  /** File > Export > WAV: asks voice and passes, renders offline, downloads <name>.wav. */
+  exportWav: () => void;
 };
 
 export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, get) => ({
@@ -99,6 +102,49 @@ export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, 
     const name = `${fileNameFor({ kind: 'riff', value: riff }).replace(/\.riff\.json$/, '')}.musicxml`;
     const result = await saveFile(musicXmlBlob(riff), name, { forceAsk: true });
     if (result) get().toast(`exported ${result.name}`);
+  },
+
+  exportWav: () => {
+    get().syncCurrentRiff();
+    const riff = selectDisplayRiff(get()).riff;
+    get().openDialog({
+      kind: 'form',
+      title: 'export WAV',
+      message: `${riff.name}: rendered offline through the playback engine, 44.1 kHz 16-bit mono.`,
+      fields: [
+        {
+          name: 'voice',
+          label: 'voice',
+          type: 'select',
+          value: get().voice,
+          options: [
+            { value: 'basic', label: 'basic' },
+            { value: 'heavy', label: 'heavy' },
+          ],
+        },
+        { name: 'passes', label: 'loop passes (1 to 8)', type: 'number', value: 1, min: 1, max: 8 },
+      ],
+      confirmLabel: 'render',
+      onConfirm: (values) => {
+        const voice = values.voice === 'heavy' ? 'heavy' : 'basic';
+        const passes = Math.max(1, Math.min(8, Math.round(Number(values.passes) || 1)));
+        const name = `${fileNameFor({ kind: 'riff', value: riff }).replace(/\.riff\.json$/, '')}.wav`;
+        get().toast(
+          `rendering ${riff.name} (${voice}, ${passes} pass${passes === 1 ? '' : 'es'})...`,
+        );
+        void renderRiffToWav(riff, { voice, passes })
+          .then((blob) => saveFile(blob, name, { forceAsk: true }))
+          .then((result) => {
+            if (result) get().toast(`exported ${result.name}`);
+          })
+          .catch((error: unknown) => {
+            get().toast(
+              `WAV export failed: ${error instanceof Error ? error.message : String(error)}`,
+              'warn',
+            );
+          });
+      },
+    });
   },
 
   copyTextTab: async () => {

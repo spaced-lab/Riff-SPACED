@@ -168,7 +168,12 @@ export function buildMenus(s: AppState): Menu[] {
               label: 'MusicXML',
               action: () => void s.exportMusicXml(),
             },
-            later('file.export.wav', 'WAV...', 8),
+            {
+              type: 'item',
+              id: 'file.export.wav',
+              label: 'WAV...',
+              action: () => s.exportWav(),
+            },
             later('file.export.pdf', 'PDF', 'backlog'),
           ],
         },

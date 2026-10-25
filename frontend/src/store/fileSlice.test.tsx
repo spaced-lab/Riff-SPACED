@@ -64,3 +64,26 @@ describe('file slice: importDocument', () => {
     expect(useStore.getState().currentArrangementId).toBe('arr-2');
   });
 });
+
+describe('file slice: exportWav', () => {
+  beforeEach(() => {
+    useStore.setState(useStore.getInitialState(), true);
+    bootstrapStore();
+  });
+
+  it('asks for the voice and the number of passes before rendering', () => {
+    useStore.getState().setVoice('heavy');
+    useStore.getState().exportWav();
+    const dialog = useStore.getState().dialog;
+    expect(dialog?.kind).toBe('form');
+    expect(dialog?.title).toBe('export WAV');
+    if (dialog?.kind !== 'form') throw new Error('expected a form dialog');
+    expect(dialog.fields.map((f) => [f.name, f.value])).toEqual([
+      ['voice', 'heavy'],
+      ['passes', 1],
+    ]);
+    expect(dialog.fields[1]).toMatchObject({ min: 1, max: 8 });
+    useStore.getState().cancelDialog();
+    expect(useStore.getState().dialog).toBeNull();
+  });
+});
