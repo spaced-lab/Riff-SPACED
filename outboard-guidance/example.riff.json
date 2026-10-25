@@ -1,0 +1,770 @@
+{
+  "format": "riff-spaced/riff",
+  "version": 1,
+  "id": "a1b2c3d4-0000-4000-8000-000000000001",
+  "name": "RS-Walkdown",
+  "createdAt": "2026-10-25T12:00:00Z",
+  "updatedAt": "2026-10-25T12:00:00Z",
+  "tuning": {
+    "name": "Bb Standard",
+    "pitches": [
+      34,
+      39,
+      44,
+      49,
+      53,
+      58
+    ]
+  },
+  "tempo": {
+    "bpm": 92
+  },
+  "timeSignature": {
+    "beats": 4,
+    "unit": 4
+  },
+  "ppq": 480,
+  "lengthBars": 4,
+  "sections": [
+    {
+      "id": "demo-walkdown-s1",
+      "label": "A",
+      "startBar": 0,
+      "lengthBars": 4,
+      "kind": "main"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n001",
+      "string": 6,
+      "fret": 0,
+      "start": 0,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n002",
+      "string": 6,
+      "fret": 3,
+      "start": 240,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c01",
+      "confidence": 0.92
+    },
+    {
+      "id": "n003",
+      "string": 5,
+      "fret": 5,
+      "start": 240,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c01",
+      "confidence": 0.92
+    },
+    {
+      "id": "n004",
+      "string": 6,
+      "fret": 3,
+      "start": 480,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c02",
+      "confidence": 0.92
+    },
+    {
+      "id": "n005",
+      "string": 5,
+      "fret": 5,
+      "start": 480,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c02",
+      "confidence": 0.92
+    },
+    {
+      "id": "n006",
+      "string": 6,
+      "fret": 3,
+      "start": 720,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c03",
+      "confidence": 0.92
+    },
+    {
+      "id": "n007",
+      "string": 5,
+      "fret": 5,
+      "start": 720,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c03",
+      "confidence": 0.92
+    },
+    {
+      "id": "n008",
+      "string": 6,
+      "fret": 3,
+      "start": 960,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c04",
+      "confidence": 0.92
+    },
+    {
+      "id": "n009",
+      "string": 5,
+      "fret": 5,
+      "start": 960,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c04",
+      "confidence": 0.92
+    },
+    {
+      "id": "n010",
+      "string": 6,
+      "fret": 3,
+      "start": 1200,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c05",
+      "confidence": 0.92
+    },
+    {
+      "id": "n011",
+      "string": 5,
+      "fret": 5,
+      "start": 1200,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c05",
+      "confidence": 0.92
+    },
+    {
+      "id": "n012",
+      "string": 6,
+      "fret": 3,
+      "start": 1440,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c06",
+      "confidence": 0.92
+    },
+    {
+      "id": "n013",
+      "string": 5,
+      "fret": 5,
+      "start": 1440,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c06",
+      "confidence": 0.92
+    },
+    {
+      "id": "n014",
+      "string": 5,
+      "fret": 5,
+      "start": 1680,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c07",
+      "confidence": 0.92
+    },
+    {
+      "id": "n015",
+      "string": 4,
+      "fret": 5,
+      "start": 1680,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c07",
+      "confidence": 0.92
+    },
+    {
+      "id": "n016",
+      "string": 6,
+      "fret": 3,
+      "start": 1920,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c08",
+      "confidence": 0.92
+    },
+    {
+      "id": "n017",
+      "string": 5,
+      "fret": 5,
+      "start": 1920,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c08",
+      "confidence": 0.92
+    },
+    {
+      "id": "n018",
+      "string": 6,
+      "fret": 3,
+      "start": 2160,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c09",
+      "confidence": 0.92
+    },
+    {
+      "id": "n019",
+      "string": 5,
+      "fret": 5,
+      "start": 2160,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c09",
+      "confidence": 0.92
+    },
+    {
+      "id": "n020",
+      "string": 6,
+      "fret": 3,
+      "start": 2400,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c10",
+      "confidence": 0.92
+    },
+    {
+      "id": "n021",
+      "string": 5,
+      "fret": 5,
+      "start": 2400,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c10",
+      "confidence": 0.92
+    },
+    {
+      "id": "n022",
+      "string": 6,
+      "fret": 3,
+      "start": 2640,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c11",
+      "confidence": 0.92
+    },
+    {
+      "id": "n023",
+      "string": 5,
+      "fret": 5,
+      "start": 2640,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c11",
+      "confidence": 0.92
+    },
+    {
+      "id": "n024",
+      "string": 6,
+      "fret": 3,
+      "start": 2880,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c12",
+      "confidence": 0.92
+    },
+    {
+      "id": "n025",
+      "string": 5,
+      "fret": 5,
+      "start": 2880,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c12",
+      "confidence": 0.92
+    },
+    {
+      "id": "n026",
+      "string": 6,
+      "fret": 3,
+      "start": 3120,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c13",
+      "confidence": 0.92
+    },
+    {
+      "id": "n027",
+      "string": 5,
+      "fret": 5,
+      "start": 3120,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c13",
+      "confidence": 0.92
+    },
+    {
+      "id": "n028",
+      "string": 6,
+      "fret": 3,
+      "start": 3360,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c14",
+      "confidence": 0.92
+    },
+    {
+      "id": "n029",
+      "string": 5,
+      "fret": 5,
+      "start": 3360,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c14",
+      "confidence": 0.92
+    },
+    {
+      "id": "n030",
+      "string": 5,
+      "fret": 5,
+      "start": 3600,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c15",
+      "confidence": 0.92
+    },
+    {
+      "id": "n031",
+      "string": 4,
+      "fret": 5,
+      "start": 3600,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c15",
+      "confidence": 0.92
+    },
+    {
+      "id": "n032",
+      "string": 6,
+      "fret": 3,
+      "start": 3840,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c16",
+      "confidence": 0.92
+    },
+    {
+      "id": "n033",
+      "string": 5,
+      "fret": 5,
+      "start": 3840,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c16",
+      "confidence": 0.92
+    },
+    {
+      "id": "n034",
+      "string": 6,
+      "fret": 3,
+      "start": 4080,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c17",
+      "confidence": 0.92
+    },
+    {
+      "id": "n035",
+      "string": 5,
+      "fret": 5,
+      "start": 4080,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c17",
+      "confidence": 0.92
+    },
+    {
+      "id": "n036",
+      "string": 6,
+      "fret": 3,
+      "start": 4320,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c18",
+      "confidence": 0.92
+    },
+    {
+      "id": "n037",
+      "string": 5,
+      "fret": 5,
+      "start": 4320,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c18",
+      "confidence": 0.92
+    },
+    {
+      "id": "n038",
+      "string": 6,
+      "fret": 3,
+      "start": 4560,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c19",
+      "confidence": 0.92
+    },
+    {
+      "id": "n039",
+      "string": 5,
+      "fret": 5,
+      "start": 4560,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c19",
+      "confidence": 0.92
+    },
+    {
+      "id": "n040",
+      "string": 6,
+      "fret": 3,
+      "start": 4800,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c20",
+      "confidence": 0.92
+    },
+    {
+      "id": "n041",
+      "string": 5,
+      "fret": 5,
+      "start": 4800,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c20",
+      "confidence": 0.92
+    },
+    {
+      "id": "n042",
+      "string": 6,
+      "fret": 3,
+      "start": 5040,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c21",
+      "confidence": 0.92
+    },
+    {
+      "id": "n043",
+      "string": 5,
+      "fret": 5,
+      "start": 5040,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c21",
+      "confidence": 0.92
+    },
+    {
+      "id": "n044",
+      "string": 6,
+      "fret": 3,
+      "start": 5280,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c22",
+      "confidence": 0.92
+    },
+    {
+      "id": "n045",
+      "string": 5,
+      "fret": 5,
+      "start": 5280,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c22",
+      "confidence": 0.92
+    },
+    {
+      "id": "n046",
+      "string": 5,
+      "fret": 5,
+      "start": 5520,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c23",
+      "confidence": 0.92
+    },
+    {
+      "id": "n047",
+      "string": 4,
+      "fret": 5,
+      "start": 5520,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c23",
+      "confidence": 0.92
+    },
+    {
+      "id": "n048",
+      "string": 5,
+      "fret": 5,
+      "start": 5760,
+      "duration": 1920,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n049",
+      "string": 6,
+      "fret": 5,
+      "start": 5760,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n050",
+      "string": 6,
+      "fret": 5,
+      "start": 6000,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n051",
+      "string": 6,
+      "fret": 4,
+      "start": 6240,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n052",
+      "string": 6,
+      "fret": 4,
+      "start": 6480,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n053",
+      "string": 6,
+      "fret": 3,
+      "start": 6720,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n054",
+      "string": 6,
+      "fret": 3,
+      "start": 6960,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n055",
+      "string": 6,
+      "fret": 2,
+      "start": 7200,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.81
+    },
+    {
+      "id": "n056",
+      "string": 6,
+      "fret": 2,
+      "start": 7440,
+      "duration": 240,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "confidence": 0.48
+    }
+  ],
+  "tags": [
+    "imported",
+    "outboard"
+  ],
+  "namingPrefs": {
+    "accidentals": "flats"
+  },
+  "source": {
+    "type": "audio",
+    "audioFile": "RS-Walkdown.m4a",
+    "analysisVersion": "outboard/your-tool 1.0",
+    "bpmDetected": 92.4
+  }
+}

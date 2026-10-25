@@ -102,6 +102,7 @@ make check                                 # ruff, pytest
 make bench                                 # synthetic benchmark, writes docs/benchmarks/latest.md
 uv run python -m riffspaced.ingest audio_in --out riffs_out --tuning "Bb Standard"   # folder in, riff JSON out
 uv run python -m riffspaced.synth ../shared/fixtures/demo-library.json --riff "Walkdown Turnaround" --out debug/walkdown.wav --drive 8
+uv run python -m riffspaced.check_riffs ../injest-riff-JSON   # validate riff JSON made by outboard tools (guide: outboard-guidance/)
 
 docker compose up --build                  # frontend :8080, backend :8000
 ```
@@ -124,3 +125,5 @@ docker compose up --build                  # frontend :8080, backend :8000
 **Real recordings arrived.** Three files are in `injest-raw/` at the repo root (RS-Descent.m4a, RS-NM1.m4a, RS-Spider.m4a, 2.6 MB total, m4a so ffmpeg decode). That folder is gitignored as of this commit; the files are the owner's and are never deleted or committed. On resume, before or after Phase 7: copy (not move) them into `backend/audio_in/`, run the P6.T10 recipe from docs/BACKLOG.md (ingest each, compare with what the owner played if a tab exists, record findings in docs/ANALYSIS_METHOD.md and LEARNING_LOG), and ask the owner only if a recording's tuning is not Bb Standard.
 
 Also still open, not blocking: the owner can add more recordings to `injest-raw/` or `backend/audio_in/` any time.
+
+**Outboard transcriptions (owner request 2026-10-25).** `outboard-guidance/` holds the guide, schema copy and example an external tool or LLM follows to produce riff JSON from a recording; results land in `injest-riff-JSON/` (gitignored) and are validated with `riffspaced.check_riffs`, then opened with File > Open. When files arrive, compare them with the built-in analyzer's output for the same recording and note the differences in docs/ANALYSIS_METHOD.md.

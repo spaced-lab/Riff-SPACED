@@ -8,3 +8,4 @@ Built in public with Claude Code. Every commit is a lesson: each one explains WH
 - Where things stand right now: [STATUS.md](STATUS.md)
 - How it was built and what to read first: [docs/](docs/)
 - The plan it was built from: [SPEC.md](SPEC.md), [PLAN.md](PLAN.md), [plan/](plan/)
+- Transcribing recordings with an outside tool or another LLM: [outboard-guidance/](outboard-guidance/) (drop the results in `injest-riff-JSON/`)

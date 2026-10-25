@@ -31,3 +31,8 @@ backend/debug/
 
 # Owner recordings dropped at the repo root (never committed, never deleted)
 injest-raw/
+
+# Riff JSON produced by outboard tools from the owner's recordings (see outboard-guidance/)
+injest-riff-JSON/*
+!injest-riff-JSON/.gitkeep
+!injest-riff-JSON/README.md
