@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T02:57:40Z
-Phase: 5 Files and library
-Last completed task: P5.T6 MIDI export
-Next task: P5.T7 e2e, Chrome verification, phase exit
+Updated: 2026-10-25T03:00:00Z
+Phase: 5 Files and library (complete), starting Phase 6 Analysis backend
+Last completed task: P5.T7 e2e, Chrome verification, phase exit
+Next task: P6.T1 Audio I/O and preprocessing (after the Phase 6 preflight on audio content blocks)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -57,20 +57,34 @@ Phase 4 (tag v0.4.0):
 - [x] P4.T6 Offline render and non-silence test
 - [x] P4.T7 Chrome verification and phase exit
 
-Phase 5:
+Phase 5 (tag v0.5.0):
 - [x] P5.T1 Menu bar and dialogs
 - [x] P5.T2 Library store and panel
 - [x] P5.T3 Arrangement and song editors
 - [x] P5.T4 File open and save
 - [x] P5.T5 Text tab export
 - [x] P5.T6 MIDI export
-- [ ] P5.T7 e2e, Chrome verification, phase exit
+- [x] P5.T7 e2e, Chrome verification, phase exit
+
+Phase 6:
+- [ ] Preflight: re-check the Messages API for an audio content block
+- [ ] P6.T1 Audio I/O and preprocessing
+- [ ] P6.T2 Test-signal synth (ground truth generator)
+- [ ] P6.T3 STFT and onset detection
+- [ ] P6.T4 Tempo estimation
+- [ ] P6.T5 Fingering-constrained spectral template matching
+- [ ] P6.T6 Viterbi decode, quantize, emit
+- [ ] P6.T7 Benchmark harness
+- [ ] P6.T8 Ingest CLI and API endpoints
+- [ ] P6.T9 Frontend import flow
+- [ ] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
+- [ ] P6.T11 Chrome verification and phase exit
 
 ## How to run right now
 ```
 cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
-npm run e2e                                # Playwright: smoke, fretboard, editor, playback, split view, render specs
+npm run e2e                                # Playwright: 10 specs (smoke, fretboard, editor, playback, split view, render, files, library)
 # dev harness: http://localhost:5173/#/dev/fretboard
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs

@@ -1,4 +1,5 @@
 import { NotePanel } from './NotePanel';
+import { RiffPanel } from './RiffPanel';
 import { SectionsPanel } from './SectionsPanel';
 import './inspector.css';
 
@@ -6,6 +7,7 @@ import './inspector.css';
 export function Inspector() {
   return (
     <div className="inspector" data-testid="inspector">
+      <RiffPanel />
       <NotePanel />
       <SectionsPanel />
     </div>

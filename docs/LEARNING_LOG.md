@@ -71,3 +71,18 @@ Read these commits:
 - `6733667` feat(playback): the engine, and why "I want to play" and "it is playing" are different fields.
 - `169e8fc` feat(playback): visuals read the audio clock; two UI traps (overflow hides controls, a checkbox is not a text field).
 - `a3e7b71` feat(audio): offline rendering by swapping the clock, and the WAV header by hand.
+
+## Phase 5: files are the product
+
+Built: the full menu bar with themed confirm, prompt, form and info dialogs and toasts, the library panel with search, tags, context menu and drag-append, arrangement and song editors over a flattened read-only timeline, open and save through the File System Access API with download and file-input fallbacks, library import with replace or keep-both merging, recents, ASCII tab export with golden files, a hand-written MIDI writer with a test reader, and `docs/FILE_FORMATS.md`.
+
+Key idea: the formats were fixed in Phase 1 and never changed; everything in this phase is a way to move them. Arrangements reference riffs by id and are flattened on the fly, so there is one copy of every note. Open and save hide two different browser capabilities behind one interface. The exports are small enough to write by hand, and the tests for them (goldens for tab, a reader for MIDI) check the output means what it should, not just that it was produced.
+
+Read these commits:
+
+- `9a94a28` feat(menu): the menu as data, with unbuilt items disabled and labeled by phase.
+- `06d099b` feat(library): delete cascades and the tuning check, where a library earns trust.
+- `05c01e4` feat(arrangement): flattening as a memoized view, ids namespaced per repeat.
+- `6432053` feat(storage): one interface over pickers and downloads; keep-both rewrites references.
+- `08d1c46` feat(export): the golden that caught the author, not the code.
+- `c8643d4` feat(export): variable-length quantities and running status, verified by a forty-line reader.
