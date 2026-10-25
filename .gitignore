@@ -1,0 +1,30 @@
+# Node
+node_modules/
+dist/
+frontend/playwright-report/
+frontend/test-results/
+frontend/e2e/__screenshots__/**/*-actual.png
+frontend/e2e/__screenshots__/**/*-diff.png
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# Owner audio and generated analysis output (never committed)
+backend/audio_in/*
+!backend/audio_in/.gitkeep
+backend/riffs_out/
+backend/debug/
+
+# OS
+.DS_Store
