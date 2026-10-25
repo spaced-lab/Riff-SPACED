@@ -1,0 +1,2 @@
+commit,date,cases,onset_f1,note_f1,fingering_accuracy,dyad_accuracy,bpm_within_2,mean_confidence,seconds
+9e44b16,2026-10-25T03:42:20Z,36,0.868,0.779,0.867,0.78,0.694,0.751,17.6

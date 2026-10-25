@@ -2,7 +2,7 @@
 
 UV := $(shell command -v uv 2>/dev/null)
 
-.PHONY: install dev lint format test check
+.PHONY: install dev lint format test check bench
 
 install:
 ifdef UV
@@ -24,3 +24,6 @@ test:
 	uv run pytest -q
 
 check: lint test
+
+bench:
+	uv run python -m tools.benchmark.run

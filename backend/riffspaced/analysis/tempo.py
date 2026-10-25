@@ -30,6 +30,9 @@ MAX_BPM = 220.0
 PRIOR_CENTER_BPM = 100.0
 PRIOR_WIDTH_OCTAVES = 0.7
 ALIGN_WINDOW_SECONDS = 0.025
+# Below this many onsets the autocorrelation has nothing to measure; the grid that aligns
+# every onset wins instead (the user can still override).
+SPARSE_ONSETS = 8
 TATUM_STRENGTH = 0.6
 BEAT_MULTIPLES = (1, 2, 4, 8)
 # A period that is not a binary multiple of the tatum (three eighths, say) is implausible in
@@ -153,5 +156,8 @@ def estimate_tempo(
         bpm = 60.0 / (lag * frame_seconds)
         if MIN_BPM <= bpm <= MAX_BPM and all(abs(bpm - c.bpm) >= 1.0 for c in found):
             found.append(candidate(bpm, strength, OFF_GRID_PENALTY))
-    found.sort(key=lambda c: c.score, reverse=True)
+    if len(onsets.times) < SPARSE_ONSETS:
+        found.sort(key=lambda c: (c.alignment, prior(c.bpm)), reverse=True)
+    else:
+        found.sort(key=lambda c: c.score, reverse=True)
     return TempoEstimate(found[:top])

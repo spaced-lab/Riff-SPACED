@@ -1,0 +1,313 @@
+{
+  "format": "riff-spaced/riff",
+  "version": 1,
+  "id": "bench-chromatic-run",
+  "name": "Chromatic Run",
+  "createdAt": "2026-10-25T00:00:00Z",
+  "updatedAt": "2026-10-25T00:00:00Z",
+  "tuning": {
+    "name": "Bb Standard",
+    "pitches": [
+      34,
+      39,
+      44,
+      49,
+      53,
+      58
+    ]
+  },
+  "tempo": {
+    "bpm": 140
+  },
+  "timeSignature": {
+    "beats": 4,
+    "unit": 4
+  },
+  "ppq": 480,
+  "lengthBars": 2,
+  "sections": [
+    {
+      "id": "bench-chromatic-run-s1",
+      "label": "A",
+      "startBar": 0,
+      "lengthBars": 2,
+      "kind": "main"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n000",
+      "string": 6,
+      "fret": 0,
+      "start": 0,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n001",
+      "string": 6,
+      "fret": 1,
+      "start": 120,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n002",
+      "string": 6,
+      "fret": 2,
+      "start": 240,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n003",
+      "string": 6,
+      "fret": 3,
+      "start": 360,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n004",
+      "string": 6,
+      "fret": 4,
+      "start": 480,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n005",
+      "string": 6,
+      "fret": 5,
+      "start": 600,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n006",
+      "string": 5,
+      "fret": 0,
+      "start": 720,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n007",
+      "string": 5,
+      "fret": 1,
+      "start": 840,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n008",
+      "string": 5,
+      "fret": 2,
+      "start": 960,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n009",
+      "string": 5,
+      "fret": 3,
+      "start": 1080,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n010",
+      "string": 5,
+      "fret": 2,
+      "start": 1200,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n011",
+      "string": 5,
+      "fret": 1,
+      "start": 1320,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n012",
+      "string": 5,
+      "fret": 0,
+      "start": 1440,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n013",
+      "string": 6,
+      "fret": 5,
+      "start": 1560,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n014",
+      "string": 6,
+      "fret": 4,
+      "start": 1680,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n015",
+      "string": 6,
+      "fret": 3,
+      "start": 1800,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n016",
+      "string": 6,
+      "fret": 0,
+      "start": 1920,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n017",
+      "string": 6,
+      "fret": 1,
+      "start": 2040,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n018",
+      "string": 6,
+      "fret": 2,
+      "start": 2160,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n019",
+      "string": 6,
+      "fret": 3,
+      "start": 2280,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n020",
+      "string": 6,
+      "fret": 4,
+      "start": 2400,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n021",
+      "string": 6,
+      "fret": 5,
+      "start": 2520,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n022",
+      "string": 5,
+      "fret": 0,
+      "start": 2640,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n023",
+      "string": 5,
+      "fret": 1,
+      "start": 2760,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n024",
+      "string": 5,
+      "fret": 2,
+      "start": 2880,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n025",
+      "string": 5,
+      "fret": 3,
+      "start": 3000,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n026",
+      "string": 5,
+      "fret": 2,
+      "start": 3120,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n027",
+      "string": 5,
+      "fret": 1,
+      "start": 3240,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n028",
+      "string": 5,
+      "fret": 0,
+      "start": 3360,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n029",
+      "string": 6,
+      "fret": 5,
+      "start": 3480,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n030",
+      "string": 6,
+      "fret": 4,
+      "start": 3600,
+      "duration": 120,
+      "velocity": 100
+    },
+    {
+      "id": "n031",
+      "string": 6,
+      "fret": 3,
+      "start": 3720,
+      "duration": 120,
+      "velocity": 100
+    }
+  ],
+  "tags": [
+    "bench",
+    "run",
+    "single-notes"
+  ],
+  "style": {
+    "genres": [
+      "sludge",
+      "doom"
+    ],
+    "notes": "A sixteenth-note chromatic run up and back on the two lowest strings."
+  },
+  "namingPrefs": {
+    "accidentals": "flats"
+  },
+  "source": {
+    "type": "manual"
+  }
+}

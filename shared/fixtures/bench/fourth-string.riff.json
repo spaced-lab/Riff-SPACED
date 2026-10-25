@@ -1,0 +1,392 @@
+{
+  "format": "riff-spaced/riff",
+  "version": 1,
+  "id": "bench-fourth-string",
+  "name": "Fourth String",
+  "createdAt": "2026-10-25T00:00:00Z",
+  "updatedAt": "2026-10-25T00:00:00Z",
+  "tuning": {
+    "name": "Bb Standard",
+    "pitches": [
+      34,
+      39,
+      44,
+      49,
+      53,
+      58
+    ]
+  },
+  "tempo": {
+    "bpm": 80
+  },
+  "timeSignature": {
+    "beats": 4,
+    "unit": 4
+  },
+  "ppq": 480,
+  "lengthBars": 4,
+  "sections": [
+    {
+      "id": "bench-fourth-string-s1",
+      "label": "A",
+      "startBar": 0,
+      "lengthBars": 4,
+      "kind": "main"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n000",
+      "string": 5,
+      "fret": 3,
+      "start": 0,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c1"
+    },
+    {
+      "id": "n001",
+      "string": 4,
+      "fret": 3,
+      "start": 0,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c1"
+    },
+    {
+      "id": "n002",
+      "string": 5,
+      "fret": 5,
+      "start": 480,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c2"
+    },
+    {
+      "id": "n003",
+      "string": 4,
+      "fret": 5,
+      "start": 480,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c2"
+    },
+    {
+      "id": "n004",
+      "string": 4,
+      "fret": 0,
+      "start": 960,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c3"
+    },
+    {
+      "id": "n005",
+      "string": 3,
+      "fret": 2,
+      "start": 960,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c3"
+    },
+    {
+      "id": "n006",
+      "string": 6,
+      "fret": 0,
+      "start": 1440,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c4"
+    },
+    {
+      "id": "n007",
+      "string": 4,
+      "fret": 0,
+      "start": 1440,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c4"
+    },
+    {
+      "id": "n008",
+      "string": 5,
+      "fret": 5,
+      "start": 1920,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c5"
+    },
+    {
+      "id": "n009",
+      "string": 4,
+      "fret": 5,
+      "start": 1920,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c5"
+    },
+    {
+      "id": "n010",
+      "string": 4,
+      "fret": 0,
+      "start": 2400,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c6"
+    },
+    {
+      "id": "n011",
+      "string": 3,
+      "fret": 2,
+      "start": 2400,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c6"
+    },
+    {
+      "id": "n012",
+      "string": 6,
+      "fret": 0,
+      "start": 2880,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c7"
+    },
+    {
+      "id": "n013",
+      "string": 4,
+      "fret": 0,
+      "start": 2880,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c7"
+    },
+    {
+      "id": "n014",
+      "string": 5,
+      "fret": 3,
+      "start": 3360,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c8"
+    },
+    {
+      "id": "n015",
+      "string": 4,
+      "fret": 3,
+      "start": 3360,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c8"
+    },
+    {
+      "id": "n016",
+      "string": 4,
+      "fret": 0,
+      "start": 3840,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c9"
+    },
+    {
+      "id": "n017",
+      "string": 3,
+      "fret": 2,
+      "start": 3840,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c9"
+    },
+    {
+      "id": "n018",
+      "string": 6,
+      "fret": 0,
+      "start": 4320,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c10"
+    },
+    {
+      "id": "n019",
+      "string": 4,
+      "fret": 0,
+      "start": 4320,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c10"
+    },
+    {
+      "id": "n020",
+      "string": 5,
+      "fret": 3,
+      "start": 4800,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c11"
+    },
+    {
+      "id": "n021",
+      "string": 4,
+      "fret": 3,
+      "start": 4800,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c11"
+    },
+    {
+      "id": "n022",
+      "string": 5,
+      "fret": 5,
+      "start": 5280,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c12"
+    },
+    {
+      "id": "n023",
+      "string": 4,
+      "fret": 5,
+      "start": 5280,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c12"
+    },
+    {
+      "id": "n024",
+      "string": 6,
+      "fret": 0,
+      "start": 5760,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c13"
+    },
+    {
+      "id": "n025",
+      "string": 4,
+      "fret": 0,
+      "start": 5760,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c13"
+    },
+    {
+      "id": "n026",
+      "string": 5,
+      "fret": 3,
+      "start": 6240,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c14"
+    },
+    {
+      "id": "n027",
+      "string": 4,
+      "fret": 3,
+      "start": 6240,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c14"
+    },
+    {
+      "id": "n028",
+      "string": 5,
+      "fret": 5,
+      "start": 6720,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c15"
+    },
+    {
+      "id": "n029",
+      "string": 4,
+      "fret": 5,
+      "start": 6720,
+      "duration": 480,
+      "velocity": 100,
+      "chordId": "c15"
+    },
+    {
+      "id": "n030",
+      "string": 4,
+      "fret": 0,
+      "start": 7200,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c16"
+    },
+    {
+      "id": "n031",
+      "string": 3,
+      "fret": 2,
+      "start": 7200,
+      "duration": 480,
+      "velocity": 100,
+      "techniques": [
+        "palmMute"
+      ],
+      "chordId": "c16"
+    }
+  ],
+  "tags": [
+    "bench",
+    "fourth-string"
+  ],
+  "style": {
+    "genres": [
+      "sludge",
+      "doom"
+    ],
+    "notes": "Quarter-note dyads that lean on the fourth and third strings, alternating open and palm-muted."
+  },
+  "namingPrefs": {
+    "accidentals": "flats"
+  },
+  "source": {
+    "type": "manual"
+  }
+}

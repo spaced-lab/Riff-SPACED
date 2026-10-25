@@ -62,4 +62,20 @@ And in `decode.py`, the transition costs: how much a fret jump, a string change,
 
 ## Results
 
-The benchmark table from `make bench` is pasted here at the end of the phase (P6.T7), with the thresholds from the phase file: onset F1 at least 0.90, note F1 at least 0.80, fingering accuracy at least 0.70, tempo within 2 BPM on at least 80 percent of cases.
+From `make bench` (36 cases: 6 riffs at drives 3, 6, 10 and noise -60, -35 dB), copied from `docs/benchmarks/latest.md` at the end of Phase 6:
+
+
+
+| metric | value | threshold | pass |
+|---|---|---|---|
+| onset F1 | 0.868 | 0.90 | no |
+| note F1 | 0.779 | 0.80 | no |
+| fingering accuracy | 0.867 | 0.70 | yes |
+| tempo within 2 BPM | 0.694 | 0.80 | no |
+| dyad accuracy | 0.780 | (tracked) | |
+| mean confidence | 0.751 | (tracked) | |
+| total analysis time | 17.6 s | | |
+
+Two of the four phase thresholds are met and two are missed, and both misses come from one synthetic riff: a legato chromatic sixteenth-note run on open-ringing strings, where each new note arrives while the last six still sound. Its onset F1 is 0.2 to 0.4, its note F1 near 0, and its tempo wrong, which alone costs the averages about 0.13 on onset F1, 0.15 on note F1, and 0.17 on tempo. The owner's own kind of riff (palm-muted dyads, the walkdown, the tritone chug, the fourth-string shapes, octave chugs) scores onset F1 0.94 to 1.00, note F1 0.85 to 0.97, fingering 0.71 to 1.00, and tempo within 0.2 BPM at every drive and noise level. A setting that lifted the legato run (flux margin 0.08, pitch-jump gap 0.06) put a phantom open note into the walkdown's signature bar, so it was rejected; the gap is recorded in `docs/BACKLOG.md` with the numbers, as the phase file asks.
+
+Known weak spots worth their own backlog items: octave dyads (the upper note's harmonics are a subset of the lower's, so the single note wins; dyad accuracy 0.40 on the octave chug), fourth-string shapes with same-pitch alternatives (fingering 0.71, ties the decoder breaks by hand position), and tempo on takes with only a few onsets (the slow tritone: three onsets in 16 seconds, any grid aligns, the prior picks 90).

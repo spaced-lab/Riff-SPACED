@@ -1,0 +1,129 @@
+{
+  "format": "riff-spaced/riff",
+  "version": 1,
+  "id": "bench-slow-tritone",
+  "name": "Slow Tritone",
+  "createdAt": "2026-10-25T00:00:00Z",
+  "updatedAt": "2026-10-25T00:00:00Z",
+  "tuning": {
+    "name": "Bb Standard",
+    "pitches": [
+      34,
+      39,
+      44,
+      49,
+      53,
+      58
+    ]
+  },
+  "tempo": {
+    "bpm": 60
+  },
+  "timeSignature": {
+    "beats": 4,
+    "unit": 4
+  },
+  "ppq": 480,
+  "lengthBars": 4,
+  "sections": [
+    {
+      "id": "bench-slow-tritone-s1",
+      "label": "A",
+      "startBar": 0,
+      "lengthBars": 4,
+      "kind": "main"
+    }
+  ],
+  "notes": [
+    {
+      "id": "n000",
+      "string": 6,
+      "fret": 3,
+      "start": 0,
+      "duration": 1920,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c1"
+    },
+    {
+      "id": "n001",
+      "string": 5,
+      "fret": 5,
+      "start": 0,
+      "duration": 1920,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c1"
+    },
+    {
+      "id": "n002",
+      "string": 6,
+      "fret": 3,
+      "start": 1920,
+      "duration": 1920,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c2"
+    },
+    {
+      "id": "n003",
+      "string": 5,
+      "fret": 1,
+      "start": 1920,
+      "duration": 1920,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c2"
+    },
+    {
+      "id": "n004",
+      "string": 6,
+      "fret": 1,
+      "start": 3840,
+      "duration": 3840,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c3"
+    },
+    {
+      "id": "n005",
+      "string": 5,
+      "fret": 2,
+      "start": 3840,
+      "duration": 3840,
+      "velocity": 100,
+      "techniques": [
+        "letRing"
+      ],
+      "chordId": "c3"
+    }
+  ],
+  "tags": [
+    "bench",
+    "tritone",
+    "sustained"
+  ],
+  "style": {
+    "genres": [
+      "sludge",
+      "doom"
+    ],
+    "notes": "Whole-note dyads: a fifth, a minor third, then a tritone held for two bars and left unresolved."
+  },
+  "namingPrefs": {
+    "accidentals": "flats"
+  },
+  "source": {
+    "type": "manual"
+  }
+}

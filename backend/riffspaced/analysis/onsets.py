@@ -37,9 +37,13 @@ THRESHOLD_MARGIN = 0.12
 MIN_GAP_SECONDS = 0.05
 PITCH_JUMP_SEMITONES = 1.0
 PITCH_HOLD_FRAMES = 3
-# A pitch jump within this long after a flux onset is the same event settling, not a new one.
+# A pitch jump this soon after another onset is the same event settling, not a new one; what
+# slips through is merged later when it decodes to the same pitches (quantize.py). 0.06 found
+# more notes in a legato sixteenth run but put phantom notes into palm-muted riffs; the
+# owner's music is the latter, so 0.12 stays (see docs/benchmarks/latest.md and BACKLOG).
 PITCH_JUMP_GAP_SECONDS = 0.12
-PITCH_MAX_HZ = 1000.0
+PITCH_MAX_HZ = 450.0
+PITCH_MIN_HZ = 55.0
 PITCH_LOUDNESS_DB = -35.0
 ONSET_N_FFT = 1024
 ONSET_HOP = 256
@@ -71,8 +75,12 @@ def spectral_flux(
     if SMOOTH_FRAMES > 1:
         kernel = np.ones(SMOOTH_FRAMES) / SMOOTH_FRAMES
         flux = np.convolve(flux, kernel, mode="same")
-    top = float(np.max(flux)) if len(flux) else 0.0
-    return (flux / top).astype(np.float32) if top > 0 else flux.astype(np.float32)
+    # Normalize by the largest onset after the first frame: the first attack out of silence is
+    # measured against the -80 dB floor and would dwarf every real onset in the take.
+    top = float(np.max(flux[1:])) if len(flux) > 1 else (float(flux[0]) if len(flux) else 0.0)
+    if top <= 0:
+        return flux.astype(np.float32)
+    return np.minimum(flux / top, 1.0).astype(np.float32)
 
 
 def adaptive_threshold(
@@ -114,13 +122,19 @@ def pick_peaks(
     return picked
 
 
-def dominant_pitch_track(spec: Spectrogram, max_hz: float = PITCH_MAX_HZ) -> np.ndarray:
-    """Per frame, the loudest interpolated peak below `max_hz` in semitones (NaN when silent)."""
+def dominant_pitch_track(
+    spec: Spectrogram, max_hz: float = PITCH_MAX_HZ, min_hz: float = PITCH_MIN_HZ
+) -> np.ndarray:
+    """Per frame, the loudest peak in the fundamental band, in semitones (NaN when silent).
+
+    The band (55 to 450 Hz) covers the open low strings to the twelfth fret of the fourth; above
+    it the loudest peak is usually a harmonic of whatever rang last, not the new note.
+    """
     track = np.full(len(spec.peaks), np.nan)
     for i, peaks in enumerate(spec.peaks):
         if len(peaks) == 0:
             continue
-        low = peaks[peaks[:, 0] < max_hz]
+        low = peaks[(peaks[:, 0] < max_hz) & (peaks[:, 0] >= min_hz)]
         if len(low) == 0:
             continue
         f = float(low[0, 0])
