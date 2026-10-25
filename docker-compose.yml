@@ -1,12 +1,20 @@
-# `docker compose up --build` serves the frontend on 8080 and the backend on 8000.
+# `docker compose up --build` serves the whole app on http://localhost:8080: nginx serves the
+# built frontend and proxies /api/* to the backend container, which is also published on
+# 8000 for the CLI and for curl. `make up` and `make down` at the repo root wrap this.
 services:
   frontend:
     build:
-      context: ./frontend
+      # Both images build from the repo root because both need the shared/ folder.
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        # Same-origin through the nginx proxy (see frontend/nginx.conf); no CORS needed.
+        VITE_BACKEND_URL: /api
     ports:
       - "8080:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   backend:
     build:
@@ -18,6 +26,13 @@ services:
     environment:
       RIFFSPACED_CORS_ORIGINS: http://localhost:8080,http://localhost:5173
     # Secrets such as ANTHROPIC_API_KEY come from backend/.env (gitignored) when it exists.
+    # Without a key, set RIFFSPACED_AI_FAKE=1 there to try the AI menu on the fake client.
     env_file:
       - path: ./backend/.env
         required: false
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).status == 200 else 1)"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s

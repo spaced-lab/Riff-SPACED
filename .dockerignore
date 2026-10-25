@@ -8,3 +8,5 @@ backend/debug
 frontend/playwright-report
 frontend/test-results
 .git
+injest-raw
+injest-riff-JSON

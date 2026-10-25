@@ -58,3 +58,13 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check . && ruff format --check .
       - run: pytest -q
+
+  docker:
+    name: container images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Build both images without pushing: proves the Dockerfiles and the compose contexts
+      # stay valid (DECISIONS 34: nothing is deployed from CI except Pages).
+      - run: docker build -f frontend/Dockerfile --build-arg VITE_BACKEND_URL=/api -t riffspaced-frontend .
+      - run: docker build -f backend/Dockerfile -t riffspaced-backend .
