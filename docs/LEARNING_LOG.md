@@ -101,3 +101,5 @@ Read these commits:
 - `c07289a` feat(analysis): the matcher, and why line width at the low end decided the tritone.
 - `9e44b16` feat(analysis): novel spectra, evidence-based sustain, emission temperature; the parameter sweep in the commit message.
 - `3d823bf` test(analysis): a benchmark earns its keep when it disagrees with you.
+
+Postscript (2026-10-25): the owner's first three real recordings went through the pipeline. The synthetic benchmark was honest about what it measured and silent about what it did not: the real rig produced a flat interval histogram and no palm mutes at all. The lesson is in `docs/benchmarks/real-audio-notes.md`: a benchmark rendered by the same model the analyzer assumes can only confirm the assumptions.

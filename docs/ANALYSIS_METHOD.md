@@ -79,3 +79,23 @@ From `make bench` (36 cases: 6 riffs at drives 3, 6, 10 and noise -60, -35 dB), 
 Two of the four phase thresholds are met and two are missed, and both misses come from one synthetic riff: a legato chromatic sixteenth-note run on open-ringing strings, where each new note arrives while the last six still sound. Its onset F1 is 0.2 to 0.4, its note F1 near 0, and its tempo wrong, which alone costs the averages about 0.13 on onset F1, 0.15 on note F1, and 0.17 on tempo. The owner's own kind of riff (palm-muted dyads, the walkdown, the tritone chug, the fourth-string shapes, octave chugs) scores onset F1 0.94 to 1.00, note F1 0.85 to 0.97, fingering 0.71 to 1.00, and tempo within 0.2 BPM at every drive and noise level. A setting that lifted the legato run (flux margin 0.08, pitch-jump gap 0.06) put a phantom open note into the walkdown's signature bar, so it was rejected; the gap is recorded in `docs/BACKLOG.md` with the numbers, as the phase file asks.
 
 Known weak spots worth their own backlog items: octave dyads (the upper note's harmonics are a subset of the lower's, so the single note wins; dyad accuracy 0.40 on the octave chug), fourth-string shapes with same-pitch alternatives (fingering 0.71, ties the decoder breaks by hand position), and tempo on takes with only a few onsets (the slow tritone: three onsets in 16 seconds, any grid aligns, the prior picks 90).
+
+## First real recordings (2026-10-25)
+
+Three phone recordings from the owner went through the pipeline with the defaults; the
+full numbers are in `docs/benchmarks/real-audio-notes.md`. Three observations matter for
+anyone tuning this next:
+
+- The dyad histogram came out nearly flat across all twelve interval classes, and the
+  confidence margins were low everywhere. The matcher that scores 0.78 dyad accuracy on
+  the synth is choosing among near-equal candidates on the real rig. The synth and the
+  templates share one model of a string; the real rig does not.
+- Not one note was marked palm muted in 806, in a style that is mostly palm muted. The
+  detector asks for a 20 dB drop within 120 ms; a phone's automatic gain control, a
+  limiter and a room tail flatten that drop. The fix is to judge each decay against the
+  recording's own distribution of decays rather than an absolute number.
+- The lowest strong peaks of all three recordings cluster in the same three places
+  (around F2, G2 and Eb2) and almost never at the open Bb1. Either the rig has a fixed
+  resonance there, or the takes were not in Bb Standard; the owner has to say. Until a
+  tuning and a tab are known for at least one take, the real-audio pass is an observation,
+  not a measurement, and the knobs above should not be moved on its account.

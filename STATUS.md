@@ -124,6 +124,12 @@ docker compose up --build                  # frontend :8080, backend :8000
 
 **Real recordings arrived.** Three files are in `injest-raw/` at the repo root (RS-Descent.m4a, RS-NM1.m4a, RS-Spider.m4a, 2.6 MB total, m4a so ffmpeg decode). That folder is gitignored as of this commit; the files are the owner's and are never deleted or committed. On resume, before or after Phase 7: copy (not move) them into `backend/audio_in/`, run the P6.T10 recipe from docs/BACKLOG.md (ingest each, compare with what the owner played if a tab exists, record findings in docs/ANALYSIS_METHOD.md and LEARNING_LOG), and ask the owner only if a recording's tuning is not Bb Standard.
 
+**Real recordings: first pass done (P6.T10, 2026-10-25).** All three takes ran end to end; findings in `docs/benchmarks/real-audio-notes.md` and the postscript in `docs/ANALYSIS_METHOD.md`. The outputs are in `backend/riffs_out/` (gitignored).
+
+## Waiting on owner (not blocking)
+
+- For the three recordings in `injest-raw/`: were they played in Bb Standard? If not, which tuning? And for at least one of them, a tab or a description of the riff (frets or note names), so the analyzer's output can be scored. The low end of all three files peaks around F2, G2 and Eb2 and almost never at the open Bb1, which is either the rig's resonance or a different tuning (see the notes). Phase 7 continues meanwhile.
+
 Also still open, not blocking: the owner can add more recordings to `injest-raw/` or `backend/audio_in/` any time.
 
 **Outboard transcriptions (owner request 2026-10-25).** `outboard-guidance/` holds the guide, schema copy and example an external tool or LLM follows to produce riff JSON from a recording; results land in `injest-riff-JSON/` (gitignored) and are validated with `riffspaced.check_riffs`, then opened with File > Open. When files arrive, compare them with the built-in analyzer's output for the same recording and note the differences in docs/ANALYSIS_METHOD.md.
