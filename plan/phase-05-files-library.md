@@ -47,7 +47,7 @@ Commit: `feat(storage): add open, save, save-as, and library import/export with 
 
 ## P5.T5 Text tab export
 
-`export/texttab.ts` per SPEC 7.2. Tests compare against golden files in `shared/fixtures/golden/walkdown.tab.txt` and `tritone.tab.txt` (write the goldens by hand first from the demo riffs, then make the code match; the golden for the walkdown must show the held Ab as `3` followed by `-` dashes while the low string reads `5-5-4-4-3-3-2-2`).
+`export/texttab.ts` per SPEC 7.2. Tests compare against golden files in `shared/fixtures/golden/walkdown.tab.txt` and `tritone.tab.txt` (write the goldens by hand first from the demo riffs, then make the code match; the golden for the walkdown must show the held Ab as `5` (string 5 fret 5 is Ab2 in Bb Standard) followed by `-` dashes while the low string reads `5-5-4-4-3-3-2-2`).
 
 File > Export > Text tab downloads `<name>.tab.txt`. Also `Edit > Copy as text tab` writes to the system clipboard via `navigator.clipboard.writeText` with a toast.
 
@@ -69,7 +69,7 @@ Chrome verification script:
 1. Open http://localhost:5173. Menu bar present; dev toolbar gone. Screenshot.
 2. Library panel shows demo riffs, arrangement, song. Search `turn` filters to the walkdown.
 3. File > New riff; name it; add two notes; File > Save (FS Access dialog appears in Chrome; save to Downloads). Screenshot of the dialog is not possible; after saving, status bar shows the filename.
-4. File > Export > Text tab; open the downloaded file in a new tab via `file://` is not allowed; instead `Edit > Copy as text tab` then paste into the search box to eyeball it, then clear. Confirm the walkdown line reads `5-5-4-4-3-3-2-2`.
+4. File > Export > Text tab; open the downloaded file in a new tab via `file://` is not allowed; instead `Edit > Copy as text tab` then paste into the search box to eyeball it, then clear. Confirm the walkdown line reads `5-5-4-4-3-3-2-2` under a held `5`.
 5. Open the arrangement; press Space; the tab shows entry boundaries and the readout crosses into the second entry.
 6. Help > Keyboard shortcuts renders. Console clean.
 

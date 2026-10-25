@@ -76,7 +76,7 @@ Chrome verification script:
 1. Open http://localhost:5173. Load demo "Walkdown Turnaround" (still via dev toolbar select of library riffs; add that select now, replaced in Phase 5). Screenshot: tab lanes show palm-muted eighths with dotted tops, the bar 4 walkdown visible, chord brackets on dyads.
 2. Click bar 4 in the ruler. Fretboard shows the held Ab and the walkdown note at the cursor, ghosts for the rest of the bar.
 3. Click fretboard string 4 fret 5; a new note appears in the tab at the cursor. Ctrl/Cmd+Z removes it.
-4. Select two dyad notes; inspector reads `P5, root Db`. Select the inverted one on the "and" of 4; inspector reads `P4, inverted, root Db`.
+4. Select the two notes of a bar 1 dyad (6:3 + 5:5); inspector reads `P5, root Db`. Select the inverted one on the "and" of 4 (5:5 + 4:5); inspector reads `P4, inverted, root Db`.
 5. Reload the page; the edit persists (autosave). Console clean.
 
 Docs: `docs/EDITOR.md` (pointer state machine diagram in ASCII, shortcut table, undo design). `docs/LEARNING_LOG.md` Phase 3 entry. `STATUS.md`, tag `v0.3.0`, push, CI green, `/compact`.

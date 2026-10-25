@@ -53,9 +53,9 @@ Commit: `feat(fretboard): add temporary dev toolbar for tuning presets and view 
 Playwright `e2e/fretboard.spec.ts`: open `/`, assert 6 string lines and 13 fret cells; toggle letters, assert text `Db` exists; switch to sharps, assert `C#`; change range to 0-24, assert 25 cells; open `/#/dev/fretboard`, screenshot each fretboard to `docs/screenshots/phase-02/`. Console must be clean.
 
 Chrome verification script:
-1. Open http://localhost:5173. Screenshot. Expect the demo "Walkdown Turnaround" notes as green dots on the bottom two strings, frets 0 to 5, black background, green outlines, fret numbers, markers at 3, 5, 7, 9, double at 12.
-2. Tick "Note letters". Screenshot. Expect `Db`, `Ab`, `F`, `E`, `Eb`, `D`, `Bb` in dots.
-3. Tick "Sharps". Expect `C#`, `G#`, `D#`.
+1. Open http://localhost:5173. Screenshot. Expect the demo "Walkdown Turnaround" notes as green dots on the bottom three strings, frets 0 to 5, black background, green outlines, fret numbers, markers at 3, 5, 7, 9, double at 12.
+2. Tick "Note letters". Screenshot. Expect `Bb`, `Db`, `Ab`, `Eb`, `D`, `C` in dots (and `Db` on string 4 fret 5).
+3. Tick "Sharps". Expect `A#`, `C#`, `G#`, `D#`.
 4. Choose tuning "Drop Ab". Expect the lowest string's letters shift down a whole step (open string shows `Ab`).
 5. Hover a dot: tooltip shows `string 6 fret 3 = Db2`.
 6. Open http://localhost:5173/#/dev/fretboard. Screenshot the four boards. Read console: no errors or warnings.

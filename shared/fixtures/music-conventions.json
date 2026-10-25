@@ -1,0 +1,883 @@
+{
+  "$comment": "Cross-language contract for RIFF-SPACED music conventions (SPEC section 3). Both frontend/src/music and backend/riffspaced/music load this file in their tests and must consume every case. Expected values are derived from the spec formulas, not from either implementation.",
+  "pitchNames": [
+    {
+      "midi": 34,
+      "flat": "Bb1",
+      "sharp": "A#1",
+      "pitchClass": 10,
+      "octave": 1
+    },
+    {
+      "midi": 39,
+      "flat": "Eb2",
+      "sharp": "D#2",
+      "pitchClass": 3,
+      "octave": 2
+    },
+    {
+      "midi": 44,
+      "flat": "Ab2",
+      "sharp": "G#2",
+      "pitchClass": 8,
+      "octave": 2
+    },
+    {
+      "midi": 49,
+      "flat": "Db3",
+      "sharp": "C#3",
+      "pitchClass": 1,
+      "octave": 3
+    },
+    {
+      "midi": 53,
+      "flat": "F3",
+      "sharp": "F3",
+      "pitchClass": 5,
+      "octave": 3
+    },
+    {
+      "midi": 58,
+      "flat": "Bb3",
+      "sharp": "A#3",
+      "pitchClass": 10,
+      "octave": 3
+    },
+    {
+      "midi": 60,
+      "flat": "C4",
+      "sharp": "C4",
+      "pitchClass": 0,
+      "octave": 4
+    },
+    {
+      "midi": 69,
+      "flat": "A4",
+      "sharp": "A4",
+      "pitchClass": 9,
+      "octave": 4
+    },
+    {
+      "midi": 70,
+      "flat": "Bb4",
+      "sharp": "A#4",
+      "pitchClass": 10,
+      "octave": 4
+    },
+    {
+      "midi": 71,
+      "flat": "B4",
+      "sharp": "B4",
+      "pitchClass": 11,
+      "octave": 4
+    }
+  ],
+  "frequencies": [
+    {
+      "midi": 69,
+      "hz": 440.0
+    },
+    {
+      "midi": 57,
+      "hz": 220.0
+    },
+    {
+      "midi": 34,
+      "hz": 58.2705
+    }
+  ],
+  "tunings": {
+    "default": "Bb Standard",
+    "dropRule": "a drop preset is the matching standard preset with pitches[0] lowered by 2 semitones",
+    "standard": [
+      {
+        "name": "E Standard",
+        "pitches": [
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ]
+      },
+      {
+        "name": "Eb Standard",
+        "pitches": [
+          39,
+          44,
+          49,
+          54,
+          58,
+          63
+        ]
+      },
+      {
+        "name": "D Standard",
+        "pitches": [
+          38,
+          43,
+          48,
+          53,
+          57,
+          62
+        ]
+      },
+      {
+        "name": "C# Standard",
+        "pitches": [
+          37,
+          42,
+          47,
+          52,
+          56,
+          61
+        ]
+      },
+      {
+        "name": "C Standard",
+        "pitches": [
+          36,
+          41,
+          46,
+          51,
+          55,
+          60
+        ]
+      },
+      {
+        "name": "B Standard",
+        "pitches": [
+          35,
+          40,
+          45,
+          50,
+          54,
+          59
+        ]
+      },
+      {
+        "name": "Bb Standard",
+        "pitches": [
+          34,
+          39,
+          44,
+          49,
+          53,
+          58
+        ]
+      },
+      {
+        "name": "A Standard",
+        "pitches": [
+          33,
+          38,
+          43,
+          48,
+          52,
+          57
+        ]
+      }
+    ],
+    "drop": [
+      {
+        "name": "Drop D",
+        "from": "E Standard",
+        "pitches": [
+          38,
+          45,
+          50,
+          55,
+          59,
+          64
+        ]
+      },
+      {
+        "name": "Drop C#",
+        "from": "Eb Standard",
+        "pitches": [
+          37,
+          44,
+          49,
+          54,
+          58,
+          63
+        ]
+      },
+      {
+        "name": "Drop C",
+        "from": "D Standard",
+        "pitches": [
+          36,
+          43,
+          48,
+          53,
+          57,
+          62
+        ]
+      },
+      {
+        "name": "Drop B",
+        "from": "C# Standard",
+        "pitches": [
+          35,
+          42,
+          47,
+          52,
+          56,
+          61
+        ]
+      },
+      {
+        "name": "Drop Bb",
+        "from": "C Standard",
+        "pitches": [
+          34,
+          41,
+          46,
+          51,
+          55,
+          60
+        ]
+      },
+      {
+        "name": "Drop A",
+        "from": "B Standard",
+        "pitches": [
+          33,
+          40,
+          45,
+          50,
+          54,
+          59
+        ]
+      },
+      {
+        "name": "Drop Ab",
+        "from": "Bb Standard",
+        "pitches": [
+          32,
+          39,
+          44,
+          49,
+          53,
+          58
+        ]
+      }
+    ],
+    "sevenString": [
+      {
+        "name": "B Standard 7",
+        "pitches": [
+          35,
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ]
+      }
+    ],
+    "validity": [
+      {
+        "pitches": [
+          34,
+          39,
+          44,
+          49,
+          53,
+          58
+        ],
+        "valid": true,
+        "why": "ascending, in range"
+      },
+      {
+        "pitches": [
+          34,
+          39,
+          39,
+          49,
+          53,
+          58
+        ],
+        "valid": false,
+        "why": "not strictly ascending"
+      },
+      {
+        "pitches": [
+          19,
+          39,
+          44,
+          49,
+          53,
+          58
+        ],
+        "valid": false,
+        "why": "below 20"
+      },
+      {
+        "pitches": [
+          34,
+          39,
+          44,
+          49,
+          53,
+          71
+        ],
+        "valid": false,
+        "why": "above 70"
+      },
+      {
+        "pitches": [
+          34,
+          39,
+          44,
+          49,
+          53
+        ],
+        "valid": false,
+        "why": "5 strings, only 6 to 8 supported"
+      },
+      {
+        "pitches": [
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          59,
+          64
+        ],
+        "valid": true,
+        "why": "8 strings"
+      }
+    ]
+  },
+  "pitchOf": [
+    {
+      "tuning": "Bb Standard",
+      "string": 6,
+      "fret": 0,
+      "midi": 34
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 6,
+      "fret": 3,
+      "midi": 37
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 5,
+      "fret": 3,
+      "midi": 42
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 5,
+      "fret": 5,
+      "midi": 44
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 4,
+      "fret": 5,
+      "midi": 49
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 4,
+      "fret": 0,
+      "midi": 44
+    },
+    {
+      "tuning": "Bb Standard",
+      "string": 1,
+      "fret": 12,
+      "midi": 70
+    }
+  ],
+  "ticks": {
+    "ppq": 480,
+    "bar": 1920,
+    "grid": {
+      "1/4": 480,
+      "1/8": 240,
+      "1/16": 120,
+      "1/8T": 160,
+      "1/16T": 80
+    },
+    "ticksToSeconds": [
+      {
+        "ticks": 1920,
+        "bpm": 120,
+        "seconds": 2.0
+      },
+      {
+        "ticks": 480,
+        "bpm": 92,
+        "seconds": 0.652174
+      },
+      {
+        "ticks": 0,
+        "bpm": 200,
+        "seconds": 0.0
+      }
+    ],
+    "barBeatTick": [
+      {
+        "ticks": 0,
+        "bar": 1,
+        "beat": 1,
+        "tick": 0
+      },
+      {
+        "ticks": 2520,
+        "bar": 2,
+        "beat": 2,
+        "tick": 120
+      },
+      {
+        "ticks": 7679,
+        "bar": 4,
+        "beat": 4,
+        "tick": 479
+      },
+      {
+        "ticks": 1920,
+        "bar": 2,
+        "beat": 1,
+        "tick": 0
+      }
+    ],
+    "snapToGrid": [
+      {
+        "ticks": 130,
+        "grid": "1/16",
+        "snapped": 120
+      },
+      {
+        "ticks": 181,
+        "grid": "1/16",
+        "snapped": 240
+      },
+      {
+        "ticks": 170,
+        "grid": "1/8T",
+        "snapped": 160
+      },
+      {
+        "ticks": 100,
+        "grid": "1/4",
+        "snapped": 0
+      },
+      {
+        "ticks": 1919,
+        "grid": "1/8",
+        "snapped": 1920
+      }
+    ]
+  },
+  "dyads": [
+    {
+      "a": 37,
+      "b": 44,
+      "interval": "P5",
+      "semitones": 7,
+      "lowerIsRoot": true,
+      "rootPitchClass": 1,
+      "rootName": "Db"
+    },
+    {
+      "a": 42,
+      "b": 37,
+      "interval": "P4",
+      "semitones": 5,
+      "lowerIsRoot": false,
+      "rootPitchClass": 6,
+      "rootName": "Gb"
+    },
+    {
+      "a": 37,
+      "b": 40,
+      "interval": "m3",
+      "semitones": 3,
+      "lowerIsRoot": true,
+      "rootPitchClass": 1,
+      "rootName": "Db"
+    },
+    {
+      "a": 37,
+      "b": 43,
+      "interval": "TT",
+      "semitones": 6,
+      "lowerIsRoot": true,
+      "rootPitchClass": 1,
+      "rootName": "Db"
+    },
+    {
+      "a": 37,
+      "b": 38,
+      "interval": "m2",
+      "semitones": 1,
+      "lowerIsRoot": true,
+      "rootPitchClass": 1,
+      "rootName": "Db"
+    },
+    {
+      "a": 44,
+      "b": 49,
+      "interval": "P4",
+      "semitones": 5,
+      "lowerIsRoot": false,
+      "rootPitchClass": 1,
+      "rootName": "Db"
+    },
+    {
+      "a": 35,
+      "b": 41,
+      "interval": "TT",
+      "semitones": 6,
+      "lowerIsRoot": true,
+      "rootPitchClass": 11,
+      "rootName": "B"
+    },
+    {
+      "a": 34,
+      "b": 46,
+      "interval": "P8",
+      "semitones": 0,
+      "lowerIsRoot": true,
+      "rootPitchClass": 10,
+      "rootName": "Bb"
+    },
+    {
+      "a": 40,
+      "b": 40,
+      "interval": "P1",
+      "semitones": 0,
+      "lowerIsRoot": true,
+      "rootPitchClass": 4,
+      "rootName": "E"
+    },
+    {
+      "a": 36,
+      "b": 44,
+      "interval": "m6",
+      "semitones": 8,
+      "lowerIsRoot": true,
+      "rootPitchClass": 0,
+      "rootName": "C"
+    }
+  ],
+  "fingerings": {
+    "$comment": "findFingerings results are ordered lowest-pitched string first (string N down to 1). bestFingering returns one position per input pitch, aligned with the input order.",
+    "find": [
+      {
+        "tuning": "Bb Standard",
+        "pitch": 37,
+        "frets": [
+          0,
+          12
+        ],
+        "strings": [
+          6,
+          5,
+          4,
+          3
+        ],
+        "expected": [
+          [
+            6,
+            3
+          ]
+        ]
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitch": 49,
+        "frets": [
+          0,
+          12
+        ],
+        "strings": [
+          6,
+          5,
+          4,
+          3
+        ],
+        "expected": [
+          [
+            5,
+            10
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitch": 49,
+        "frets": [
+          0,
+          24
+        ],
+        "strings": [
+          6,
+          5,
+          4,
+          3
+        ],
+        "expected": [
+          [
+            6,
+            15
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitch": 33,
+        "frets": [
+          0,
+          12
+        ],
+        "strings": [
+          6,
+          5,
+          4,
+          3
+        ],
+        "expected": []
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitch": 44,
+        "frets": [
+          0,
+          12
+        ],
+        "strings": [
+          6,
+          5
+        ],
+        "expected": [
+          [
+            5,
+            5
+          ]
+        ]
+      }
+    ],
+    "best": [
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          37,
+          44
+        ],
+        "expected": [
+          [
+            6,
+            3
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "why": "P5 power chord on the two lowest strings beats using the open 4th string"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          44,
+          49
+        ],
+        "expected": [
+          [
+            5,
+            5
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "why": "inverted P4, same fret on adjacent strings"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          35,
+          41
+        ],
+        "expected": [
+          [
+            6,
+            1
+          ],
+          [
+            5,
+            2
+          ]
+        ],
+        "why": "tritone, only one playable shape"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          49
+        ],
+        "expected": [
+          [
+            5,
+            10
+          ]
+        ],
+        "why": "no previous position: lowest string wins"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          49
+        ],
+        "previous": [
+          [
+            6,
+            3
+          ]
+        ],
+        "expected": [
+          [
+            4,
+            5
+          ]
+        ],
+        "why": "continuity from fret 3 pulls the hand to 4:5 instead of 5:10"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          34,
+          49
+        ],
+        "expected": [
+          [
+            6,
+            0
+          ],
+          [
+            5,
+            10
+          ]
+        ],
+        "why": "Bb1 only at 6:0 (open, excluded from span); Db3 prefers 5:10 over 4:5 on the lower-string rule since span is 0 either way"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          33
+        ],
+        "expected": null,
+        "why": "below the lowest open string: unplayable"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [
+          37,
+          46
+        ],
+        "expected": [
+          [
+            6,
+            3
+          ],
+          [
+            5,
+            7
+          ]
+        ],
+        "why": "span 4 is the maximum allowed and is accepted"
+      }
+    ],
+    "handSpan": [
+      {
+        "positions": [
+          [
+            6,
+            3
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "span": 2
+      },
+      {
+        "positions": [
+          [
+            6,
+            3
+          ],
+          [
+            4,
+            0
+          ]
+        ],
+        "span": 0
+      },
+      {
+        "positions": [
+          [
+            6,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "span": 0
+      },
+      {
+        "positions": [
+          [
+            6,
+            3
+          ],
+          [
+            5,
+            7
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        "span": 4
+      }
+    ]
+  }
+}

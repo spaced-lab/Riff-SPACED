@@ -13,8 +13,8 @@ Steps:
    - `tunings`: every preset from SPEC 3.3 with name and pitches, plus the rule "drop = standard with pitches[0] - 2".
    - `pitchOf`: cases for Bb Standard: (string 6, fret 0) → 34, (6, 3) → 37, (5, 3) → 42, (4, 5) → 49, (1, 12) → 70.
    - `ticks`: ppq 480, bar = 1920, sixteenth = 120, eighth triplet = 160, sixteenth triplet = 80; `ticksToSeconds(1920, 120)` = 2.0.
-   - `dyads`: pairs (37, 44) → P5 lowerIsRoot true root Db; (42, 37) → P4 inverted, root Db (upper note is root in a P4); (37, 40) → m3; (37, 43) → TT; (37, 38) → m2.
-   - `fingerings`: `findFingerings(37, BbStandard, {frets 0..12, strings 6,5,4,3})` → [[6,3]] only (42 on string 5 would need fret -2; 37 on string 5 is impossible). `findFingerings(49, ...)` → [[4,5],[5,10],[3,0]].
+   - `dyads`: pairs (37, 44) → P5 lowerIsRoot true root Db; (42, 37) → P4 inverted, root Gb (upper note is root in a P4; corrected from "root Db", which contradicted SPEC 3.5); (37, 40) → m3; (37, 43) → TT; (37, 38) → m2; (44, 49) → P4 inverted root Db.
+   - `fingerings`: `findFingerings(37, BbStandard, {frets 0..12, strings 6,5,4,3})` → [[6,3]] only (37 on string 5 would need fret -2). `findFingerings(49, ...)` → [[5,10],[4,5],[3,0]], ordered lowest-pitched string first (SPEC 3.6 leaves order open; this fixes it).
 2. This file is the contract. Both implementations load it in tests.
 
 Commit: `test(music): add shared music-conventions fixture as the cross-language contract`.
@@ -51,7 +51,7 @@ Commit: `feat(model): add riff, arrangement, song types with JSON schemas, valid
 ## P1.T4 Demo library fixture
 
 Write `shared/fixtures/demo-library.json`, a valid library bundle with:
-1. **"Walkdown Turnaround"**: Bb Standard, 92 BPM, 4 bars, one `main` section. Bars 1 to 3: palm-muted eighth-note P5 dyads on strings 6 and 5 at fret 3 (Db2 + Ab2), with an inverted P4 on the "and" of beat 4 each bar (string 6 fret 5, string 5 fret 3). Bar 4 is the owner's signature turnaround: string 5 holds fret 3 (Ab2) as whole-bar sustained `letRing`, while string 6 walks down chromatically in palm-muted eighths: fret 5, 5, 4, 4, 3, 3, 2, 2 (F2, E2, Eb2, D2), resolving to an open-string Bb1 chug on the downbeat of the loop. Tags `sludge, turnaround, palm-mute, demo`.
+1. **"Walkdown Turnaround"**: Bb Standard, 92 BPM, 4 bars, one `main` section. Bar 1 opens with one palm-muted open Bb1 eighth (string 6 fret 0), the resolution of the loop. Bars 1 to 3 otherwise: palm-muted eighth-note P5 dyads Db2 + Ab2 (string 6 fret 3, string 5 fret 5; in Bb Standard adjacent low strings are a fourth apart, so the fifth sits two frets up), with an inverted P4 Ab2 + Db3 (string 5 fret 5, string 4 fret 5, root Db on top) on the "and" of beat 4 each bar. Bar 4 is the owner's signature turnaround: string 5 holds fret 5 (Ab2) as a whole-bar sustained `letRing`, while string 6 walks down chromatically in palm-muted eighths: fret 5, 5, 4, 4, 3, 3, 2, 2 (Eb2, D2, Db2, C2: against the held Ab2 that is P4, TT, P5, m6), resolving to the open Bb1 chug on the downbeat of the loop. Tags `sludge, turnaround, palm-mute, demo`. (Positions and note names corrected against SPEC 3.3; the original text had P5 at the same fret on strings 6 and 5, which is a P4 in this tuning.)
 2. **"Tritone Chug"**: Bb Standard, 80 BPM, 4 bars: sixteenth-note palm-muted single notes on string 6 fret 0 with a tritone dyad (string 6 fret 1 + string 5 fret 2, that is B1 + Bb2... recompute: string 5 fret 2 = 41 = F2, string 6 fret 1 = 35 = B1, interval 6 = TT) landing on beat 3 of bars 2 and 4, left unresolved. Tags `doom, tritone, demo`.
 3. One arrangement "Demo verse": Walkdown x3 then Tritone x1. One song "Demo song" with that arrangement as its only part.
 
