@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T08:40:00Z
-Phase: 7 AI layer (in progress, fake client, DECISIONS 54)
-Last completed task: P7.T6 Frontend: AI menu and suggestions drawer
-Next task: P7.T7 Chrome verification and phase exit
+Updated: 2026-10-25T09:20:00Z
+Phase: 7 AI layer (complete, tag v0.7.0, fake client; live test waits for a key), Phase 8 next
+Last completed task: P7.T7 Chrome verification and phase exit
+Next task: P8.T1 Transpose and retune tools
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -80,7 +80,7 @@ Phase 6 (tag v0.6.0):
 - [x] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
 - [x] P6.T11 Chrome verification and phase exit
 
-Phase 7:
+Phase 7 (tag v0.7.0):
 - [x] HARD STOP check: ANTHROPIC_API_KEY (not set; owner chose the fake client, DECISIONS 54)
 - [x] P7.T1 Prompt files and client wrapper
 - [x] P7.T2 Analyze endpoint
@@ -88,7 +88,17 @@ Phase 7:
 - [x] P7.T4 Cleanup endpoint and ingest --ai
 - [x] P7.T5 Live smoke test (written, skipped until RIFFSPACED_LIVE=1 and a key; see Waiting on owner)
 - [x] P7.T6 Frontend: AI menu and suggestions drawer
-- [ ] P7.T7 Chrome verification and phase exit
+- [x] P7.T7 Chrome verification and phase exit (Chrome tools could not inject into the page; verified with e2e/ai-real.spec.ts against the fake backend, see Known issues)
+
+Phase 8:
+- [ ] P8.T1 Transpose and retune tools
+- [ ] P8.T2 Find easier tuning
+- [ ] P8.T3 MusicXML export
+- [ ] P8.T4 WAV export and heavy voice (heavy voice shipped in Phase 4, DECISIONS 48)
+- [ ] P8.T5 CRT toggle and visual polish
+- [ ] P8.T6 Containers and compose, final
+- [ ] P8.T7 Public docs
+- [ ] P8.T8 Final verification and exit
 
 ## How to run right now
 ```
@@ -98,6 +108,8 @@ npm run e2e                                # Playwright: 12 specs; RIFFSPACED_RE
 # dev harness: http://localhost:5173/#/dev/fretboard
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
+RIFFSPACED_AI_FAKE=1 make dev              # same, with the AI routes answered by the deterministic fake (no key needed)
+RIFFSPACED_REAL_BACKEND=1 npx playwright test e2e/ai-real.spec.ts   # (from frontend/) the AI flow against that backend
 make check                                 # ruff, pytest
 make bench                                 # synthetic benchmark, writes docs/benchmarks/latest.md
 uv run python -m riffspaced.ingest audio_in --out riffs_out --tuning "Bb Standard"   # folder in, riff JSON out
@@ -108,6 +120,7 @@ docker compose up --build                  # frontend :8080, backend :8000
 ```
 
 ## Known issues
+- Claude in Chrome cannot run scripts in the app page in this environment: screenshots, page reads and finds time out ("Script injection timed out", "Page still loading, waited 45000ms for document_idle") on both the Vite dev page (5173) and the production preview (8080); console reads work and were clean. Per CLAUDE.md the Playwright suites are the gate; Phase 7's Chrome script was run as `e2e/ai-real.spec.ts` against the backend with the fake client (analyze, 23 labels, variations, audition with sounding notes, add as variation, undo, three tunings; console clean), screenshots in docs/screenshots/phase-07/real-*.png. Step 5 of the script (menu disabled without a key) is covered by the mocked `e2e/ai.spec.ts` and `/health` reporting aiConfigured false without the fake.
 - Commit 589a837 (Phase 6 close) had a red frontend CI job: with no backend in CI, Chromium logs the health poll's refused connection as a console error and the e2e suite counted it. Fixed in the next commit by ignoring resource errors from the optional backend's endpoints in the test helper; reproduced locally with the backend stopped before the fix went in.
 - Commit a90199a has a red CI run (one unit test); fixed in f3846f8, CI green since. Cause: a shell pipeline masked the gate's exit code. Gates now run with explicit exit codes.
 - Claude in Chrome: console reading works (clean), but script injection for screenshots and page reads times out on the Vite dev page in this session ("Page still loading"). Playwright is the gate and produces the committed screenshots; the Chrome pass is retried each UI phase.

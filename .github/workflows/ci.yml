@@ -42,6 +42,9 @@ jobs:
   backend:
     name: backend gate
     runs-on: ubuntu-latest
+    env:
+      # No API key in CI: the AI layer runs on the deterministic fake (DECISIONS 54).
+      RIFFSPACED_AI_FAKE: "1"
     defaults:
       run:
         working-directory: backend

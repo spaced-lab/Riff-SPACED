@@ -103,3 +103,20 @@ Read these commits:
 - `3d823bf` test(analysis): a benchmark earns its keep when it disagrees with you.
 
 Postscript (2026-10-25): the owner's first three real recordings went through the pipeline. The synthetic benchmark was honest about what it measured and silent about what it did not: the real rig produced a flat interval histogram and no palm mutes at all. The lesson is in `docs/benchmarks/real-audio-notes.md`: a benchmark rendered by the same model the analyzer assumes can only confirm the assumptions.
+
+## Phase 7: the model is an untrusted collaborator
+
+Built: the owner's style directive as a versioned prompt file, three task prompts rendered from the sources of truth, a JSON client that parses, validates and retries once, a deterministic fake so everything runs without a key, the analyze, suggest and cleanup endpoints with their post-processing rules, `ingest --ai`, a skipped live smoke test, the AI menu, the analysis panel with dyad chips and tab labels, the suggestions drawer with audition and undoable accept, and `docs/AI_LAYER.md`. Alongside: the outboard transcription guide and checker the owner asked for, and the first pass over the owner's real recordings.
+
+Key idea: give the model the arithmetic and keep the judgment for it, then treat every answer as input. The backend precomputes pitches, intervals and positions; the model names the music and writes riffs; the backend validates, repairs fingerings, restores the tuning, replays only the declared cleanup edits, and labels anything it had to fill in. On the frontend the same stance: a suggestion is heard through a transient riff the engine prefers, and accepted through the same `commit` as every edit, so nothing the AI does reaches the owner's riff without a click and an undo step.
+
+Read these commits:
+
+- `0de0a98` feat(ai): the directive verbatim, prompts as templates, one retry and then refusal.
+- `f1f812a` feat(ai): facts for the model, the computed fallback that keeps every chord labeled.
+- `00d91f1` feat(ai): decide what a change meant before undoing it (tuning restore keeps pitches).
+- `efc0d32` feat(ai): enforce an edit policy by replaying declared edits from the original.
+- `7bf0f69` test(ai): a worked example made in the model's seat, labeled honestly.
+- `3d74742` feat(frontend): audition as a transient playable, accept as a pure function.
+- `955fc7e` docs(analysis): a second producer gets the same contract, not a translation layer.
+- `6a9ec67` docs(analysis): what the first real recordings said about the synthetic benchmark.

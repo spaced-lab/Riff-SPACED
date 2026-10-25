@@ -157,6 +157,35 @@ not contain: the implied intervals between the held Ab2 and the walking bass (th
 label notes that share a `chordId`), and the reading of the open Bb1 as the loop's point of
 rest a major third below the key center rather than as a wrong note.
 
+## The frontend side
+
+`frontend/src/ai/` and `frontend/src/store/aiSlice.ts` (SPEC 9.3). The AI menu is enabled only
+when `/health` reports the backend up with `aiConfigured` true; otherwise each item carries
+the reason as a tooltip (`backend unreachable at ...`, `ANTHROPIC_API_KEY not set`, `open a
+riff first`, or what is running). AI > Settings is a themed form for the backend URL and an
+optional model name sent as `X-Riffspaced-Model`.
+
+- **Analyze** fills the inspector's analysis panel: one chip per dyad (click selects the
+  chord's notes and moves the cursor), dashed when the backend computed it, plus the style
+  reading, devices, turnaround flag and warnings. View > Dyad labels draws the same labels
+  above the chord brackets in the tab. The panel belongs to the riff it was made for and
+  disappears when another riff opens.
+- **Suggest** opens the right-side drawer and appends cards: name, rationale, playing
+  notes, the backend's repairs, a fixed-size mini fretboard with every position used, and
+  four buttons. A second request of the same kind sends the cards already shown as `avoid`.
+- **Audition** sets `auditionRiff` in the store; the engine's `playableFrom` prefers it, so
+  the suggestion plays whole through the chosen voice while the open riff is untouched and
+  the fretboard shows the suggestion. Stop (the card, Space, the transport) clears it.
+- **Add as variation** is `commit('add ... from AI', riff => appendAsVariation(riff, s))`:
+  a new `variation` section after the riff, notes shifted and re-identified, chordIds
+  namespaced, tuning required to match (a suggestion in another tuning can only become a
+  new riff). One commit, one undo step.
+- **Add as new riff** copies the suggestion into the library as a sibling tagged `ai`
+  without leaving the open riff.
+
+`/ai/cleanup` is used by `ingest --ai` and is not yet wired into File > Import from audio;
+that is in the backlog.
+
 ## Waiting on owner: the live smoke test
 
 `backend/tests/live/test_ai_live.py` analyzes the demo walkdown (asserting the turnaround
