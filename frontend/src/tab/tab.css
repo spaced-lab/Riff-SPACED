@@ -1,0 +1,161 @@
+/* Tab lanes (SPEC 5.4). Colors come from the theme. */
+.tab {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  border: 1px solid var(--color-dim);
+  background: var(--color-bg);
+}
+
+.tab__gutter {
+  flex: 0 0 44px;
+  border-right: 1px solid var(--color-dim);
+}
+
+.tab__gutter svg {
+  display: block;
+}
+
+.tab__gutter text {
+  fill: var(--color-mid);
+  font-size: 11px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+.tab__scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.tab__scroll svg {
+  display: block;
+  user-select: none;
+}
+
+.tab-ruler__bar {
+  fill: var(--color-fg);
+  font-size: 11px;
+}
+
+.tab-ruler__section {
+  fill: var(--color-mid);
+  font-size: 10px;
+  text-transform: lowercase;
+}
+
+.tab-ruler__hit {
+  fill: transparent;
+  cursor: text;
+}
+
+.tab-grid__bar {
+  stroke: var(--color-mid);
+  stroke-width: 1.5;
+}
+
+.tab-grid__beat {
+  stroke: var(--color-dim);
+  stroke-width: 1;
+}
+
+.tab-grid__step {
+  stroke: var(--color-dim);
+  stroke-width: 0.5;
+  opacity: 0.6;
+}
+
+.tab-lane__line {
+  stroke: var(--color-dim);
+  stroke-width: 1;
+}
+
+.tab-loop {
+  fill: var(--color-dim);
+  opacity: 0.12;
+}
+
+.tab-note rect {
+  fill: var(--color-bg);
+  stroke: var(--color-fg);
+  stroke-width: 1.2;
+}
+
+.tab-note text {
+  fill: var(--color-fg);
+  font-size: 12px;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.tab-note--palm-mute .tab-note__mute {
+  stroke: var(--color-fg);
+  stroke-width: 2;
+  stroke-dasharray: 2 2;
+}
+
+.tab-note--selected rect {
+  fill: var(--color-dim);
+  stroke: #ffffff;
+  stroke-width: 1.6;
+}
+
+.tab-note--sounding rect {
+  fill: var(--color-flash);
+}
+
+.tab-note--sounding text {
+  fill: var(--color-dot-text);
+}
+
+.tab-note--low rect {
+  stroke: var(--color-warn);
+}
+
+.tab-note--low text {
+  fill: var(--color-warn);
+}
+
+.tab-note--unplayable rect {
+  stroke: var(--color-warn);
+  stroke-dasharray: 3 2;
+}
+
+.tab-note--unplayable text {
+  fill: var(--color-warn);
+}
+
+.tab-note__resize {
+  fill: transparent;
+  cursor: ew-resize;
+}
+
+.tab-chord {
+  stroke: var(--color-mid);
+  stroke-width: 1;
+  fill: none;
+}
+
+.tab-playhead {
+  stroke: var(--color-flash);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
+.tab-cursor {
+  stroke: var(--color-mid);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+}
+
+.tab-marquee {
+  fill: var(--color-dim);
+  fill-opacity: 0.25;
+  stroke: var(--color-fg);
+  stroke-dasharray: 3 2;
+  pointer-events: none;
+}

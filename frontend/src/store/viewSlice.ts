@@ -1,5 +1,6 @@
 import type { StateCreator } from 'zustand';
 import type { Accidentals } from '@/music/naming';
+import type { GridName } from '@/music/time';
 import type { AppState } from './types';
 
 export type FretRange = { from: number; to: number };
@@ -23,6 +24,12 @@ export type ViewSlice = {
   /** Dim all other notes of the current bar behind the ones at the cursor (Phase 3). */
   ghostNotes: boolean;
   panels: { library: boolean; inspector: boolean };
+  /** Editor grid resolution: note entry duration and snapping (SPEC 3.4). */
+  grid: GridName;
+  /** Tab lane zoom in pixels per bar, 120..1200. */
+  pxPerBar: number;
+  setGrid: (grid: GridName) => void;
+  setPxPerBar: (px: number) => void;
   setShowLetters: (on: boolean) => void;
   setAccidentals: (a: Accidentals) => void;
   setFretRange: (range: FretRange) => void;
@@ -40,6 +47,10 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   splitView: false,
   ghostNotes: true,
   panels: { library: true, inspector: true },
+  grid: '1/16',
+  pxPerBar: 320,
+  setGrid: (grid) => set({ grid }),
+  setPxPerBar: (px) => set({ pxPerBar: clampZoom(px) }),
   setShowLetters: (showLetters) => set({ showLetters }),
   setAccidentals: (accidentals) => set({ accidentals }),
   setFretRange: (fretRange) => set({ fretRange: clampRange(fretRange) }),
@@ -54,4 +65,11 @@ export function clampRange(range: FretRange): FretRange {
   const from = Math.max(0, Math.min(23, Math.floor(range.from)));
   const to = Math.max(from + 1, Math.min(24, Math.floor(range.to)));
   return { from, to };
+}
+
+export const MIN_PX_PER_BAR = 120;
+export const MAX_PX_PER_BAR = 1200;
+
+export function clampZoom(px: number): number {
+  return Math.max(MIN_PX_PER_BAR, Math.min(MAX_PX_PER_BAR, Math.round(px)));
 }

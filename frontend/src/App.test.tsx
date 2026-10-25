@@ -15,7 +15,7 @@ describe('App', () => {
     const { container } = render(<App />);
     expect(screen.getByText('RIFF-SPACED')).toBeInTheDocument();
     expect(container.querySelectorAll('[data-note-id]').length).toBeGreaterThan(0);
-    expect(screen.getByTestId('placeholder-tab-lanes')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-lanes')).toBeInTheDocument();
     expect(screen.getByTestId('placeholder-inspector')).toBeInTheDocument();
     expect(screen.getByTestId('status-bar')).toHaveTextContent('Bb Standard');
   });

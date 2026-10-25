@@ -1,6 +1,7 @@
 import { Placeholder } from '@/components/Placeholder';
 import { DevToolbar } from '@/dev/DevToolbar';
 import { Fretboard } from '@/fretboard/Fretboard';
+import { TabLanes } from '@/tab/TabLanes';
 import { useStore } from '@/store';
 import './shell.css';
 
@@ -54,8 +55,8 @@ export function Shell() {
         <section className="shell__transport">
           <Placeholder name="Transport" phase={4} />
         </section>
-        <section className="shell__tab">
-          <Placeholder name="Tab lanes" phase={3} />
+        <section className="shell__tab" aria-label="tab lanes">
+          <TabLanes />
         </section>
       </main>
 
