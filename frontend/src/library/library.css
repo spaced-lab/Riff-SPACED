@@ -1,0 +1,144 @@
+.library {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--color-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.library__search {
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.library__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.library__chip {
+  padding: 1px 6px;
+  font-size: 11px;
+  border-color: var(--color-dim);
+  color: var(--color-mid);
+}
+
+.library__chip--on {
+  border-color: var(--color-fg);
+  color: var(--color-fg);
+  background: var(--color-dim);
+}
+
+.library__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.library__toggle {
+  border: none;
+  background: transparent;
+  padding: 2px 0;
+  color: var(--color-mid);
+  text-align: left;
+}
+
+.library__count {
+  color: var(--color-dim);
+}
+
+.library__new {
+  padding: 0 6px;
+  line-height: 1.2;
+}
+
+.library ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.library__item {
+  display: flex;
+  flex-direction: column;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.library__item:hover {
+  border-color: var(--color-dim);
+}
+
+.library__item--current {
+  border-color: var(--color-fg);
+  background: var(--color-dim);
+}
+
+.library__item--drop {
+  border-color: var(--color-flash);
+  border-style: dashed;
+}
+
+.library__name {
+  color: var(--color-fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library__dirty {
+  margin-left: 6px;
+  color: var(--color-warn);
+  font-size: 9px;
+  vertical-align: middle;
+}
+
+.library__meta {
+  color: var(--color-mid);
+  font-size: 11px;
+}
+
+.library__empty {
+  color: var(--color-dim);
+  padding: 2px 6px;
+}
+
+.library__menu {
+  position: fixed;
+  z-index: 60;
+  min-width: 140px;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-fg);
+}
+
+.library__menu li button {
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 0;
+  padding: 3px 10px;
+}
+
+.library__menu li button:hover {
+  background: var(--color-dim);
+}
+
+.library__menu li button:disabled {
+  color: var(--color-dim);
+}
+
+.library__menu-danger {
+  color: var(--color-warn);
+}

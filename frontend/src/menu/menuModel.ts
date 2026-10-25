@@ -61,8 +61,13 @@ export function buildMenus(s: AppState): Menu[] {
       label: 'File',
       items: [
         { type: 'item', id: 'file.newRiff', label: 'New riff', action: () => s.createRiff() },
-        later('file.newArrangement', 'New arrangement', 'Phase 5, task 3'),
-        later('file.newSong', 'New song', 'Phase 5, task 3'),
+        {
+          type: 'item',
+          id: 'file.newArrangement',
+          label: 'New arrangement',
+          action: () => s.createArrangement(),
+        },
+        { type: 'item', id: 'file.newSong', label: 'New song', action: () => s.createSong() },
         {
           type: 'item',
           id: 'file.openLibrary',

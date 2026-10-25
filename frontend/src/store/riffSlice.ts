@@ -45,9 +45,12 @@ export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, 
     set((state) => {
       const next = change(state.riff);
       if (next === state.riff) return {};
+      const id = state.currentRiffId;
       return {
         riff: { ...next, updatedAt: new Date().toISOString() },
         history: pushHistory(state.history, label, state.riff),
+        dirtyRiffIds:
+          id && !state.dirtyRiffIds.includes(id) ? [...state.dirtyRiffIds, id] : state.dirtyRiffIds,
       };
     }),
 

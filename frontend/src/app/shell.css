@@ -104,3 +104,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.shell__editor-placeholder {
+  height: 60px;
+}

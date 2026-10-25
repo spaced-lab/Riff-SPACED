@@ -53,7 +53,7 @@ describe('App', () => {
     fireEvent.click(container.querySelector('[data-menu-item="file.open:demo-riff-tritone"]')!);
     expect(useStore.getState().riff.name).toBe('Tritone Chug');
     act(() => useStore.getState().togglePanel('library'));
-    expect(screen.queryByTestId('placeholder-library')).toBeNull();
+    expect(screen.queryByTestId('library-panel')).toBeNull();
   });
 
   it('routes /#/dev/fretboard to the harness with four boards', () => {

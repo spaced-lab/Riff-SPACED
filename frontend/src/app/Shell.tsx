@@ -3,6 +3,7 @@ import { Toasts } from '@/components/Toast';
 import { MenuBar } from '@/menu/MenuBar';
 import { Placeholder } from '@/components/Placeholder';
 import { Inspector } from '@/inspector/Inspector';
+import { LibraryPanel } from '@/library/LibraryPanel';
 import { TransportBar } from '@/transport/TransportBar';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { SplitView } from '@/fretboard/SplitView';
@@ -31,6 +32,7 @@ export function Shell() {
   const highlightIds = useStore((s) => s.highlightIds);
   const panels = useStore((s) => s.panels);
   const splitView = useStore((s) => s.splitView);
+  const editing = useStore((s) => s.editing);
   const select = useStore((s) => s.select);
   const editCursorTick = useStore((s) => s.editCursorTick);
   const ghostNotes = useStore((s) => s.ghostNotes);
@@ -66,11 +68,19 @@ export function Shell() {
 
       {panels.library ? (
         <aside className="shell__library">
-          <Placeholder name="Library" phase={5} />
+          <LibraryPanel />
         </aside>
       ) : null}
 
       <main className="shell__center">
+        {editing !== 'riff' ? (
+          <section className="shell__editor-placeholder">
+            <Placeholder
+              name={editing === 'arrangement' ? 'Arrangement editor' : 'Song editor'}
+              phase={5}
+            />
+          </section>
+        ) : null}
         <section className="shell__fretboard" aria-label="fretboard area">
           {splitView ? (
             <SplitView />
