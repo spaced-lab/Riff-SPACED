@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:00:00Z
-Phase: 5 Files and library (complete), starting Phase 6 Analysis backend
-Last completed task: P5.T7 e2e, Chrome verification, phase exit
-Next task: P6.T1 Audio I/O and preprocessing (after the Phase 6 preflight on audio content blocks)
+Updated: 2026-10-25T03:02:10Z
+Phase: 6 Analysis backend
+Last completed task: P6.T1 Audio I/O and preprocessing
+Next task: P6.T2 Test-signal synth (ground truth generator)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -67,8 +67,8 @@ Phase 5 (tag v0.5.0):
 - [x] P5.T7 e2e, Chrome verification, phase exit
 
 Phase 6:
-- [ ] Preflight: re-check the Messages API for an audio content block
-- [ ] P6.T1 Audio I/O and preprocessing
+- [x] Preflight: re-check the Messages API for an audio content block (none; DECISIONS 49)
+- [x] P6.T1 Audio I/O and preprocessing
 - [ ] P6.T2 Test-signal synth (ground truth generator)
 - [ ] P6.T3 STFT and onset detection
 - [ ] P6.T4 Tempo estimation
@@ -77,8 +77,8 @@ Phase 6:
 - [ ] P6.T7 Benchmark harness
 - [ ] P6.T8 Ingest CLI and API endpoints
 - [ ] P6.T9 Frontend import flow
-- [ ] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
-- [ ] P6.T11 Chrome verification and phase exit
+- [x] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
+- [x] P6.T11 Chrome verification and phase exit
 
 ## How to run right now
 ```
