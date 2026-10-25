@@ -4,8 +4,10 @@
     (optional: --bpm 92, --max-fret 12, --strings 6,5,4, --ai)
 
 Every supported file in the folder becomes `<name>.riff.json` and `<name>.report.md`.
-The exit code is non-zero when any file failed. `--ai` runs the Claude cleanup pass once
-Phase 7 lands; until then it prints a notice and does nothing else.
+With `--ai`, the Claude cleanup pass (SPEC 9.2) also writes `<name>.clean.riff.json` and
+`<name>.cleanup.md`; the raw riff is kept so the two can be compared. Without a key (and
+without RIFFSPACED_AI_FAKE=1) the flag prints a notice and the analysis runs alone.
+The exit code is non-zero when any file failed to analyze.
 """
 
 from __future__ import annotations
@@ -13,8 +15,13 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
+from riffspaced.ai.cleanup import cleanup_riff
+from riffspaced.ai.client import AiClient, AiError, AiNotConfiguredError, make_client
+from riffspaced.analysis.emit import Report
 from riffspaced.analysis.io import FFMPEG_EXTENSIONS, SOUNDFILE_EXTENSIONS, UnsupportedFormat
 from riffspaced.analysis.pipeline import AnalyzeOptions, analyze
 from riffspaced.model.validate import ValidationError
@@ -27,14 +34,58 @@ def audio_files(folder: Path) -> list[Path]:
     return sorted(p for p in folder.iterdir() if p.is_file() and p.suffix.lower() in SUPPORTED)
 
 
-def ingest_file(path: Path, out_dir: Path, options: AnalyzeOptions) -> tuple[Path, Path]:
+@dataclass
+class IngestResult:
+    """One analyzed file: the documents and where they were written."""
+
+    riff: dict[str, Any]
+    report: Report
+    riff_path: Path
+    report_path: Path
+
+
+def ingest_file(path: Path, out_dir: Path, options: AnalyzeOptions) -> IngestResult:
     """Analyze one file and write its riff and report next to each other in `out_dir`."""
     riff, report = analyze(path, options)
     riff_path = out_dir / f"{path.stem}.riff.json"
     report_path = out_dir / f"{path.stem}.report.md"
     riff_path.write_text(json.dumps(riff, indent=2) + "\n")
     report_path.write_text(report.to_markdown(path.stem))
-    return riff_path, report_path
+    return IngestResult(riff, report, riff_path, report_path)
+
+
+def cleanup_markdown(name: str, result: dict[str, Any]) -> str:
+    """`<name>.cleanup.md`: what the model changed, what the backend refused."""
+    lines = [f"# {name}: AI cleanup", ""]
+    lines.append(f"- model: {result['model']}, prompt version {result['promptVersion']}")
+    usage = result.get("usage") or {}
+    if usage:
+        lines.append(
+            f"- tokens: {usage.get('inputTokens', 0)} in, {usage.get('outputTokens', 0)} out, "
+            f"{usage.get('attempts', 1)} attempt(s)"
+        )
+    lines.append(f"- notes: {len(result['riff']['notes'])} after cleanup")
+    lines += ["", "## changes"]
+    lines += [f"- {c['kind']} {', '.join(c['noteIds'])}: {c['reason']}" for c in result["changes"]]
+    if not result["changes"]:
+        lines.append("- none")
+    if result["rejected"]:
+        lines += ["", "## rejected by the backend"]
+        lines += [
+            f"- {r['kind']} {', '.join(r['noteIds'])}: {r['rejectedBecause']}"
+            for r in result["rejected"]
+        ]
+    return "\n".join(lines) + "\n"
+
+
+def run_cleanup(result: IngestResult, out_dir: Path, client: AiClient) -> tuple[Path, int]:
+    """Cleanup pass for one analyzed file; returns the cleaned riff path and the change count."""
+    cleaned = cleanup_riff(result.riff, result.report.to_dict(), client)
+    stem = result.riff_path.name.removesuffix(".riff.json")
+    clean_path = out_dir / f"{stem}.clean.riff.json"
+    clean_path.write_text(json.dumps(cleaned["riff"], indent=2) + "\n")
+    (out_dir / f"{stem}.cleanup.md").write_text(cleanup_markdown(stem, cleaned))
+    return clean_path, len(cleaned["changes"])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -74,8 +125,12 @@ def main(argv: list[str] | None = None) -> int:
     if not files:
         print(f"nothing to do: no {', '.join(SUPPORTED)} files in {folder}", file=sys.stderr)
         return 1
+    client: AiClient | None = None
     if args.ai:
-        print("note: --ai is wired in Phase 7; running the analysis only")
+        try:
+            client = make_client()
+        except AiNotConfiguredError as error:
+            print(f"note: --ai skipped, {error}; running the analysis only")
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -83,15 +138,21 @@ def main(argv: list[str] | None = None) -> int:
     for i, path in enumerate(files, 1):
         print(f"[{i}/{len(files)}] {path.name} ...", end=" ", flush=True)
         try:
-            riff_path, report_path = ingest_file(path, out_dir, options)
+            result = ingest_file(path, out_dir, options)
         except (UnsupportedFormat, ValidationError, ValueError, OSError) as error:
             failures += 1
             print(f"failed: {error}")
             continue
-        riff = json.loads(riff_path.read_text())
-        notes = len(riff["notes"])
-        bpm = riff["tempo"]["bpm"]
-        print(f"{notes} notes, {bpm} bpm -> {riff_path.name}, {report_path.name}")
+        notes = len(result.riff["notes"])
+        bpm = result.riff["tempo"]["bpm"]
+        line = f"{notes} notes, {bpm} bpm -> {result.riff_path.name}, {result.report_path.name}"
+        if client is not None:
+            try:
+                clean_path, changed = run_cleanup(result, out_dir, client)
+                line += f", {clean_path.name} ({changed} change(s))"
+            except AiError as error:
+                line += f", cleanup failed: {error}"
+        print(line)
     ok = len(files) - failures
     print(f"done: {ok} ok, {failures} failed, output in {out_dir}")
     return 1 if failures else 0

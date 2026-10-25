@@ -7,6 +7,7 @@ Routes:
 - POST /analyze/batch     several files -> a list of results, one per file, failures included
 - POST /ai/analyze        riff JSON -> dyad labels and a style reading (SPEC 9.2)
 - POST /ai/suggest        { riff, kind, count, intent?, avoid? } -> suggested riffs (SPEC 9.2)
+- POST /ai/cleanup        { riff, report? } -> corrected imported riff plus changes (SPEC 9.2)
 
 AI routes answer 503 `{"reason": "ANTHROPIC_API_KEY not set"}` when no key and no fake client
 is configured, 502 `{"reason": ...}` when the model's answer could not be used, and 400 when
@@ -34,6 +35,7 @@ from pydantic import BaseModel, Field
 
 from riffspaced import __version__
 from riffspaced.ai.analyze import analyze_riff
+from riffspaced.ai.cleanup import cleanup_riff
 from riffspaced.ai.client import AiClient, AiError, AiNotConfiguredError, ai_configured, make_client
 from riffspaced.ai.schemas import SUGGEST_KINDS
 from riffspaced.ai.suggest import suggest
@@ -128,6 +130,13 @@ class SuggestRequest(BaseModel):
     count: int = Field(default=2, ge=1, le=4)
     intent: str | None = Field(default=None, max_length=2000)
     avoid: list[str] = Field(default_factory=list, max_length=40)
+
+
+class CleanupRequest(BaseModel):
+    """Body of POST /ai/cleanup: an imported riff and, if available, its analysis report."""
+
+    riff: dict[str, Any]
+    report: dict[str, Any] = Field(default_factory=dict)
 
 
 def ai_client_for(model_header: str | None) -> AiClient:
@@ -243,6 +252,18 @@ def create_app() -> FastAPI:
         return await run_ai(
             suggest, body.riff, body.kind, body.count, client, body.intent, body.avoid
         )
+
+    @app.post("/ai/cleanup")
+    async def ai_cleanup(
+        body: CleanupRequest,
+        x_riffspaced_model: str | None = Header(default=None),
+    ) -> Any:
+        """Bounded repair of an imported riff; every accepted change is listed (SPEC 9.2)."""
+        try:
+            client = ai_client_for(x_riffspaced_model)
+        except AiNotConfiguredError as error:
+            return JSONResponse(status_code=503, content={"reason": error.reason})
+        return await run_ai(cleanup_riff, body.riff, body.report, client)
 
     return app
 
