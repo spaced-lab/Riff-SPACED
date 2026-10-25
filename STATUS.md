@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T02:31:07Z
-Phase: 4 Playback
-Last completed task: P4.T6 Offline render and non-silence test
-Next task: P4.T7 Chrome verification and phase exit
+Updated: 2026-10-25T02:32:19Z
+Phase: 4 Playback (complete), starting Phase 5 Files and library
+Last completed task: P4.T7 Chrome verification and phase exit
+Next task: P5.T1 Menu bar and dialogs
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -48,20 +48,29 @@ Phase 3 (tag v0.3.0):
 - [x] P3.T6 Inspector for notes and dyads
 - [x] P3.T7 e2e, Chrome verification, phase exit
 
-Phase 4:
+Phase 4 (tag v0.4.0):
 - [x] P4.T1 Audio engine core (no React)
 - [x] P4.T2 Voices
 - [x] P4.T3 Transport and store integration
 - [x] P4.T4 Visual sync: fretboard flash and playhead
 - [x] P4.T5 Four-way split view
 - [x] P4.T6 Offline render and non-silence test
-- [ ] P4.T7 Chrome verification and phase exit
+- [x] P4.T7 Chrome verification and phase exit
+
+Phase 5:
+- [ ] P5.T1 Menu bar and dialogs
+- [ ] P5.T2 Library store and panel
+- [ ] P5.T3 Arrangement and song editors
+- [ ] P5.T4 File open and save
+- [ ] P5.T5 Text tab export
+- [ ] P5.T6 MIDI export
+- [ ] P5.T7 e2e, Chrome verification, phase exit
 
 ## How to run right now
 ```
 cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
-npm run e2e                                # Playwright: smoke, fretboard, editor specs
+npm run e2e                                # Playwright: smoke, fretboard, editor, playback, split view, render specs
 # dev harness: http://localhost:5173/#/dev/fretboard
 
 cd backend && make install && make dev     # http://localhost:8000/health, /docs

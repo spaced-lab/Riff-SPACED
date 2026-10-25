@@ -57,3 +57,17 @@ Read these commits:
 - `6d8e23f` feat(editor): invalid section states made impossible by construction; the themed confirm.
 - `a90199a` feat(store): undo/redo and autosave, and the quarantine rule (never destroy what you cannot read).
 - `f3846f8` fix(store): the pipeline exit-code lesson, worth reading before trusting any `cmd | grep` gate.
+
+## Phase 4: two clocks, one scheduler
+
+Built: the lookahead scheduler with an injectable clock, the basic and heavy voices, the metronome, the master bus, the engine that binds them to the store and the animation frame, the transport, section solo, count-in, visual sync with a measured jitter readout, the four-way split view, the offline WAV render, and `docs/AUDIO_ENGINE.md`.
+
+Key idea: the main thread's timers are jittery and the audio clock is exact, so a coarse timer schedules precise events a little ahead, and the visuals read the audio clock back. Counting in absolute ticks makes loop wraps seamless; a scheduled-key set makes edits during playback safe; injecting the clock makes the same scheduler run in tests, in the browser, and offline.
+
+Read these commits:
+
+- `63978f6` feat(audio): the scheduler and the fake clock that proves its timing to a microsecond.
+- `7631d20` feat(audio): voices whose whole envelope is scheduled at noteOn, tested against a recording fake of Web Audio.
+- `6733667` feat(playback): the engine, and why "I want to play" and "it is playing" are different fields.
+- `169e8fc` feat(playback): visuals read the audio clock; two UI traps (overflow hides controls, a checkbox is not a text field).
+- `a3e7b71` feat(audio): offline rendering by swapping the clock, and the WAV header by hand.
