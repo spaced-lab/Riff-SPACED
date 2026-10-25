@@ -162,7 +162,12 @@ export function buildMenus(s: AppState): Menu[] {
               label: 'Text tab',
               action: () => void s.exportTextTab(),
             },
-            later('file.export.musicxml', 'MusicXML', 8),
+            {
+              type: 'item',
+              id: 'file.export.musicxml',
+              label: 'MusicXML',
+              action: () => void s.exportMusicXml(),
+            },
             later('file.export.wav', 'WAV...', 8),
             later('file.export.pdf', 'PDF', 'backlog'),
           ],

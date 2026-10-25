@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T11:10:00Z
+Updated: 2026-10-25T12:00:00Z
 Phase: 8 Polish and backlog promotion (in progress)
-Last completed task: P8.T2 Find easier tuning
-Next task: P8.T3 MusicXML export
+Last completed task: P8.T3 MusicXML export
+Next task: P8.T4 WAV export and heavy voice
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -93,7 +93,7 @@ Phase 7 (tag v0.7.0):
 Phase 8:
 - [x] P8.T1 Transpose and retune tools
 - [x] P8.T2 Find easier tuning
-- [ ] P8.T3 MusicXML export
+- [x] P8.T3 MusicXML export
 - [ ] P8.T4 WAV export and heavy voice (heavy voice shipped in Phase 4, DECISIONS 48)
 - [ ] P8.T5 CRT toggle and visual polish
 - [ ] P8.T6 Containers and compose, final
@@ -141,6 +141,7 @@ docker compose up --build                  # frontend :8080, backend :8000
 
 ## Waiting on owner (not blocking)
 
+- Open a MusicXML export (File > Export > MusicXML, or `shared/fixtures/golden/walkdown.musicxml`) in MuseScore or Guitar Pro once and report what the tab looks like (P8.T3 owner task).
 - The live AI smoke test (P7.T5) has not run: no `ANTHROPIC_API_KEY`. When one exists: `export ANTHROPIC_API_KEY=...` (or `backend/.env`), then `cd backend && RIFFSPACED_LIVE=1 uv run pytest tests/live -q -s`, and paste the printed summary and usage into docs/AI_LAYER.md. No code change.
 - For the three recordings in `injest-raw/`: were they played in Bb Standard? If not, which tuning? And for at least one of them, a tab or a description of the riff (frets or note names), so the analyzer's output can be scored. The low end of all three files peaks around F2, G2 and Eb2 and almost never at the open Bb1, which is either the rig's resonance or a different tuning (see the notes). Phase 7 continues meanwhile.
 

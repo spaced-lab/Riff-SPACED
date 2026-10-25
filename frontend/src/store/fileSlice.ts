@@ -12,6 +12,7 @@ import {
 import type { ParsedDocument } from '@/storage/documents';
 import { pushRecent, readRecent } from '@/storage/recent';
 import { riffToTextTab } from '@/export/texttab';
+import { musicXmlBlob } from '@/export/musicxml';
 import { midiBlob } from '@/export/midi';
 import { selectDisplayRiff } from './derived';
 import type { RecentEntry } from '@/storage/recent';
@@ -41,6 +42,8 @@ export type FileSlice = {
   copyTextTab: () => Promise<void>;
   /** File > Export > MIDI: asks about channel-per-string, then downloads <name>.mid. */
   exportMidi: () => void;
+  /** File > Export > MusicXML: downloads <name>.musicxml, a part-wise score with a TAB staff. */
+  exportMusicXml: () => Promise<void>;
 };
 
 export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, get) => ({
@@ -88,6 +91,14 @@ export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, 
         });
       },
     });
+  },
+
+  exportMusicXml: async () => {
+    get().syncCurrentRiff();
+    const riff = selectDisplayRiff(get()).riff;
+    const name = `${fileNameFor({ kind: 'riff', value: riff }).replace(/\.riff\.json$/, '')}.musicxml`;
+    const result = await saveFile(musicXmlBlob(riff), name, { forceAsk: true });
+    if (result) get().toast(`exported ${result.name}`);
   },
 
   copyTextTab: async () => {

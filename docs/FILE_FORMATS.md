@@ -10,6 +10,7 @@ What RIFF-SPACED reads and writes (Phase 5). Every document is plain JSON with a
 | `.riffspaced.json` | `riff-spaced/library` | everything: riffs, arrangements, songs (autosave, export, backup) |
 | `.tab.txt` | text | ASCII tab, export only |
 | `.mid` | Standard MIDI File | export only |
+| `.musicxml` | MusicXML 4.0, part-wise | export only (Phase 8) |
 
 ## The three tiers
 
@@ -74,9 +75,16 @@ Bb|0-3-3-3-3-3-3---|3-3-3-3-3-3-3---|3-3-3-3-3-3-3---|5-5-4-4-3-3-2-2-|
 
 Format 0, one track, 480 PPQ (the same ticks as the riff, so no rounding). Track name, tempo and 4/4 meta events, program change 30 (General MIDI distortion guitar), then note on/off per note with running status. Pitch is the sounding MIDI number from the tuning. Palm mute becomes a note half as long; other techniques are not expressed. Unplayable notes are left out. The export dialog offers one channel per string (string N on channel N-1), which lets a DAW split the strings onto separate instruments.
 
+## MusicXML mapping
+
+Part-wise MusicXML 4.0, one part, one TAB staff (`<clef><sign>TAB</sign>`), `<divisions>` 480 so riff ticks are score durations with no rounding, `<staff-details>` with one `<staff-tuning>` per string (line 1 is the lowest string, as MusicXML counts tab lines from the bottom), and the tempo as a metronome direction with `<sound tempo>`.
+
+MusicXML is sequential inside a measure, so the writer first turns notes into events (same start and duration), writes a chord as the first note followed by notes carrying `<chord/>`, and puts anything that overlaps another event into a second voice reached with `<backup>`; the walkdown's held Ab2 under the moving low string is the case that needs it. Events crossing a bar line are split with `<tie>` and `<tied>`. Gaps become rests. Each note carries `<technical><string>` and `<fret>` so notation apps draw real tab, palm mute is `<other-technical>palm mute</other-technical>`, hammer-ons, pull-offs and slides use their MusicXML elements, and unplayable notes are left out, as in MIDI. `shared/fixtures/golden/walkdown.musicxml` is the pinned output for the demo walkdown; the owner's task is to open an export in MuseScore or Guitar Pro once and report what it looks like.
+
 ## Where the code lives
 
 - `frontend/src/model/`: types, validation, migration, factories
 - `frontend/src/storage/`: pickers and fallbacks, handles, recents, document parsing and merging
+- `frontend/src/export/`: text tab, MIDI, WAV encoding, MusicXML
 - `frontend/src/export/`: text tab, MIDI, WAV (Phase 8), MusicXML (Phase 8)
 - `backend/riffspaced/model/`: the Python mirror of types, validation and migration

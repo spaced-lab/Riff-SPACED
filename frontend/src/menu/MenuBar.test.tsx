@@ -36,11 +36,11 @@ describe('MenuBar', () => {
       'title',
       expect.stringContaining('backend unreachable at'),
     );
-    expect(container.querySelector('[data-menu-item="file.export.musicxml"]')).toBeNull();
+    expect(container.querySelector('[data-menu-item="file.export.pdf"]')).toBeNull();
     fireEvent.click(container.querySelector('[data-menu-item="file.export"]')!);
-    expect(container.querySelector('[data-menu-item="file.export.musicxml"]')).toHaveAttribute(
+    expect(container.querySelector('[data-menu-item="file.export.pdf"]')).toHaveAttribute(
       'title',
-      'Phase 8',
+      'backlog',
     );
   });
 
