@@ -12,7 +12,7 @@ if (!rootElement) {
 
 // Load the autosaved library (or the demo on first run) before the first render, then
 // keep saving it as the riff changes.
-bootstrapStore(undefined);
+bootstrapStore(window.localStorage);
 startAutosave();
 
 createRoot(rootElement).render(

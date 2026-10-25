@@ -12,6 +12,7 @@ export function DevToolbar() {
   const library = useStore((s) => s.library);
   const currentRiffId = useStore((s) => s.currentRiffId);
   const openRiff = useStore((s) => s.openRiff);
+  const createRiff = useStore((s) => s.createRiff);
   const setTuning = useStore((s) => s.setTuning);
   const showLetters = useStore((s) => s.showLetters);
   const setShowLetters = useStore((s) => s.setShowLetters);
@@ -40,6 +41,14 @@ export function DevToolbar() {
           ))}
         </select>
       </label>
+
+      <button
+        type="button"
+        onClick={() => createRiff()}
+        title="new empty riff in the current tuning"
+      >
+        new riff
+      </button>
 
       <label>
         tuning

@@ -16,6 +16,8 @@ import { useStore } from './index';
 import { bundleToSave } from './librarySlice';
 
 export const STORAGE_KEY = 'riffspaced.library.v1';
+/** Which riff was open, so a reload lands where the owner left off. */
+export const CURRENT_KEY = 'riffspaced.current.v1';
 export const AUTOSAVE_DELAY_MS = 500;
 
 /** The subset of the Storage interface we use, so tests can pass a plain object. */
@@ -38,14 +40,22 @@ export type LoadResult = {
   bundle: LibraryBundle;
   source: 'storage' | 'demo';
   warning: string | null;
+  /** The riff to open, when it is still in the bundle. */
+  currentRiffId: string | null;
 };
 
 export function loadInitialLibrary(storage: KeyValueStorage | null = defaultStorage()): LoadResult {
   const raw = storage?.getItem(STORAGE_KEY) ?? null;
-  if (raw === null) return { bundle: loadDemoLibrary(), source: 'demo', warning: null };
+  if (raw === null) {
+    return { bundle: loadDemoLibrary(), source: 'demo', warning: null, currentRiffId: null };
+  }
   try {
     const result = validateLibrary(migrateLibrary(JSON.parse(raw)));
-    if (result.ok) return { bundle: result.value, source: 'storage', warning: null };
+    if (result.ok) {
+      const wanted = storage?.getItem(CURRENT_KEY) ?? null;
+      const currentRiffId = result.value.riffs.some((r) => r.id === wanted) ? wanted : null;
+      return { bundle: result.value, source: 'storage', warning: null, currentRiffId };
+    }
     return quarantine(storage, raw, result.errors[0] ?? 'invalid library');
   } catch (error) {
     return quarantine(storage, raw, error instanceof Error ? error.message : String(error));
@@ -64,6 +74,7 @@ function quarantine(storage: KeyValueStorage | null, raw: string, reason: string
     bundle: loadDemoLibrary(),
     source: 'demo',
     warning: `saved library could not be read (${reason}); it was moved to ${asideKey} and the demo library loaded`,
+    currentRiffId: null,
   };
 }
 
@@ -90,6 +101,7 @@ export function startAutosave(
     const state = useStore.getState();
     try {
       storage.setItem(STORAGE_KEY, JSON.stringify(bundleToSave(state)));
+      if (state.currentRiffId) storage.setItem(CURRENT_KEY, state.currentRiffId);
       state.setLastSavedAt(new Date().toISOString());
     } catch (error) {
       state.setStorageWarning(
@@ -98,7 +110,12 @@ export function startAutosave(
     }
   };
   const unsubscribe = useStore.subscribe((state, previous) => {
-    if (state.riff === previous.riff && state.library === previous.library) return;
+    if (
+      state.riff === previous.riff &&
+      state.library === previous.library &&
+      state.currentRiffId === previous.currentRiffId
+    )
+      return;
     if (timer !== null) clearTimeout(timer);
     timer = setTimeout(flush, delayMs);
   });

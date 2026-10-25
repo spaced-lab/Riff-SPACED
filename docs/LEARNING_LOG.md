@@ -42,3 +42,18 @@ Read these commits:
 - `19d6148` feat(fretboard): the component, hit rectangles for clickable neck, states as CSS classes.
 - `db8d613` feat(fretboard): two bugs worth remembering: object-returning Zustand selectors and Testing Library cleanup with globals off.
 - `4a55932` feat(app): the shell as a visible plan, and the stacked-dots hover lesson for Playwright.
+
+## Phase 3: an editor is a state machine and one mutation door
+
+Built: tab lanes with grid and zoom, note entry by click and keyboard with dyads, marquee / drag / resize / clipboard, sections and loop length with a themed confirm, undo and redo, localStorage autosave with quarantine of corrupt data, the note and dyad inspector, and `docs/EDITOR.md`.
+
+Key idea: two disciplines made the editor small. Every riff change is a pure function wrapped by `commit`, so undo, autosave, and timestamps live in one place. And every pointer gesture is a named state (idle, marquee, dragging, resizing) that previews locally and commits once on release, so a drag is one undo step and the store never sees intermediate positions.
+
+Read these commits:
+
+- `0396e0b` feat(tab): the lanes, the non-passive wheel listener, and the playhead ref.
+- `b5efdf9` feat(editor): keyboard handling as a pure function with injected timers.
+- `aef6bb6` feat(editor): the pointer state machine and one-commit gestures.
+- `6d8e23f` feat(editor): invalid section states made impossible by construction; the themed confirm.
+- `a90199a` feat(store): undo/redo and autosave, and the quarantine rule (never destroy what you cannot read).
+- `f3846f8` fix(store): the pipeline exit-code lesson, worth reading before trusting any `cmd | grep` gate.

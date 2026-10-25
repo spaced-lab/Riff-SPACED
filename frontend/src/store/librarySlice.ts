@@ -1,4 +1,5 @@
 import type { StateCreator } from 'zustand';
+import { newRiff } from '@/model/factories';
 import type { LibraryBundle, Riff } from '@/model/types';
 import type { AppState } from './types';
 
@@ -11,6 +12,8 @@ export type LibrarySlice = {
   currentRiffId: string | null;
   loadLibrary: (bundle: LibraryBundle) => void;
   openRiff: (id: string) => void;
+  /** Create an empty riff in the current tuning, add it to the library, and open it. */
+  createRiff: (name?: string) => Riff;
   /** Write the edited riff back into the bundle so the library reflects edits. */
   syncCurrentRiff: () => void;
   /** ISO time of the last autosave, for the status bar. */
@@ -46,6 +49,16 @@ export const createLibrarySlice: StateCreator<AppState, [], [], LibrarySlice> = 
     set({ library: bundle });
     const first = bundle.riffs[0];
     if (first) get().openRiff(first.id);
+  },
+
+  createRiff: (name = 'Untitled riff') => {
+    const state = get();
+    state.syncCurrentRiff();
+    const riff = newRiff(state.riff.tuning, { name });
+    const library = get().library;
+    set({ library: { ...library, riffs: [...library.riffs, riff] } });
+    get().openRiff(riff.id);
+    return riff;
   },
 
   openRiff: (id) => {

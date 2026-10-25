@@ -30,7 +30,10 @@ export const useStore = create<AppState>()((...a) => ({
  * Tests pass `null` storage to always get the demo library.
  */
 export function bootstrapStore(storage: KeyValueStorage | null | undefined = null): void {
-  const { bundle, warning } = loadInitialLibrary(storage === undefined ? undefined : storage);
+  const { bundle, warning, currentRiffId } = loadInitialLibrary(
+    storage === undefined ? undefined : storage,
+  );
   useStore.getState().loadLibrary(bundle);
+  if (currentRiffId) useStore.getState().openRiff(currentRiffId);
   useStore.getState().setStorageWarning(warning);
 }

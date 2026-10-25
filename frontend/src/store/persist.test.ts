@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { newNote } from '@/model/factories';
 import { bootstrapStore, useStore } from './index';
-import { STORAGE_KEY, loadInitialLibrary, startAutosave } from './persist';
+import { CURRENT_KEY, STORAGE_KEY, loadInitialLibrary, startAutosave } from './persist';
 import type { KeyValueStorage } from './persist';
 
 function memoryStorage(
@@ -28,12 +28,19 @@ describe('loadInitialLibrary', () => {
     expect(r.warning).toBeNull();
   });
 
-  it('loads a valid saved bundle', () => {
+  it('loads a valid saved bundle and remembers the open riff when it still exists', () => {
     const saved = loadInitialLibrary(memoryStorage()).bundle;
     saved.riffs[0]!.name = 'Edited';
-    const r = loadInitialLibrary(memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved) }));
+    const r = loadInitialLibrary(
+      memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved), [CURRENT_KEY]: 'demo-riff-tritone' }),
+    );
     expect(r.source).toBe('storage');
     expect(r.bundle.riffs[0]!.name).toBe('Edited');
+    expect(r.currentRiffId).toBe('demo-riff-tritone');
+    const gone = loadInitialLibrary(
+      memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved), [CURRENT_KEY]: 'deleted' }),
+    );
+    expect(gone.currentRiffId).toBeNull();
   });
 
   it('quarantines corrupt storage and loads the demo with a warning', () => {
@@ -85,6 +92,7 @@ describe('autosave', () => {
     vi.advanceTimersByTime(200);
     const saved = JSON.parse(storage.data[STORAGE_KEY]!);
     expect(saved.riffs[0].notes).toHaveLength(58);
+    expect(storage.data[CURRENT_KEY]).toBe('demo-riff-walkdown');
     expect(useStore.getState().lastSavedAt).not.toBeNull();
     const writes = Object.keys(storage.data).length;
     vi.advanceTimersByTime(2000);
@@ -103,6 +111,16 @@ describe('autosave', () => {
     useStore.getState().addNote(newNote({ string: 6, fret: 1, start: 0, duration: 120 }));
     vi.advanceTimersByTime(20);
     expect(useStore.getState().storageWarning).toMatch(/quota exceeded/);
+  });
+
+  it('bootstrapStore reopens the saved current riff', () => {
+    const storage = memoryStorage();
+    stop = startAutosave(storage, 10);
+    useStore.getState().openRiff('demo-riff-tritone');
+    vi.advanceTimersByTime(20);
+    useStore.setState(useStore.getInitialState(), true);
+    bootstrapStore(storage);
+    expect(useStore.getState().riff.name).toBe('Tritone Chug');
   });
 
   it('bootstrapStore surfaces the corruption warning', () => {
