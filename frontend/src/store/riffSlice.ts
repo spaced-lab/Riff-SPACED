@@ -2,7 +2,7 @@ import type { StateCreator } from 'zustand';
 import { newRiff } from '@/model/factories';
 import type { Note, Riff } from '@/model/types';
 import type { Tuning } from '@/music/tuning';
-import { emptyHistory, pushHistory } from './history';
+import { emptyHistory, pushHistory, redo as redoHistory, undo as undoHistory } from './history';
 import type { History } from './history';
 import * as ops from './riffOps';
 import type { AppState } from './types';
@@ -27,7 +27,15 @@ export type RiffSlice = {
    * Pitch-preserving retune arrives in Phase 8.
    */
   setTuning: (tuning: Tuning) => void;
+  undo: () => void;
+  redo: () => void;
 };
+
+/** Labels for the Edit menu: `undo add note`, or null when there is nothing to undo. */
+export const selectUndoLabel = (s: { history: History }): string | null =>
+  s.history.past[s.history.past.length - 1]?.label ?? null;
+export const selectRedoLabel = (s: { history: History }): string | null =>
+  s.history.future[s.history.future.length - 1]?.label ?? null;
 
 export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, get) => ({
   riff: newRiff(),
@@ -60,6 +68,17 @@ export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, 
         ? riff
         : { ...riff, tuning: { name: tuning.name, pitches: [...tuning.pitches] } },
     ),
+
+  undo: () =>
+    set((state) => {
+      const result = undoHistory(state.history, state.riff);
+      return result ? { ...result, selectedNoteIds: [] } : {};
+    }),
+  redo: () =>
+    set((state) => {
+      const result = redoHistory(state.history, state.riff);
+      return result ? { ...result, selectedNoteIds: [] } : {};
+    }),
 
   removeNotes: (ids) => {
     get().commit('remove notes', (riff) => ops.removeNotes(riff, ids));

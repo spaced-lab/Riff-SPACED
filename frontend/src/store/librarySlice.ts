@@ -13,7 +13,23 @@ export type LibrarySlice = {
   openRiff: (id: string) => void;
   /** Write the edited riff back into the bundle so the library reflects edits. */
   syncCurrentRiff: () => void;
+  /** ISO time of the last autosave, for the status bar. */
+  lastSavedAt: string | null;
+  setLastSavedAt: (iso: string) => void;
+  /** A non-blocking warning for the status bar (never a modal), e.g. corrupted storage. */
+  storageWarning: string | null;
+  setStorageWarning: (message: string | null) => void;
 };
+
+/** The bundle as it should be saved: the library with the current riff's edits folded in. */
+export function bundleToSave(
+  s: Pick<AppState, 'library' | 'riff' | 'currentRiffId'>,
+): LibraryBundle {
+  const riffs = s.currentRiffId
+    ? s.library.riffs.map((r) => (r.id === s.currentRiffId ? s.riff : r))
+    : s.library.riffs;
+  return { ...s.library, riffs, exportedAt: new Date().toISOString() };
+}
 
 export const createLibrarySlice: StateCreator<AppState, [], [], LibrarySlice> = (set, get) => ({
   library: {
@@ -40,6 +56,11 @@ export const createLibrarySlice: StateCreator<AppState, [], [], LibrarySlice> = 
     set({ currentRiffId: id });
     state.setRiff(structuredClone(riff));
   },
+
+  lastSavedAt: null,
+  setLastSavedAt: (lastSavedAt) => set({ lastSavedAt }),
+  storageWarning: null,
+  setStorageWarning: (storageWarning) => set({ storageWarning }),
 
   syncCurrentRiff: () => {
     const { currentRiffId, riff, library } = get();

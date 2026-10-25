@@ -35,6 +35,8 @@ export function Shell() {
   const activeLane = useStore((s) => s.activeLane);
   const addNoteAtCursor = useStore((s) => s.addNoteAtCursor);
   const removeNotes = useStore((s) => s.removeNotes);
+  const lastSavedAt = useStore((s) => s.lastSavedAt);
+  const storageWarning = useStore((s) => s.storageWarning);
   useKeyboard();
 
   // The fretboard shows what sounds at the edit cursor, with the rest of the bar as ghosts.
@@ -101,7 +103,16 @@ export function Shell() {
           <span data-testid="status-pending">fret: {pendingFret}_</span>
         ) : null}
         <span>backend: not checked (phase 6)</span>
-        <span>autosave: phase 3</span>
+        <span data-testid="status-saved">
+          {lastSavedAt
+            ? `saved ${new Date(lastSavedAt).toLocaleTimeString([], { hour12: false })}`
+            : 'not saved yet'}
+        </span>
+        {storageWarning ? (
+          <span className="shell__warning" data-testid="status-warning">
+            {storageWarning}
+          </span>
+        ) : null}
       </footer>
     </div>
   );

@@ -131,6 +131,21 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
         return true;
       }
       return false;
+    case 'z':
+    case 'Z':
+      if (mod) {
+        if (e.shiftKey) s.redo();
+        else s.undo();
+        return true;
+      }
+      return false;
+    case 'y':
+    case 'Y':
+      if (mod) {
+        s.redo();
+        return true;
+      }
+      return false;
     case 'c':
     case 'C':
       if (mod) {

@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T02:00:24Z
+Updated: 2026-10-25T02:02:32Z
 Phase: 3 Editor
-Last completed task: P3.T4 Sections, loop length, grid, quantize
-Next task: P3.T5 Undo/redo and autosave
+Last completed task: P3.T5 Undo/redo and autosave
+Next task: P3.T6 Inspector for notes and dyads
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -44,7 +44,7 @@ Phase 3:
 - [x] P3.T2 Note entry from the fretboard and keyboard
 - [x] P3.T3 Selection, drag, resize, clipboard
 - [x] P3.T4 Sections, loop length, grid, quantize
-- [ ] P3.T5 Undo/redo and autosave
+- [x] P3.T5 Undo/redo and autosave
 - [ ] P3.T6 Inspector for notes and dyads
 - [ ] P3.T7 e2e, Chrome verification, phase exit
 

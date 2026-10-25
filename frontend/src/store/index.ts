@@ -7,10 +7,11 @@ import { create } from 'zustand';
 import { createDialogSlice } from './dialogSlice';
 import { createEditorSlice } from './editorSlice';
 import { createLibrarySlice } from './librarySlice';
-import { loadInitialLibrary } from './persist';
 import { createRiffSlice } from './riffSlice';
 import { createSelectionSlice } from './selectionSlice';
 import type { AppState } from './types';
+import { loadInitialLibrary } from './persist';
+import type { KeyValueStorage } from './persist';
 import { createViewSlice } from './viewSlice';
 
 export type { AppState } from './types';
@@ -24,7 +25,12 @@ export const useStore = create<AppState>()((...a) => ({
   ...createDialogSlice(...a),
 }));
 
-/** Load the startup library once. Called from main.tsx, and by tests that want fresh state. */
-export function bootstrapStore(): void {
-  useStore.getState().loadLibrary(loadInitialLibrary());
+/**
+ * Load the startup library once. Called from main.tsx, and by tests that want fresh state.
+ * Tests pass `null` storage to always get the demo library.
+ */
+export function bootstrapStore(storage: KeyValueStorage | null | undefined = null): void {
+  const { bundle, warning } = loadInitialLibrary(storage === undefined ? undefined : storage);
+  useStore.getState().loadLibrary(bundle);
+  useStore.getState().setStorageWarning(warning);
 }

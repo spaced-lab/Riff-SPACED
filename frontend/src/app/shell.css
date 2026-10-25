@@ -92,3 +92,10 @@
     grid-template-rows: auto auto 1fr auto auto;
   }
 }
+
+.shell__warning {
+  color: var(--color-warn);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

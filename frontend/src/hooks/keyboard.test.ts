@@ -101,6 +101,19 @@ describe('keyboard', () => {
     expect(handleKey(key('a'), deps)).toBe(false);
   });
 
+  it('Ctrl/Cmd+Z undoes, Shift adds redo, Ctrl+Y redoes', () => {
+    handleKey(key('3'), deps);
+    handleKey(key('Enter'), deps);
+    expect(useStore.getState().riff.notes).toHaveLength(1);
+    handleKey(key('z', { metaKey: true }), deps);
+    expect(useStore.getState().riff.notes).toHaveLength(0);
+    handleKey(key('z', { metaKey: true, shiftKey: true }), deps);
+    expect(useStore.getState().riff.notes).toHaveLength(1);
+    handleKey(key('z', { ctrlKey: true }), deps);
+    handleKey(key('y', { ctrlKey: true }), deps);
+    expect(useStore.getState().riff.notes).toHaveLength(1);
+  });
+
   it('knows which targets are typing targets and lists the shortcut table', () => {
     const input = document.createElement('input');
     expect(isTypingTarget(input)).toBe(true);

@@ -1,0 +1,113 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { newNote } from '@/model/factories';
+import { bootstrapStore, useStore } from './index';
+import { STORAGE_KEY, loadInitialLibrary, startAutosave } from './persist';
+import type { KeyValueStorage } from './persist';
+
+function memoryStorage(
+  initial: Record<string, string> = {},
+): KeyValueStorage & { data: Record<string, string> } {
+  const data = { ...initial };
+  return {
+    data,
+    getItem: (k) => (k in data ? data[k]! : null),
+    setItem: (k, v) => {
+      data[k] = v;
+    },
+    removeItem: (k) => {
+      delete data[k];
+    },
+  };
+}
+
+describe('loadInitialLibrary', () => {
+  it('loads the demo when storage is empty', () => {
+    const r = loadInitialLibrary(memoryStorage());
+    expect(r.source).toBe('demo');
+    expect(r.bundle.riffs).toHaveLength(2);
+    expect(r.warning).toBeNull();
+  });
+
+  it('loads a valid saved bundle', () => {
+    const saved = loadInitialLibrary(memoryStorage()).bundle;
+    saved.riffs[0]!.name = 'Edited';
+    const r = loadInitialLibrary(memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved) }));
+    expect(r.source).toBe('storage');
+    expect(r.bundle.riffs[0]!.name).toBe('Edited');
+  });
+
+  it('quarantines corrupt storage and loads the demo with a warning', () => {
+    const storage = memoryStorage({ [STORAGE_KEY]: '{not json' });
+    const r = loadInitialLibrary(storage);
+    expect(r.source).toBe('demo');
+    expect(r.warning).toMatch(/could not be read/);
+    expect(storage.data[STORAGE_KEY]).toBeUndefined();
+    const aside = Object.keys(storage.data).find((k) => k.startsWith(`${STORAGE_KEY}.corrupt.`));
+    expect(aside).toBeDefined();
+    expect(storage.data[aside!]).toBe('{not json');
+
+    const invalid = memoryStorage({
+      [STORAGE_KEY]: JSON.stringify({
+        format: 'riff-spaced/library',
+        version: 1,
+        exportedAt: 'x',
+        riffs: 'no',
+        arrangements: [],
+        songs: [],
+      }),
+    });
+    expect(loadInitialLibrary(invalid).warning).toMatch(/riffs must be an array/);
+  });
+});
+
+describe('autosave', () => {
+  let stop = () => {};
+  beforeEach(() => {
+    vi.useFakeTimers();
+    useStore.setState(useStore.getInitialState(), true);
+    bootstrapStore();
+  });
+  afterEach(() => {
+    stop();
+    vi.useRealTimers();
+  });
+
+  it('debounces writes to 500 ms and records the save time', () => {
+    const storage = memoryStorage();
+    stop = startAutosave(storage, 500);
+    const s = useStore.getState();
+    s.addNote(newNote({ string: 6, fret: 1, start: 0, duration: 120 }));
+    vi.advanceTimersByTime(300);
+    s.addNote(newNote({ string: 6, fret: 2, start: 120, duration: 120 }));
+    vi.advanceTimersByTime(300);
+    expect(storage.data[STORAGE_KEY]).toBeUndefined();
+    vi.advanceTimersByTime(200);
+    const saved = JSON.parse(storage.data[STORAGE_KEY]!);
+    expect(saved.riffs[0].notes).toHaveLength(58);
+    expect(useStore.getState().lastSavedAt).not.toBeNull();
+    const writes = Object.keys(storage.data).length;
+    vi.advanceTimersByTime(2000);
+    expect(Object.keys(storage.data).length).toBe(writes);
+  });
+
+  it('reports a failing storage in the status warning instead of throwing', () => {
+    const broken: KeyValueStorage = {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error('quota exceeded');
+      },
+      removeItem: () => undefined,
+    };
+    stop = startAutosave(broken, 10);
+    useStore.getState().addNote(newNote({ string: 6, fret: 1, start: 0, duration: 120 }));
+    vi.advanceTimersByTime(20);
+    expect(useStore.getState().storageWarning).toMatch(/quota exceeded/);
+  });
+
+  it('bootstrapStore surfaces the corruption warning', () => {
+    useStore.setState(useStore.getInitialState(), true);
+    bootstrapStore(memoryStorage({ [STORAGE_KEY]: 'garbage' }));
+    expect(useStore.getState().storageWarning).toMatch(/moved to/);
+    expect(useStore.getState().riff.name).toBe('Walkdown Turnaround');
+  });
+});
