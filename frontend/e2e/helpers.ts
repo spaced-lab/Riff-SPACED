@@ -8,9 +8,15 @@ import type { Page } from '@playwright/test';
 export function watchConsole(page: Page): { errors: string[] } {
   const errors: string[] = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') {
-      errors.push(`console.error: ${message.text()}`);
-    }
+    if (message.type() !== 'error') return;
+    // The analysis backend is optional (SPEC 2.3). When it is down, the health poll's
+    // refused connection is logged by the browser itself as a resource error; that is the
+    // expected state in CI and not an app error, so it does not count.
+    const text = message.text();
+    const url = message.location().url ?? '';
+    if (text.startsWith('Failed to load resource') && /\/(health|tunings|analyze)(\?|$)/.test(url))
+      return;
+    errors.push(`console.error: ${text}`);
   });
   page.on('pageerror', (error) => {
     errors.push(`pageerror: ${error.message}`);

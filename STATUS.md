@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-10-25T03:56:45Z
+Updated: 2026-10-25T04:01:04Z
 Phase: 6 Analysis backend (complete), Phase 7 AI layer blocked on the API key
 Last completed task: P6.T11 Chrome verification and phase exit
 Next task: P7.T1 Prompt files and client wrapper (HARD STOP: ANTHROPIC_API_KEY is not set, see Waiting on owner)
@@ -107,6 +107,7 @@ docker compose up --build                  # frontend :8080, backend :8000
 ```
 
 ## Known issues
+- Commit 589a837 (Phase 6 close) had a red frontend CI job: with no backend in CI, Chromium logs the health poll's refused connection as a console error and the e2e suite counted it. Fixed in the next commit by ignoring resource errors from the optional backend's endpoints in the test helper; reproduced locally with the backend stopped before the fix went in.
 - Commit a90199a has a red CI run (one unit test); fixed in f3846f8, CI green since. Cause: a shell pipeline masked the gate's exit code. Gates now run with explicit exit codes.
 - Claude in Chrome: console reading works (clean), but script injection for screenshots and page reads times out on the Vite dev page in this session ("Page still loading"). Playwright is the gate and produces the committed screenshots; the Chrome pass is retried each UI phase.
 
