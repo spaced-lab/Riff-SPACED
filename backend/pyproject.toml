@@ -16,6 +16,7 @@ dependencies = [
   "anthropic>=0.40",
   "python-dotenv>=1.0",
   "python-multipart>=0.0.9",
+  "referencing>=0.37.0",
 ]
 
 [project.optional-dependencies]

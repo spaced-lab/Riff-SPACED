@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:27:29Z
+Updated: 2026-10-25T01:32:58Z
 Phase: 1 Music core
-Last completed task: P1.T4 Demo library fixture
-Next task: P1.T5 Python mirror of the music module and schemas
+Last completed task: P1.T5 Python mirror of the music module and schemas
+Next task: P1.T6 Docs and phase exit
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -28,7 +28,7 @@ Phase 1:
 - [x] P1.T2 TypeScript music module
 - [x] P1.T3 Document types, schemas, validation, migration (TypeScript)
 - [x] P1.T4 Demo library fixture
-- [ ] P1.T5 Python mirror of the music module and schemas
+- [x] P1.T5 Python mirror of the music module and schemas
 - [ ] P1.T6 Docs and phase exit
 
 ## How to run right now
