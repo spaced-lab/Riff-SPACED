@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:11:26Z
-Phase: 0 Bootstrap (complete), starting Phase 1 Music core
-Last completed task: P0.T7 Phase exit
-Next task: P1.T1 Shared conventions fixture
+Updated: 2026-10-25T01:21:32Z
+Phase: 1 Music core
+Last completed task: P1.T2 TypeScript music module
+Next task: P1.T3 Document types, schemas, validation, migration (TypeScript)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -24,8 +24,8 @@ Phase 0 (tag v0.0.0):
 - [x] P0.T7 Phase exit
 
 Phase 1:
-- [ ] P1.T1 Shared conventions fixture
-- [ ] P1.T2 TypeScript music module
+- [x] P1.T1 Shared conventions fixture
+- [x] P1.T2 TypeScript music module
 - [ ] P1.T3 Document types, schemas, validation, migration (TypeScript)
 - [ ] P1.T4 Demo library fixture
 - [ ] P1.T5 Python mirror of the music module and schemas

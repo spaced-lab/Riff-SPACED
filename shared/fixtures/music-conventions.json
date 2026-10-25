@@ -92,264 +92,108 @@
     "standard": [
       {
         "name": "E Standard",
-        "pitches": [
-          40,
-          45,
-          50,
-          55,
-          59,
-          64
-        ]
+        "pitches": [40, 45, 50, 55, 59, 64]
       },
       {
         "name": "Eb Standard",
-        "pitches": [
-          39,
-          44,
-          49,
-          54,
-          58,
-          63
-        ]
+        "pitches": [39, 44, 49, 54, 58, 63]
       },
       {
         "name": "D Standard",
-        "pitches": [
-          38,
-          43,
-          48,
-          53,
-          57,
-          62
-        ]
+        "pitches": [38, 43, 48, 53, 57, 62]
       },
       {
         "name": "C# Standard",
-        "pitches": [
-          37,
-          42,
-          47,
-          52,
-          56,
-          61
-        ]
+        "pitches": [37, 42, 47, 52, 56, 61]
       },
       {
         "name": "C Standard",
-        "pitches": [
-          36,
-          41,
-          46,
-          51,
-          55,
-          60
-        ]
+        "pitches": [36, 41, 46, 51, 55, 60]
       },
       {
         "name": "B Standard",
-        "pitches": [
-          35,
-          40,
-          45,
-          50,
-          54,
-          59
-        ]
+        "pitches": [35, 40, 45, 50, 54, 59]
       },
       {
         "name": "Bb Standard",
-        "pitches": [
-          34,
-          39,
-          44,
-          49,
-          53,
-          58
-        ]
+        "pitches": [34, 39, 44, 49, 53, 58]
       },
       {
         "name": "A Standard",
-        "pitches": [
-          33,
-          38,
-          43,
-          48,
-          52,
-          57
-        ]
+        "pitches": [33, 38, 43, 48, 52, 57]
       }
     ],
     "drop": [
       {
         "name": "Drop D",
         "from": "E Standard",
-        "pitches": [
-          38,
-          45,
-          50,
-          55,
-          59,
-          64
-        ]
+        "pitches": [38, 45, 50, 55, 59, 64]
       },
       {
         "name": "Drop C#",
         "from": "Eb Standard",
-        "pitches": [
-          37,
-          44,
-          49,
-          54,
-          58,
-          63
-        ]
+        "pitches": [37, 44, 49, 54, 58, 63]
       },
       {
         "name": "Drop C",
         "from": "D Standard",
-        "pitches": [
-          36,
-          43,
-          48,
-          53,
-          57,
-          62
-        ]
+        "pitches": [36, 43, 48, 53, 57, 62]
       },
       {
         "name": "Drop B",
         "from": "C# Standard",
-        "pitches": [
-          35,
-          42,
-          47,
-          52,
-          56,
-          61
-        ]
+        "pitches": [35, 42, 47, 52, 56, 61]
       },
       {
         "name": "Drop Bb",
         "from": "C Standard",
-        "pitches": [
-          34,
-          41,
-          46,
-          51,
-          55,
-          60
-        ]
+        "pitches": [34, 41, 46, 51, 55, 60]
       },
       {
         "name": "Drop A",
         "from": "B Standard",
-        "pitches": [
-          33,
-          40,
-          45,
-          50,
-          54,
-          59
-        ]
+        "pitches": [33, 40, 45, 50, 54, 59]
       },
       {
         "name": "Drop Ab",
         "from": "Bb Standard",
-        "pitches": [
-          32,
-          39,
-          44,
-          49,
-          53,
-          58
-        ]
+        "pitches": [32, 39, 44, 49, 53, 58]
       }
     ],
     "sevenString": [
       {
         "name": "B Standard 7",
-        "pitches": [
-          35,
-          40,
-          45,
-          50,
-          55,
-          59,
-          64
-        ]
+        "pitches": [35, 40, 45, 50, 55, 59, 64]
       }
     ],
     "validity": [
       {
-        "pitches": [
-          34,
-          39,
-          44,
-          49,
-          53,
-          58
-        ],
+        "pitches": [34, 39, 44, 49, 53, 58],
         "valid": true,
         "why": "ascending, in range"
       },
       {
-        "pitches": [
-          34,
-          39,
-          39,
-          49,
-          53,
-          58
-        ],
+        "pitches": [34, 39, 39, 49, 53, 58],
         "valid": false,
         "why": "not strictly ascending"
       },
       {
-        "pitches": [
-          19,
-          39,
-          44,
-          49,
-          53,
-          58
-        ],
+        "pitches": [19, 39, 44, 49, 53, 58],
         "valid": false,
         "why": "below 20"
       },
       {
-        "pitches": [
-          34,
-          39,
-          44,
-          49,
-          53,
-          71
-        ],
+        "pitches": [34, 39, 44, 49, 53, 71],
         "valid": false,
         "why": "above 70"
       },
       {
-        "pitches": [
-          34,
-          39,
-          44,
-          49,
-          53
-        ],
+        "pitches": [34, 39, 44, 49, 53],
         "valid": false,
         "why": "5 strings, only 6 to 8 supported"
       },
       {
-        "pitches": [
-          30,
-          35,
-          40,
-          45,
-          50,
-          55,
-          59,
-          64
-        ],
+        "pitches": [30, 35, 40, 45, 50, 55, 59, 64],
         "valid": true,
         "why": "8 strings"
       }
@@ -418,7 +262,7 @@
       {
         "ticks": 480,
         "bpm": 92,
-        "seconds": 0.652174
+        "seconds": 0.6521739130434783
       },
       {
         "ticks": 0,
@@ -573,308 +417,186 @@
     }
   ],
   "fingerings": {
-    "$comment": "findFingerings results are ordered lowest-pitched string first (string N down to 1). bestFingering returns one position per input pitch, aligned with the input order.",
+    "$comment": "findFingerings results are ordered lowest-pitched string first (string N down to 1). bestFingering returns one position per input pitch, aligned with the input order, or null when unplayable. Cost model (lower wins): 1.0 per fret of span between fretted fingers, 1.0 per fret of hand movement from the previous hand position, 0.5 per string above the lowest string per note, 2.5 extra per note above the lowest three strings, 0.3 per fret of hand position, 2.0 per unused string skipped inside the group. Hand position = lowest fretted finger, 0 when all open. Ties: lower-pitched string first, then lower fret.",
     "find": [
       {
         "tuning": "Bb Standard",
         "pitch": 37,
-        "frets": [
-          0,
-          12
-        ],
-        "strings": [
-          6,
-          5,
-          4,
-          3
-        ],
+        "frets": [0, 12],
+        "strings": [6, 5, 4, 3],
+        "expected": [[6, 3]]
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitch": 49,
+        "frets": [0, 12],
+        "strings": [6, 5, 4, 3],
         "expected": [
-          [
-            6,
-            3
-          ]
+          [5, 10],
+          [4, 5],
+          [3, 0]
         ]
       },
       {
         "tuning": "Bb Standard",
         "pitch": 49,
-        "frets": [
-          0,
-          12
-        ],
-        "strings": [
-          6,
-          5,
-          4,
-          3
-        ],
+        "frets": [0, 24],
+        "strings": [6, 5, 4, 3],
         "expected": [
-          [
-            5,
-            10
-          ],
-          [
-            4,
-            5
-          ],
-          [
-            3,
-            0
-          ]
-        ]
-      },
-      {
-        "tuning": "Bb Standard",
-        "pitch": 49,
-        "frets": [
-          0,
-          24
-        ],
-        "strings": [
-          6,
-          5,
-          4,
-          3
-        ],
-        "expected": [
-          [
-            6,
-            15
-          ],
-          [
-            5,
-            10
-          ],
-          [
-            4,
-            5
-          ],
-          [
-            3,
-            0
-          ]
+          [6, 15],
+          [5, 10],
+          [4, 5],
+          [3, 0]
         ]
       },
       {
         "tuning": "Bb Standard",
         "pitch": 33,
-        "frets": [
-          0,
-          12
-        ],
-        "strings": [
-          6,
-          5,
-          4,
-          3
-        ],
+        "frets": [0, 12],
+        "strings": [6, 5, 4, 3],
         "expected": []
       },
       {
         "tuning": "Bb Standard",
         "pitch": 44,
-        "frets": [
-          0,
-          12
-        ],
-        "strings": [
-          6,
-          5
-        ],
+        "frets": [0, 12],
+        "strings": [6, 5],
         "expected": [
-          [
-            5,
-            5
-          ]
+          [6, 10],
+          [5, 5]
         ]
       }
     ],
     "best": [
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          37,
-          44
-        ],
+        "pitches": [37, 44],
         "expected": [
-          [
-            6,
-            3
-          ],
-          [
-            5,
-            5
-          ]
+          [6, 3],
+          [5, 5]
         ],
-        "why": "P5 power chord on the two lowest strings beats using the open 4th string"
+        "why": "P5 power chord on the two lowest strings; using the open 4th string would skip string 5"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          44,
-          49
-        ],
+        "pitches": [44, 49],
         "expected": [
-          [
-            5,
-            5
-          ],
-          [
-            4,
-            5
-          ]
+          [5, 5],
+          [4, 5]
         ],
-        "why": "inverted P4, same fret on adjacent strings"
+        "why": "inverted P4 at the same fret on adjacent strings beats 6:10 + 5:10 (height) and the open 4:0 + 3:0 (string 3 costs extra)"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          35,
-          41
+        "pitches": [44, 49],
+        "previous": [
+          [6, 3],
+          [5, 5]
         ],
         "expected": [
-          [
-            6,
-            1
-          ],
-          [
-            5,
-            2
-          ]
+          [5, 5],
+          [4, 5]
+        ],
+        "why": "continuity from the hand at fret 3 agrees"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [35, 41],
+        "expected": [
+          [6, 1],
+          [5, 2]
         ],
         "why": "tritone, only one playable shape"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          49
-        ],
-        "expected": [
-          [
-            5,
-            10
-          ]
-        ],
-        "why": "no previous position: lowest string wins"
+        "pitches": [49],
+        "expected": [[4, 5]],
+        "why": "no previous position: 4:5 beats 5:10 (height) and open 3:0 (string 3 costs extra)"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          49
-        ],
-        "previous": [
-          [
-            6,
-            3
-          ]
-        ],
-        "expected": [
-          [
-            4,
-            5
-          ]
-        ],
-        "why": "continuity from fret 3 pulls the hand to 4:5 instead of 5:10"
+        "pitches": [49],
+        "previous": [[6, 3]],
+        "expected": [[4, 5]],
+        "why": "continuity from fret 3 keeps 4:5"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          34,
-          49
-        ],
-        "expected": [
-          [
-            6,
-            0
-          ],
-          [
-            5,
-            10
-          ]
-        ],
-        "why": "Bb1 only at 6:0 (open, excluded from span); Db3 prefers 5:10 over 4:5 on the lower-string rule since span is 0 either way"
+        "pitches": [49],
+        "previous": [[6, 10]],
+        "expected": [[5, 10]],
+        "why": "hand already at fret 10 stays there"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          33
+        "pitches": [34, 49],
+        "expected": [
+          [6, 0],
+          [5, 10]
         ],
+        "why": "Bb1 exists only at the open 6th string, which does not count toward span; Db3 then sits on the lower string"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [33],
         "expected": null,
         "why": "below the lowest open string: unplayable"
       },
       {
         "tuning": "Bb Standard",
-        "pitches": [
-          37,
-          46
-        ],
+        "pitches": [37, 46],
         "expected": [
-          [
-            6,
-            3
-          ],
-          [
-            5,
-            7
-          ]
+          [6, 3],
+          [4, 2]
         ],
-        "why": "span 4 is the maximum allowed and is accepted"
+        "why": "span 1 on a skipped string beats the span-4 stretch 6:3 + 5:7"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [37, 46],
+        "strings": [6, 5],
+        "expected": [
+          [6, 3],
+          [5, 7]
+        ],
+        "why": "restricted to two strings, span 4 is the maximum allowed and is accepted"
+      },
+      {
+        "tuning": "Bb Standard",
+        "pitches": [37, 47],
+        "strings": [6, 5],
+        "expected": null,
+        "why": "the only shape spans 5: unplayable"
       }
     ],
     "handSpan": [
       {
         "positions": [
-          [
-            6,
-            3
-          ],
-          [
-            5,
-            5
-          ]
+          [6, 3],
+          [5, 5]
         ],
         "span": 2
       },
       {
         "positions": [
-          [
-            6,
-            3
-          ],
-          [
-            4,
-            0
-          ]
+          [6, 3],
+          [4, 0]
         ],
         "span": 0
       },
       {
         "positions": [
-          [
-            6,
-            0
-          ],
-          [
-            5,
-            0
-          ]
+          [6, 0],
+          [5, 0]
         ],
         "span": 0
       },
       {
         "positions": [
-          [
-            6,
-            3
-          ],
-          [
-            5,
-            7
-          ],
-          [
-            4,
-            5
-          ]
+          [6, 3],
+          [5, 7],
+          [4, 5]
         ],
         "span": 4
       }
