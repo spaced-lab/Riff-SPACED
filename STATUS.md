@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:05:59Z
+Updated: 2026-10-25T01:07:52Z
 Phase: 0 Bootstrap
-Last completed task: P0.T2 Frontend skeleton
-Next task: P0.T3 Backend skeleton
+Last completed task: P0.T3 Backend skeleton
+Next task: P0.T4 Shared schemas folder and fixtures placeholder
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available
@@ -11,7 +11,7 @@ claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3
 ## Phase checklist
 - [x] P0.T1 Preflight and repo init
 - [x] P0.T2 Frontend skeleton
-- [ ] P0.T3 Backend skeleton
+- [x] P0.T3 Backend skeleton
 - [ ] P0.T4 Shared schemas folder and fixtures placeholder
 - [ ] P0.T5 CI and GitHub Pages
 - [ ] P0.T6 Docker (minimal)
@@ -22,6 +22,9 @@ claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3
 cd frontend && npm install && npm run dev   # http://localhost:5173
 npm run check                              # lint, format, typecheck, unit tests, build
 npm run e2e                                # Playwright smoke test
+
+cd backend && make install && make dev     # http://localhost:8000/health, /docs
+make check                                 # ruff, pytest
 ```
 
 ## Known issues
