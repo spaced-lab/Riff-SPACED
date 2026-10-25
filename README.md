@@ -4,6 +4,7 @@ A browser-based guitar riff-writing and transposing tool for heavy, low-tuned, c
 
 Built in public with Claude Code. Every commit is a lesson: each one explains WHY it was made, WHAT changed, what a newcomer can LEARN from it, and how it was TESTed.
 
+- Live frontend (GitHub Pages): https://spaced-lab.github.io/Riff-SPACED/
 - Where things stand right now: [STATUS.md](STATUS.md)
 - How it was built and what to read first: [docs/](docs/)
 - The plan it was built from: [SPEC.md](SPEC.md), [PLAN.md](PLAN.md), [plan/](plan/)
