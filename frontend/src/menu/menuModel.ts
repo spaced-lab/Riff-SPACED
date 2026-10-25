@@ -126,7 +126,12 @@ export function buildMenus(s: AppState): Menu[] {
           label: 'Export',
           submenu: [
             later('file.export.midi', 'MIDI...', 'Phase 5, task 6'),
-            later('file.export.tab', 'Text tab', 'Phase 5, task 5'),
+            {
+              type: 'item',
+              id: 'file.export.tab',
+              label: 'Text tab',
+              action: () => void s.exportTextTab(),
+            },
             later('file.export.musicxml', 'MusicXML', 8),
             later('file.export.wav', 'WAV...', 8),
             later('file.export.pdf', 'PDF', 'backlog'),
@@ -234,7 +239,12 @@ export function buildMenus(s: AppState): Menu[] {
           disabled: !hasSelection,
           action: () => s.quantizeSelection(),
         },
-        later('edit.copyTab', 'Copy as text tab', 'Phase 5, task 5'),
+        {
+          type: 'item',
+          id: 'edit.copyTab',
+          label: 'Copy as text tab',
+          action: () => void s.copyTextTab(),
+        },
       ],
     },
     {

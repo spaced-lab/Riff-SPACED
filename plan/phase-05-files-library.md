@@ -47,7 +47,7 @@ Commit: `feat(storage): add open, save, save-as, and library import/export with 
 
 ## P5.T5 Text tab export
 
-`export/texttab.ts` per SPEC 7.2. Tests compare against golden files in `shared/fixtures/golden/walkdown.tab.txt` and `tritone.tab.txt` (write the goldens by hand first from the demo riffs, then make the code match; the golden for the walkdown must show the held Ab as `5` (string 5 fret 5 is Ab2 in Bb Standard) followed by `-` dashes while the low string reads `5-5-4-4-3-3-2-2`).
+`export/texttab.ts` per SPEC 7.2. Tests compare against golden files in `shared/fixtures/golden/walkdown.tab.txt` and `tritone.tab.txt` (write the goldens by hand first from the demo riffs, then make the code match; the golden for the walkdown must show the held Ab as `5` on the string-5 line (labeled `Eb`, the open string; fret 5 on it is Ab2 in Bb Standard) followed by `-` dashes while the low string reads `5-5-4-4-3-3-2-2`).
 
 File > Export > Text tab downloads `<name>.tab.txt`. Also `Edit > Copy as text tab` writes to the system clipboard via `navigator.clipboard.writeText` with a toast.
 

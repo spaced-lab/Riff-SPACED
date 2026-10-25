@@ -11,6 +11,8 @@ import {
 } from '@/storage/documents';
 import type { ParsedDocument } from '@/storage/documents';
 import { pushRecent, readRecent } from '@/storage/recent';
+import { riffToTextTab } from '@/export/texttab';
+import { selectDisplayRiff } from './derived';
 import type { RecentEntry } from '@/storage/recent';
 import { bundleToSave } from './librarySlice';
 import type { AppState } from './types';
@@ -32,6 +34,10 @@ export type FileSlice = {
   /** Import an already-parsed document (used by open, import, and tests). */
   importDocument: (doc: ParsedDocument, sourceName: string) => void;
   loadRecent: () => void;
+  /** File > Export > Text tab: downloads <name>.tab.txt of the riff on screen (flattened for arrangements). */
+  exportTextTab: () => Promise<void>;
+  /** Edit > Copy as text tab: system clipboard, with a toast. */
+  copyTextTab: () => Promise<void>;
 };
 
 export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, get) => ({
@@ -40,6 +46,28 @@ export const createFileSlice: StateCreator<AppState, [], [], FileSlice> = (set, 
   recent: [],
 
   loadRecent: () => set({ recent: readRecent() }),
+
+  exportTextTab: async () => {
+    get().syncCurrentRiff();
+    const riff = selectDisplayRiff(get()).riff;
+    const text = riffToTextTab(riff);
+    const name = `${fileNameFor({ kind: 'riff', value: riff }).replace(/\.riff\.json$/, '')}.tab.txt`;
+    const result = await saveFile(new Blob([text], { type: 'text/plain' }), name, {
+      forceAsk: true,
+    });
+    if (result) get().toast(`exported ${result.name}`);
+  },
+
+  copyTextTab: async () => {
+    get().syncCurrentRiff();
+    const text = riffToTextTab(selectDisplayRiff(get()).riff);
+    try {
+      await navigator.clipboard.writeText(text);
+      get().toast('text tab copied to the clipboard');
+    } catch {
+      get().openDialog({ kind: 'info', title: 'text tab', message: text, confirmLabel: 'close' });
+    }
+  },
 
   openFromDisk: async () => {
     const files = await openFiles({ multiple: true });

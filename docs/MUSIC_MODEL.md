@@ -9,16 +9,16 @@ Bb Standard tuning, 92 BPM, 4 bars. String 6 is the lowest string, written at th
 ```
 Walkdown Turnaround   Bb Standard   92 BPM
       bar 1               bar 2               bar 3               bar 4
-Bb3|-----------------|-----------------|-----------------|-----------------|
-F3 |-----------------|-----------------|-----------------|-----------------|
-Db3|---------------5-|---------------5-|---------------5-|-----------------|
-Ab2|--5-5-5-5-5-5-5--|5-5-5-5-5-5-5-5--|5-5-5-5-5-5-5-5--|5----------------|
-Eb2|-----------------|-----------------|-----------------|-----------------|
-Bb1|0-3-3-3-3-3-3----|3-3-3-3-3-3-3----|3-3-3-3-3-3-3----|5-5-4-4-3-3-2-2--|
+Bb3|----------------|----------------|----------------|----------------|
+F3 |----------------|----------------|----------------|----------------|
+Db3|----------------|----------------|----------------|----------------|
+Ab2|--------------5-|--------------5-|--------------5-|----------------|
+Eb2|--5-5-5-5-5-5-5-|5-5-5-5-5-5-5-5-|5-5-5-5-5-5-5-5-|5---------------|
+Bb1|0-3-3-3-3-3-3---|3-3-3-3-3-3-3---|3-3-3-3-3-3-3---|5-5-4-4-3-3-2-2-|
      p p p p p p p p   p p p p p p p p   p p p p p p p p   p p p p p p p p
 ```
 
-Bars 1 to 3 are palm-muted eighth-note power chords, Db2 + Ab2, played at fret 3 on string 6 and fret 5 on string 5. The last eighth of each bar flips the chord upside down: Ab2 + Db3 at fret 5 on strings 5 and 4, a fourth with the root on top. Bar 4 is the turnaround: Ab2 rings for the whole bar while the low string walks down a half step at a time, Eb, D, Db, C, landing on the open Bb1 that starts the loop again.
+Bars 1 to 3 are palm-muted eighth-note power chords, Db2 + Ab2, played at fret 3 on string 6 (the Bb1 line) and fret 5 on string 5 (the Eb2 line). The last eighth of each bar flips the chord upside down: Ab2 + Db3 at fret 5 on strings 5 and 4, a fourth with the root on top. Bar 4 is the turnaround: Ab2 rings for the whole bar while the low string walks down a half step at a time, Eb, D, Db, C, landing on the open Bb1 that starts the loop again.
 
 ## Strings versus pitch arrays
 

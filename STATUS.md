@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T02:51:55Z
+Updated: 2026-10-25T02:54:57Z
 Phase: 5 Files and library
-Last completed task: P5.T4 File open and save
-Next task: P5.T5 Text tab export
+Last completed task: P5.T5 Text tab export
+Next task: P5.T6 MIDI export
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -62,7 +62,7 @@ Phase 5:
 - [x] P5.T2 Library store and panel
 - [x] P5.T3 Arrangement and song editors
 - [x] P5.T4 File open and save
-- [ ] P5.T5 Text tab export
+- [x] P5.T5 Text tab export
 - [ ] P5.T6 MIDI export
 - [ ] P5.T7 e2e, Chrome verification, phase exit
 
