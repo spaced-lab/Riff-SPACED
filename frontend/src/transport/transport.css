@@ -1,0 +1,24 @@
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+  padding: 0 10px;
+  border: 1px solid var(--color-dim);
+}
+
+.transport label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-mid);
+}
+
+.transport__placeholder {
+  color: var(--color-dim);
+}
+
+.transport button:disabled {
+  color: var(--color-dim);
+  border-color: var(--color-dim);
+}

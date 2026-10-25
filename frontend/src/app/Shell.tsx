@@ -1,4 +1,7 @@
+import { Dialog } from '@/components/Dialog';
 import { Placeholder } from '@/components/Placeholder';
+import { Inspector } from '@/inspector/Inspector';
+import { TransportBar } from '@/transport/TransportBar';
 import { DevToolbar } from '@/dev/DevToolbar';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { TabLanes } from '@/tab/TabLanes';
@@ -76,8 +79,8 @@ export function Shell() {
             onNoteContextMenu={(id) => removeNotes([id])}
           />
         </section>
-        <section className="shell__transport">
-          <Placeholder name="Transport" phase={4} />
+        <section className="shell__transport" aria-label="transport">
+          <TransportBar />
         </section>
         <section className="shell__tab" aria-label="tab lanes">
           <TabLanes />
@@ -86,10 +89,11 @@ export function Shell() {
 
       {panels.inspector ? (
         <aside className="shell__inspector">
-          <Placeholder name="Inspector" phase={3} />
+          <Inspector />
         </aside>
       ) : null}
 
+      <Dialog />
       <footer className="shell__status" data-testid="status-bar">
         <span>{riff.tuning.name}</span>
         <span data-testid="status-lane">lane {activeLane}</span>

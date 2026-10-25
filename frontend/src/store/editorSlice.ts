@@ -1,10 +1,11 @@
 import type { StateCreator } from 'zustand';
 import { newNote } from '@/model/factories';
 import { uuid } from '@/model/ids';
-import type { Note, Riff } from '@/model/types';
+import type { Note, Riff, Section } from '@/model/types';
 import { GRID, GRID_NAMES, TICKS_PER_BAR, snapToGrid } from '@/music/time';
 import type { GridName } from '@/music/time';
 import * as ops from './riffOps';
+import * as sections from './sectionOps';
 import type { AppState } from './types';
 
 export type EditorSlice = {
@@ -31,6 +32,17 @@ export type EditorSlice = {
   cutSelection: () => void;
   pasteAtCursor: () => void;
   duplicateSelection: () => void;
+  /**
+   * Resize the loop (4, 8, 12, 16 bars). Shrinking that would remove notes asks first
+   * through the themed dialog; `force` skips the question (tests, confirmed dialogs).
+   */
+  setLengthBars: (bars: number, force?: boolean) => void;
+  quantizeSelection: () => void;
+  splitSection: (sectionId: string, atBar: number) => void;
+  mergeSectionWithNext: (sectionId: string) => void;
+  updateSection: (sectionId: string, patch: Partial<Pick<Section, 'label' | 'kind'>>) => void;
+  /** Move the edit cursor to a section's first bar (Phase 4 also solos it). */
+  goToSection: (sectionId: string) => void;
 };
 
 export function loopEndTick(riff: Riff): number {
@@ -145,6 +157,48 @@ export const createEditorSlice: StateCreator<AppState, [], [], EditorSlice> = (s
       return result.riff;
     });
     if (pastedIds.length) set({ selectedNoteIds: pastedIds });
+  },
+
+  setLengthBars: (bars, force = false) => {
+    const { riff } = get();
+    if (bars === riff.lengthBars) return;
+    const cut = sections.notesCutBy(riff, bars);
+    const apply = () => {
+      get().commit('loop length', (r) => sections.setLengthBars(r, bars));
+      const s = get();
+      s.setEditCursor(s.editCursorTick);
+      const remaining = new Set(s.riff.notes.map((n) => n.id));
+      set({ selectedNoteIds: s.selectedNoteIds.filter((id) => remaining.has(id)) });
+    };
+    if (cut.length === 0 || force) {
+      apply();
+      return;
+    }
+    get().openDialog({
+      title: 'shorten loop?',
+      message: `${cut.length} note${cut.length === 1 ? '' : 's'} after bar ${bars} will be removed.`,
+      confirmLabel: 'remove and shorten',
+      cancelLabel: 'keep',
+      danger: true,
+      onConfirm: apply,
+    });
+  },
+
+  quantizeSelection: () => {
+    const { selectedNoteIds, grid } = get();
+    if (!selectedNoteIds.length) return;
+    get().commit('quantize', (r) => sections.quantizeNotes(r, selectedNoteIds, grid));
+  },
+
+  splitSection: (sectionId, atBar) =>
+    get().commit('split section', (r) => sections.splitSection(r, sectionId, atBar)),
+  mergeSectionWithNext: (sectionId) =>
+    get().commit('merge sections', (r) => sections.mergeWithNext(r, sectionId)),
+  updateSection: (sectionId, patch) =>
+    get().commit('edit section', (r) => sections.updateSection(r, sectionId, patch)),
+  goToSection: (sectionId) => {
+    const section = get().riff.sections.find((s) => s.id === sectionId);
+    if (section) get().setEditCursor(section.startBar * TICKS_PER_BAR);
   },
 
   duplicateSelection: () => {
