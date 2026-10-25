@@ -155,3 +155,14 @@ Read these commits:
 - `8a663a7` feat(audio): an export is the test's render with a file name on the end.
 - `5b4e2dc` feat(ui): preferences and data on separate keys, so a bad boolean cannot cost a riff.
 - `713c26b` chore(docker): a build context wide enough to see what the bundler reads; the proxy that removes CORS.
+
+## Phase 9: a scale is a table, a shape is a window
+
+Built after v1 at the owner's request: the scale overlay (eight scales, degree colors, legend, Scales menu, persisted preferences) and the CAGED positions on top of it.
+
+Key idea: separate the three questions. "Which pitch classes are in the scale and what degree is each" is a 12-entry table owned by the music module; "what color is a degree" is a CSS table of theme tokens; "which cells belong to one hand position" is a window computed from a two-notes-per-string pentatonic skeleton. The fretboard only ever asks the first question per cell, and the color mapping the owner wants to tune later is one block of CSS. For the positions, the trick was to notice that every classic pentatonic box has exactly two notes per string, and that the "nearest consecutive pair" rule reproduces all five boxes (including the duplicated note in box 3) without a lookup table, then to treat a seven-note scale as its pentatonic skeleton plus fill. The harmonic minor caught the first version: its skeleton has a b7 it does not contain, so the skeleton shapes the window and only real scale notes become cells.
+
+Read these commits:
+
+- `e847aae` feat(fretboard): scale mode; the degree table, the CSS color table, and the legend that reuses the neck's classes.
+- the CAGED commit after it: `music/positions.ts`, with the derivation in its header comment and the classic boxes pinned in its tests.

@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T18:00:00Z
-Phase: All phases complete (v0.8.0, CI green on 0288a9a). No plan task remains.
-Last completed task: real-recording pass (YAML out, collision fix, measurements) and the menu submenu CI fix
-Next task: none scheduled; the next move is the owner's (see Resume after clear and Owner follow-ups)
+Updated: 2026-10-25T23:30:00Z
+Phase: 9 (scale mode and CAGED positions, owner request after v1), all tasks done, tag v0.9.0.
+Last completed task: P9.T5 CAGED positions and P9.T4 docs
+Next task: none scheduled; owner feedback on the scale colors and the position shapes (see Owner follow-ups)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -100,6 +100,13 @@ Phase 8 (tag v0.8.0):
 - [x] P8.T7 Public docs
 - [x] P8.T8 Final verification and exit (fresh clone: both gates and 23 e2e specs green; Pages checked with pages.spec.ts; tag v0.8.0)
 
+Phase 9 (tag v0.9.0, plan/phase-09-scales.md):
+- [x] P9.T1 Scale definitions (music/scales.ts)
+- [x] P9.T2 Store slice and persisted preferences
+- [x] P9.T3 Overlay, legend, Scales menu
+- [x] P9.T5 CAGED positions (music/positions.ts, Position submenu, < and > shortcuts)
+- [x] P9.T4 Docs and exit (FRETBOARD.md, USER_GUIDE.md 6a, LEARNING_LOG, DECISIONS 60-62)
+
 ## How to run right now
 ```
 cd frontend && npm install && npm run dev   # http://localhost:5173
@@ -153,6 +160,8 @@ State: main is at 0288a9a, tag v0.8.0 is three commits behind it (docs and the s
 Background processes left running for the owner at the end of the run: uvicorn with `RIFFSPACED_AI_FAKE=1` on :8000 and the Vite dev server on :5173. If they are gone, start them with the commands under How to run right now.
 
 ## Owner follow-ups
+
+- Scale mode (Phase 9): try Scales > Full color with Blues and a few roots, and say which colors to change. The palette is the `--scale-*` block at the top of `frontend/src/theme.css`; every degree has one token. Also check the CAGED shapes against how you learned them (Scales > Position, or `<` and `>`): the derivation is in `frontend/src/music/positions.ts` and DECISIONS 62. Ideas not built yet: show the position's fret span as a faint band, a 3-notes-per-string position system, letters inside scale dots when the neck is tall enough.
 
 - Open a MusicXML export in MuseScore or Guitar Pro once and report (P8.T3).
 - Record one riff you can write down (four bars, looped three or four times, played the way you play), ideally captured from the interface or amp output rather than the phone, and say which tuning. Drop it in `injest-raw/`. That is what the analyzer needs next; the three takes there now show no repeat structure the pipeline can lock onto.

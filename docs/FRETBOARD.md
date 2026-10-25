@@ -29,8 +29,9 @@ The component measures its container with a `ResizeObserver` and passes the size
 3. Fret wires; the nut is a thicker bright line when the range starts at 0.
 4. Strings, thicker toward the low side, with the open-string names in the left gutter.
 5. One transparent hit rectangle per (string, fret) cell. This is what makes empty neck clickable: SVG lines are one pixel wide, rectangles are not.
-6. Chord connectors: a thin line between notes that share a `chordId`, the fingering hint for a dyad.
-7. Note dots, last so they sit on top and receive clicks first. A dot stops propagation so clicking a note is never also a click on its cell.
+6. Scale dots (Phase 9), when a scale is shown: one small dot on every cell whose pitch class is in the scale, colored by degree. They ignore the pointer, so the cells under them stay clickable. See "The scale overlay" below.
+7. Chord connectors: a thin line between notes that share a `chordId`, the fingering hint for a dyad.
+8. Note dots, last so they sit on top and receive clicks first. A dot stops propagation so clicking a note is never also a click on its cell.
 
 ## The dot state machine
 
@@ -49,9 +50,34 @@ States combine: a selected, sounding note has both classes. Because the componen
 
 Letters are drawn in black inside the dot using `nameOf(pitch, accidentals, false)`, so the flats and sharps toggle changes them with no component logic.
 
+## The scale overlay (Phase 9)
+
+`music/scales.ts` holds eight scales as tables of degrees. A degree is an interval above the root plus the role it plays (root, third, fifth...) and whether it is lowered against the major scale, so b3 and 3 can look different. `degreesOf(scale, root)` turns that into a 12-entry table indexed by pitch class; the fretboard looks up `pitchClass(pitchOf(tuning, string, fret))` for every cell and draws a dot where the entry is not null. The scale itself never knows about strings or frets, which is why it works in any tuning.
+
+Colors are a table, not code. Each degree has a CSS class (`fb-scale--third-flat`) and each class one token in `theme.css` (`--scale-third-flat`). The legend above the neck draws its swatches with the same classes, so legend and neck cannot disagree. Change a color by editing the token.
+
+| Degree | Class | Default color |
+|---|---|---|
+| R | `root` | pink |
+| 2 | `second` | pale green |
+| b3 / 3 | `third-flat` / `third` | orange / gold |
+| 4 | `fourth` | pale green |
+| b5 (blues) | `blue` | blue |
+| 5 | `fifth` | purple |
+| b6 / 6 | `sixth-flat` / `sixth` | olive / lime |
+| b7 / 7 | `seventh-flat` / `seventh` | teal / cyan |
+
+Three modes: off, full color, and mono (every scale note the same plain ring). In full color each degree group (roots, thirds, fifths, sevenths, blue notes, others) has a switch; a group switched off is drawn as the plain ring, not hidden, so you can see only the roots in color while the rest of the scale stays as context. The root follows the lowest open string until you choose one.
+
+**Hand positions (CAGED).** `music/positions.ts` cuts the scale into the shapes a hand plays without moving. The derivation: every pentatonic box has two notes per string, and the box anchored at the k-th pentatonic note on the lowest string takes, on every other string, the consecutive pair whose lower note is nearest in fret to that anchor. Seven-note scales use the same boxes built from their pentatonic skeleton (major pentatonic when the scale has a natural third, minor pentatonic otherwise), then add the remaining scale notes inside the box's fret span. That reproduces the five classic pentatonic boxes exactly, and for a major scale gives the usual CAGED positions with two or three notes per string. Positions are named E, D, C, A, G going up the neck (the E shape is the box whose low-string pair starts on the root) when the tuning has standard intervals; other tunings get Position 1, 2, 3. With a position selected, scale dots outside it are dimmed and riff notes are untouched. Step with `<` and `>`, the arrows in the legend, or Scales > Position.
+
+![Blues scale in full color](screenshots/phase-09/blues.png)
+
+![One CAGED position highlighted](screenshots/phase-09/position-caged.png)
+
 ## Interaction surface
 
-Everything leaves the component as a callback: `onCellClick({ string, fret, shiftKey })` from the hit rectangles, `onNoteClick(id, { shiftKey, button })` and `onNoteContextMenu(id)` from the dots. The store decides what those mean (Phase 3: add a note at the edit cursor, add to the chord with shift, select, delete). Hovering any cell or dot shows `string 6 fret 3 = Db2`.
+Everything leaves the component as a callback: `onCellClick({ string, fret, shiftKey })` from the hit rectangles, `onNoteClick(id, { shiftKey, button })` and `onNoteContextMenu(id)` from the dots. The store decides what those mean (Phase 3: add a note at the edit cursor, add to the chord with shift, select, delete). Hovering any cell or dot shows `string 6 fret 3 = Db2`, and with a scale shown, `, b3 of Bb Minor Pentatonic`.
 
 ## Trying it
 

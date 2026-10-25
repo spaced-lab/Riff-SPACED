@@ -120,6 +120,22 @@ Drop tunings are the matching standard tuning with the lowest string down a whol
 
 Arrangements have one more rule: every riff in an arrangement must share its tuning. If you add a riff in another tuning the app refuses and tells you to retune it with keep pitches first.
 
+## 6a. Scales on the neck
+
+The Scales menu lays a scale over the fretboard so you can see where it lives in your tuning while you write.
+
+- **Off / Full color / Mono.** Full color draws each scale degree in its own color (roots pink, thirds orange or gold, fifths purple, sevenths teal or cyan, the blues b5 blue, the rest pale green); mono draws every scale note as the same plain ring. The legend above the neck names the scale and shows one swatch per degree.
+- **Scale.** Minor Pentatonic, Blues (the minor pentatonic plus the b5 blue note), Major Pentatonic, Major (Ionian), Natural Minor (Aeolian), Dorian, Mixolydian, Harmonic Minor.
+- **Root.** Follows your lowest open string (Bb in Bb Standard) until you pick one; a chosen root sticks across tunings and reloads.
+- **Color switches.** Roots, thirds, fifths, sevenths, blue notes, others (2, 4, 6). Switch a group off and those notes drop back to the plain ring, so "only roots in color" or "only the blue notes" is two clicks. Clicking a swatch in the legend does the same thing.
+- **Position.** The CAGED shapes: pick one and the scale notes outside that hand position dim, so you can learn one shape and see how the next one overlaps it. Step up and down the neck with `<` and `>`, the arrows in the legend, or Scales > Position. Shapes are named E, D, C, A, G from the one with the root under your first finger on the low string; in a tuning without standard intervals (drop tunings, seven strings) they are numbered from the nut. Click the position name to go back to the whole neck.
+
+Scale dots are smaller than riff notes and sit under them. Hover any cell to see its note and degree (`string 6 fret 6 = E2, b5 of Bb Blues`). Split view carries the overlay to every quadrant.
+
+![Blues scale in full color](screenshots/phase-09/blues.png)
+
+![One CAGED position highlighted](screenshots/phase-09/position-caged.png)
+
 ## 7. Save, load, export
 
 ![The library panel](screenshots/phase-05/library.png)
@@ -216,6 +232,7 @@ Help > Keyboard shortcuts shows this table in the app. Shortcuts do not fire whi
 | [ / ] | coarser / finer grid |
 | - / = | tempo down / up by 1 |
 | Tab | toggle note letters |
+| < / > | scale position down / up the neck |
 
 Ctrl/Cmd+Y also redoes. Ctrl/Cmd + mouse wheel zooms the tab lanes. In an arrangement or song view only the transport keys work; editing happens in the riff.
 
