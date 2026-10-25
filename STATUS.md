@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:43:20Z
+Updated: 2026-10-25T03:47:04Z
 Phase: 6 Analysis backend
-Last completed task: P6.T7 Benchmark harness (thresholds partly met, gap in BACKLOG)
-Next task: P6.T8 Ingest CLI and API endpoints
+Last completed task: P6.T8 Ingest CLI and API endpoints
+Next task: P6.T9 Frontend import flow
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -75,7 +75,7 @@ Phase 6:
 - [x] P6.T5 Fingering-constrained spectral template matching
 - [x] P6.T6 Viterbi decode, quantize, emit
 - [x] P6.T7 Benchmark harness
-- [ ] P6.T8 Ingest CLI and API endpoints
+- [x] P6.T8 Ingest CLI and API endpoints
 - [ ] P6.T9 Frontend import flow
 - [x] P6.T10 Real recordings (skip and continue if backend/audio_in is empty, DECISIONS 39)
 - [x] P6.T11 Chrome verification and phase exit
@@ -90,6 +90,7 @@ npm run e2e                                # Playwright: 10 specs (smoke, fretbo
 cd backend && make install && make dev     # http://localhost:8000/health, /docs
 make check                                 # ruff, pytest
 make bench                                 # synthetic benchmark, writes docs/benchmarks/latest.md
+uv run python -m riffspaced.ingest audio_in --out riffs_out --tuning "Bb Standard"   # folder in, riff JSON out
 uv run python -m riffspaced.synth ../shared/fixtures/demo-library.json --riff "Walkdown Turnaround" --out debug/walkdown.wav --drive 8
 
 docker compose up --build                  # frontend :8080, backend :8000

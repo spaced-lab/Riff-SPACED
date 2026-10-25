@@ -98,7 +98,11 @@ def load_audio(path: str | Path) -> Audio:
     p = Path(path)
     ext = p.suffix.lower()
     if ext in SOUNDFILE_EXTENSIONS:
-        data, sr = sf.read(str(p), dtype="float32", always_2d=False)
+        try:
+            data, sr = sf.read(str(p), dtype="float32", always_2d=False)
+        except (sf.LibsndfileError, RuntimeError) as error:
+            # A .wav that is not really a WAV: say so instead of leaking a libsndfile trace.
+            raise UnsupportedFormat(f"{p.name}: could not decode it ({error})") from error
         mono = resample(to_mono(np.asarray(data)), int(sr))
     elif ext in FFMPEG_EXTENSIONS:
         mono = _decode_with_ffmpeg(p)
