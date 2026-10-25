@@ -36,7 +36,13 @@ export function MenuBar() {
   }, [openId]);
 
   const activate = (item: Extract<MenuItem, { type: 'item' }>) => {
-    if (item.disabled || item.submenu) return;
+    if (item.disabled) return;
+    // A click on a parent opens its submenu too, not only hover: a pointer that is already
+    // resting on the item never fires mouseenter (seen as a flaky submenu on the CI runner).
+    if (item.submenu) {
+      setSubId(item.id);
+      return;
+    }
     setOpenId(null);
     setSubId(null);
     item.action?.();
