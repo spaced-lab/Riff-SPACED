@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T07:20:00Z
+Updated: 2026-10-25T07:50:00Z
 Phase: 7 AI layer (in progress, fake client, DECISIONS 54)
-Last completed task: P7.T4 Cleanup endpoint and ingest --ai
-Next task: P7.T5 Live smoke test (written, skipped without RIFFSPACED_LIVE=1), then P7.T6 frontend
+Last completed task: P7.T5 Live smoke test (written and skipped; transcript worked example in docs/AI_LAYER.md)
+Next task: P7.T6 Frontend: AI menu and suggestions drawer
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -86,7 +86,7 @@ Phase 7:
 - [x] P7.T2 Analyze endpoint
 - [x] P7.T3 Suggest endpoint
 - [x] P7.T4 Cleanup endpoint and ingest --ai
-- [ ] P7.T5 Live smoke test (needs the key)
+- [x] P7.T5 Live smoke test (written, skipped until RIFFSPACED_LIVE=1 and a key; see Waiting on owner)
 - [ ] P7.T6 Frontend: AI menu and suggestions drawer
 - [ ] P7.T7 Chrome verification and phase exit
 
@@ -128,6 +128,7 @@ docker compose up --build                  # frontend :8080, backend :8000
 
 ## Waiting on owner (not blocking)
 
+- The live AI smoke test (P7.T5) has not run: no `ANTHROPIC_API_KEY`. When one exists: `export ANTHROPIC_API_KEY=...` (or `backend/.env`), then `cd backend && RIFFSPACED_LIVE=1 uv run pytest tests/live -q -s`, and paste the printed summary and usage into docs/AI_LAYER.md. No code change.
 - For the three recordings in `injest-raw/`: were they played in Bb Standard? If not, which tuning? And for at least one of them, a tab or a description of the riff (frets or note names), so the analyzer's output can be scored. The low end of all three files peaks around F2, G2 and Eb2 and almost never at the open Bb1, which is either the rig's resonance or a different tuning (see the notes). Phase 7 continues meanwhile.
 
 Also still open, not blocking: the owner can add more recordings to `injest-raw/` or `backend/audio_in/` any time.
