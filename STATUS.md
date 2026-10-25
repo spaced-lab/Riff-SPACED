@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:11:49Z
+Updated: 2026-10-25T03:15:18Z
 Phase: 6 Analysis backend
-Last completed task: P6.T3 STFT and onset detection
-Next task: P6.T4 Tempo estimation
+Last completed task: P6.T4 Tempo estimation
+Next task: P6.T5 Fingering-constrained spectral template matching
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -71,7 +71,7 @@ Phase 6:
 - [x] P6.T1 Audio I/O and preprocessing
 - [x] P6.T2 Test-signal synth (ground truth generator)
 - [x] P6.T3 STFT and onset detection
-- [ ] P6.T4 Tempo estimation
+- [x] P6.T4 Tempo estimation
 - [ ] P6.T5 Fingering-constrained spectral template matching
 - [ ] P6.T6 Viterbi decode, quantize, emit
 - [ ] P6.T7 Benchmark harness
