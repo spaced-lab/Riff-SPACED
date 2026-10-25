@@ -1,0 +1,133 @@
+/* Fretboard (SPEC 5.3). Every color is a theme custom property. */
+.fretboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+}
+
+.fretboard svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  user-select: none;
+}
+
+.fb-wire {
+  stroke: var(--color-dim);
+  stroke-width: 1.5;
+}
+
+.fb-wire--nut {
+  stroke: var(--color-fg);
+  stroke-width: 5;
+}
+
+.fb-string {
+  stroke: var(--color-mid);
+}
+
+.fb-marker {
+  fill: none;
+  stroke: var(--color-dim);
+  stroke-width: 1;
+}
+
+.fb-fret-number {
+  fill: var(--color-mid);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.fb-fret-number--marker {
+  fill: var(--color-fg);
+}
+
+.fb-string-label {
+  fill: var(--color-mid);
+  font-size: 11px;
+  text-anchor: end;
+  dominant-baseline: middle;
+}
+
+.fb-cell {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.fb-connector {
+  stroke: var(--color-fg);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.fb-connector--sounding {
+  stroke: var(--color-flash);
+}
+
+.fb-note {
+  cursor: pointer;
+  transition:
+    transform 80ms ease-out,
+    fill 80ms ease-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.fb-note circle {
+  fill: var(--color-fg);
+  stroke: none;
+}
+
+.fb-note text {
+  fill: var(--color-dot-text);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.fb-note--selected circle {
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.fb-note--sounding {
+  transform: scale(1.25);
+}
+
+.fb-note--sounding circle {
+  fill: var(--color-flash);
+}
+
+.fb-note--low circle {
+  fill: var(--color-warn);
+}
+
+.fb-note--unplayable circle {
+  fill: none;
+  stroke: var(--color-warn);
+  stroke-width: 2;
+}
+
+.fb-note--unplayable text {
+  fill: var(--color-warn);
+}
+
+.fb-note--dimmed {
+  opacity: 0.35;
+}
+
+.fb-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-mid);
+  padding: 2px 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  z-index: 2;
+}

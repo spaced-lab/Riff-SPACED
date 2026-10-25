@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T01:37:44Z
+Updated: 2026-10-25T01:40:40Z
 Phase: 2 Fretboard
-Last completed task: P2.T2 Fretboard geometry
-Next task: P2.T3 Fretboard component
+Last completed task: P2.T3 Fretboard component
+Next task: P2.T4 Tuning menu and view toggles (temporary toolbar)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -34,7 +34,7 @@ Phase 1 (tag v0.1.0):
 Phase 2:
 - [x] P2.T1 Store foundation
 - [x] P2.T2 Fretboard geometry
-- [ ] P2.T3 Fretboard component
+- [x] P2.T3 Fretboard component
 - [ ] P2.T4 Tuning menu and view toggles (temporary toolbar)
 - [ ] P2.T5 App shell and dev harness route
 - [ ] P2.T6 Phase exit
