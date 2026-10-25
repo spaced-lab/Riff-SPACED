@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T16:30:00Z
-Phase: All phases complete (v0.8.0). Next: the owner's real-recording pass (see After Phase 8).
-Last completed task: real-recording pass, first round (YAML out, collision fix, measurements)
-Next task: none scheduled; waiting on the owner for a known-riff recording (see Owner follow-ups)
+Updated: 2026-10-25T18:00:00Z
+Phase: All phases complete (v0.8.0, CI green on 0288a9a). No plan task remains.
+Last completed task: real-recording pass (YAML out, collision fix, measurements) and the menu submenu CI fix
+Next task: none scheduled; the next move is the owner's (see Resume after clear and Owner follow-ups)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -140,6 +140,17 @@ make down                                  # stop the containers; make check run
 **Real recordings arrived.** Three files are in `injest-raw/` at the repo root (RS-Descent.m4a, RS-NM1.m4a, RS-Spider.m4a, 2.6 MB total, m4a so ffmpeg decode). That folder is gitignored as of this commit; the files are the owner's and are never deleted or committed. On resume, before or after Phase 7: copy (not move) them into `backend/audio_in/`, run the P6.T10 recipe from docs/BACKLOG.md (ingest each, compare with what the owner played if a tab exists, record findings in docs/ANALYSIS_METHOD.md and LEARNING_LOG), and ask the owner only if a recording's tuning is not Bb Standard.
 
 **Real recordings: first pass done (P6.T10, 2026-10-25).** All three takes ran end to end; findings in `docs/benchmarks/real-audio-notes.md` and the postscript in `docs/ANALYSIS_METHOD.md`. The outputs are in `backend/riffs_out/` (gitignored).
+
+## Resume after clear (2026-10-25, end of the autonomous run)
+
+State: main is at 0288a9a, tag v0.8.0 is three commits behind it (docs and the submenu fix), CI green, working tree clean. Nothing is waiting on code. On `resume`:
+
+1. Read Owner follow-ups below. If a new recording is in `injest-raw/`, copy it into `backend/audio_in/`, run `uv run python -m riffspaced.ingest audio_in --out riffs_out --ai --tuning "<tuning the owner stated>"` with `RIFFSPACED_AI_FAKE=1`, read the `.riff.yaml`, and score it against the owner's tab (notes hit, notes missed, extra notes, per bar). Then tune the analysis knobs in this order: bar alignment with the known riff length, relative palm-mute threshold, onset flux threshold. Record every number in `docs/benchmarks/real-audio-notes.md` (third pass).
+2. If files are in `injest-riff-JSON/`, run `uv run python -m riffspaced.check_riffs ../injest-riff-JSON`, open the valid ones with File > Open, and compare with the built-in analyzer's output for the same recording in `docs/ANALYSIS_METHOD.md`.
+3. If `ANTHROPIC_API_KEY` exists, run the live smoke test (recipe in docs/AI_LAYER.md) and paste the result there.
+4. Otherwise take the next item from docs/BACKLOG.md in its listed order.
+
+Background processes left running for the owner at the end of the run: uvicorn with `RIFFSPACED_AI_FAKE=1` on :8000 and the Vite dev server on :5173. If they are gone, start them with the commands under How to run right now.
 
 ## Owner follow-ups
 
