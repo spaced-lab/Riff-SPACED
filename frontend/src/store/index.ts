@@ -11,11 +11,13 @@ import { createEditorSlice } from './editorSlice';
 import { createFileSlice } from './fileSlice';
 import { createLibrarySlice } from './librarySlice';
 import { createRiffSlice } from './riffSlice';
+import { createScaleSlice } from './scaleSlice';
 import { createSelectionSlice } from './selectionSlice';
 import { createTransportSlice } from './transportSlice';
 import type { AppState } from './types';
 import { loadInitialLibrary, loadPrefs } from './persist';
 import type { KeyValueStorage } from './persist';
+import type { ColorGroup } from '@/music/scales';
 import { createViewSlice } from './viewSlice';
 
 export type { AppState } from './types';
@@ -31,6 +33,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createFileSlice(...a),
   ...createBackendSlice(...a),
   ...createAiSlice(...a),
+  ...createScaleSlice(...a),
 }));
 
 /**
@@ -51,4 +54,10 @@ export function bootstrapStore(storage: KeyValueStorage | null | undefined = nul
   if (prefs.retuneMode) useStore.getState().setRetuneMode(prefs.retuneMode);
   if (prefs.showDyadLabels !== undefined)
     useStore.getState().setShowDyadLabels(prefs.showDyadLabels);
+  if (prefs.scaleMode) useStore.getState().setScaleMode(prefs.scaleMode);
+  if (prefs.scaleId) useStore.getState().setScaleId(prefs.scaleId);
+  if (prefs.scaleRoot !== undefined) useStore.getState().setScaleRoot(prefs.scaleRoot);
+  if (prefs.scaleColors)
+    for (const [group, on] of Object.entries(prefs.scaleColors))
+      useStore.getState().setScaleColor(group as ColorGroup, on);
 }

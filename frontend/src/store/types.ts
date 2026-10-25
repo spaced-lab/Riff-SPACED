@@ -5,6 +5,7 @@ import type { EditorSlice } from './editorSlice';
 import type { FileSlice } from './fileSlice';
 import type { LibrarySlice } from './librarySlice';
 import type { RiffSlice } from './riffSlice';
+import type { ScaleSlice } from './scaleSlice';
 import type { SelectionSlice } from './selectionSlice';
 import type { TransportSlice } from './transportSlice';
 import type { ViewSlice } from './viewSlice';
@@ -19,4 +20,5 @@ export type AppState = RiffSlice &
   TransportSlice &
   FileSlice &
   BackendSlice &
-  AiSlice;
+  AiSlice &
+  ScaleSlice;

@@ -3,6 +3,7 @@ import type { Note } from '@/model/types';
 import { TICKS_PER_BAR } from '@/music/time';
 import { useStore } from '@/store';
 import { selectDisplayRiff } from '@/store/derived';
+import { selectScaleOverlay } from '@/store/scaleSlice';
 import { Fretboard } from './Fretboard';
 import './splitView.css';
 
@@ -41,6 +42,7 @@ export function SplitView() {
   const positionTick = useStore((s) => s.positionTick);
   const editCursorTick = useStore((s) => s.editCursorTick);
   const select = useStore((s) => s.select);
+  const scaleOverlay = useStore(selectScaleOverlay);
 
   const ranges = useMemo(() => quadrantRanges(riff.lengthBars), [riff.lengthBars]);
   const tick = isPlaying ? positionTick : editCursorTick;
@@ -80,6 +82,7 @@ export function SplitView() {
                 showLetters={showLetters}
                 accidentals={accidentals}
                 realisticSpacing={realisticSpacing}
+                scale={scaleOverlay}
                 onNoteClick={(id, e) => select([id], e.shiftKey)}
                 label={`quadrant ${i + 1}`}
               />

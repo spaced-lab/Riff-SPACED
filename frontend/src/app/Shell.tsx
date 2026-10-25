@@ -11,6 +11,9 @@ import { selectDisplayRiff } from '@/store/derived';
 import { TransportBar } from '@/transport/TransportBar';
 import { EasierTuningDialog } from '@/tuning/EasierTuningDialog';
 import { Fretboard } from '@/fretboard/Fretboard';
+import { ScaleLegend } from '@/fretboard/ScaleLegend';
+import { scaleById } from '@/music/scales';
+import { selectScaleOverlay } from '@/store/scaleSlice';
 import { SplitView } from '@/fretboard/SplitView';
 import { TabLanes } from '@/tab/TabLanes';
 import { useKeyboard } from '@/hooks/useKeyboard';
@@ -60,6 +63,10 @@ export function Shell() {
   const easierOpen = useStore((s) => s.easierTuningOpen);
   const setEasierOpen = useStore((s) => s.setEasierTuningOpen);
   const crt = useStore((s) => s.crt);
+  const scaleOverlay = useStore(selectScaleOverlay);
+  const scaleId = useStore((s) => s.scaleId);
+  const toggleScaleColor = useStore((s) => s.toggleScaleColor);
+  const setScaleMode = useStore((s) => s.setScaleMode);
   useKeyboard();
   // The CRT look is a body class so the overlay covers dialogs and the drawer too.
   useEffect(() => {
@@ -98,29 +105,40 @@ export function Shell() {
         {editing === 'arrangement' ? <ArrangementEditor /> : null}
         {editing === 'song' ? <SongEditor /> : null}
         <section className="shell__fretboard" aria-label="fretboard area">
-          {splitView ? (
-            <SplitView />
-          ) : (
-            <Fretboard
-              tuning={shownRiff.tuning}
-              notes={shown}
-              dimmedIds={dimmedIds}
-              selectedIds={selectedNoteIds}
-              highlightIds={highlightIds}
-              range={fretRange}
-              showLetters={showLetters}
-              accidentals={accidentals}
-              realisticSpacing={realisticSpacing}
-              onCellClick={
-                display.readOnly
-                  ? undefined
-                  : ({ string, fret, shiftKey }) =>
-                      addNoteAtCursor(string, fret, { chord: shiftKey })
-              }
-              onNoteClick={(id, e) => select([id], e.shiftKey)}
-              onNoteContextMenu={display.readOnly ? undefined : (id) => removeNotes([id])}
+          {scaleOverlay ? (
+            <ScaleLegend
+              overlay={scaleOverlay}
+              degrees={scaleById(scaleId).degrees}
+              onToggleGroup={toggleScaleColor}
+              onMode={setScaleMode}
             />
-          )}
+          ) : null}
+          <div className="shell__board">
+            {splitView ? (
+              <SplitView />
+            ) : (
+              <Fretboard
+                tuning={shownRiff.tuning}
+                notes={shown}
+                dimmedIds={dimmedIds}
+                selectedIds={selectedNoteIds}
+                highlightIds={highlightIds}
+                range={fretRange}
+                showLetters={showLetters}
+                accidentals={accidentals}
+                realisticSpacing={realisticSpacing}
+                scale={scaleOverlay}
+                onCellClick={
+                  display.readOnly
+                    ? undefined
+                    : ({ string, fret, shiftKey }) =>
+                        addNoteAtCursor(string, fret, { chord: shiftKey })
+                }
+                onNoteClick={(id, e) => select([id], e.shiftKey)}
+                onNoteContextMenu={display.readOnly ? undefined : (id) => removeNotes([id])}
+              />
+            )}
+          </div>
         </section>
         <section className="shell__transport" aria-label="transport">
           <TransportBar />

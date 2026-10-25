@@ -1,0 +1,89 @@
+import { expect, test } from '@playwright/test';
+import { screenshotPath, watchConsole } from './helpers';
+import { menuClick } from './menu';
+
+/**
+ * Scale mode (Phase 9): the overlay appears with the legend, colors follow the degree
+ * groups, the root menu moves the scale, the swatches toggle colors, mono flattens them,
+ * and the preference survives a reload.
+ */
+test('scale overlay: color, blues scale, root shift, toggles, mono, persistence', async ({
+  page,
+}) => {
+  const console = watchConsole(page);
+  await page.goto('/?demo=1');
+  const board = page.getByTestId('fretboard');
+  await expect(board.locator('[data-string-line]')).toHaveCount(6);
+  await expect(page.getByTestId('scale-legend')).toHaveCount(0);
+
+  // Full color on the default scale: Bb minor pentatonic follows the Bb Standard low string.
+  await menuClick(page, 'scales', 'scales.mode:color');
+  await expect(page.getByTestId('scale-title')).toHaveText('Bb Minor Pentatonic');
+  const open6 = board.locator('[data-scale-dot][data-string="6"][data-fret="0"]');
+  await expect(open6).toHaveAttribute('data-degree', 'R');
+  await expect(open6).toHaveClass(/fb-scale--root/);
+  await expect(board.locator('[data-scale-dot][data-degree="b5"]')).toHaveCount(0);
+  await page.screenshot({ path: screenshotPath('phase-09', 'minor-pentatonic'), fullPage: true });
+
+  // Blues adds the blue note, drawn in its own class.
+  await menuClick(page, 'scales', 'scales.scale', 'scales.scale:blues');
+  await expect(page.getByTestId('scale-title')).toHaveText('Bb Blues');
+  const blue = board.locator('[data-scale-dot][data-string="6"][data-fret="6"]');
+  await expect(blue).toHaveAttribute('data-degree', 'b5');
+  await expect(blue).toHaveClass(/fb-scale--blue/);
+  await expect(board.locator('[data-scale-dot][data-string="6"][data-fret="7"]')).toHaveClass(
+    /fb-scale--fifth/,
+  );
+  await expect(board.locator('[data-scale-dot][data-string="6"][data-fret="10"]')).toHaveClass(
+    /fb-scale--seventh-flat/,
+  );
+  await page.screenshot({ path: screenshotPath('phase-09', 'blues'), fullPage: true });
+
+  // Shift the root to Eb: the root now sits at fret 5 on string 6.
+  await menuClick(page, 'scales', 'scales.root', 'scales.root:3');
+  await expect(page.getByTestId('scale-title')).toHaveText('Eb Blues');
+  await expect(board.locator('[data-scale-dot][data-string="6"][data-fret="5"]')).toHaveAttribute(
+    'data-degree',
+    'R',
+  );
+  await expect(open6).toHaveAttribute('data-degree', '5');
+
+  // Legend swatch switches the roots group off: still there, plain.
+  await page.locator('[data-legend-degree="R"]').click();
+  await expect(board.locator('[data-scale-dot][data-string="6"][data-fret="5"]')).toHaveClass(
+    /fb-scale--plain/,
+  );
+  await expect(page.locator('[data-legend-degree="R"]')).toHaveAttribute('aria-pressed', 'false');
+  await page.screenshot({ path: screenshotPath('phase-09', 'roots-off'), fullPage: true });
+  await menuClick(page, 'scales', 'scales.color:roots');
+  await expect(board.locator('[data-scale-dot][data-string="6"][data-fret="5"]')).toHaveClass(
+    /fb-scale--root/,
+  );
+
+  // Mono: everything plain, legend swatches disabled.
+  await page.locator('[data-scale-mode="mono"]').click();
+  await expect(board.locator('[data-scale-dot]:not(.fb-scale--plain)')).toHaveCount(0);
+  await expect(page.locator('[data-legend-degree="R"]')).toBeDisabled();
+  await page.screenshot({ path: screenshotPath('phase-09', 'mono'), fullPage: true });
+
+  // Harmonic minor in color, then reload: the preference comes back.
+  await menuClick(page, 'scales', 'scales.mode:color');
+  await menuClick(page, 'scales', 'scales.scale', 'scales.scale:harmonicMinor');
+  await expect(page.getByTestId('scale-title')).toHaveText('Eb Harmonic Minor');
+  await expect(board.locator('[data-scale-dot].fb-scale--sixth-flat').first()).toBeVisible();
+  await expect(board.locator('[data-scale-dot].fb-scale--seventh').first()).toBeVisible();
+  await page.screenshot({ path: screenshotPath('phase-09', 'harmonic-minor'), fullPage: true });
+  await page.reload();
+  await expect(page.getByTestId('scale-title')).toHaveText('Eb Harmonic Minor');
+
+  // Split view carries the overlay to every quadrant.
+  await menuClick(page, 'view', 'view.split');
+  await expect(page.getByTestId('scale-dots')).toHaveCount(4);
+  await menuClick(page, 'view', 'view.split');
+
+  // Off removes the legend and the dots.
+  await menuClick(page, 'scales', 'scales.mode:off');
+  await expect(page.getByTestId('scale-legend')).toHaveCount(0);
+  await expect(board.locator('[data-scale-dot]')).toHaveCount(0);
+  expect(console.errors).toEqual([]);
+});

@@ -148,19 +148,43 @@ describe('preferences and the demo reset', () => {
     const stop = startPrefsSave(storage);
     useStore.getState().setCrt(true);
     useStore.getState().setRetuneMode('keepPitches');
-    expect(JSON.parse(storage.getItem(PREFS_KEY)!)).toEqual({
+    useStore.getState().setScaleMode('color');
+    useStore.getState().setScaleId('blues');
+    useStore.getState().toggleScaleColor('others');
+    const expected = {
       crt: true,
       retuneMode: 'keepPitches',
       showDyadLabels: true,
-    });
+      scaleMode: 'color',
+      scaleId: 'blues',
+      scaleRoot: null,
+      scaleColors: {
+        roots: true,
+        thirds: true,
+        fifths: true,
+        sevenths: true,
+        blue: true,
+        others: false,
+      },
+    };
+    expect(JSON.parse(storage.getItem(PREFS_KEY)!)).toEqual(expected);
     stop();
+    expect(loadPrefs(storage)).toEqual(expected);
+    storage.setItem(
+      PREFS_KEY,
+      '{"crt": "yes", "retuneMode": "sideways", "showDyadLabels": false, "scaleMode": "neon", "scaleId": "lydian", "scaleRoot": 1.5, "scaleColors": {"roots": false, "blue": "no"}}',
+    );
     expect(loadPrefs(storage)).toEqual({
-      crt: true,
-      retuneMode: 'keepPitches',
-      showDyadLabels: true,
+      showDyadLabels: false,
+      scaleColors: {
+        roots: false,
+        thirds: true,
+        fifths: true,
+        sevenths: true,
+        blue: true,
+        others: true,
+      },
     });
-    storage.setItem(PREFS_KEY, '{"crt": "yes", "retuneMode": "sideways", "showDyadLabels": false}');
-    expect(loadPrefs(storage)).toEqual({ showDyadLabels: false });
     storage.setItem(PREFS_KEY, 'not json');
     expect(loadPrefs(storage)).toEqual({});
     useStore.setState(useStore.getInitialState(), true);

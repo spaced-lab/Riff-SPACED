@@ -13,7 +13,7 @@ describe('MenuBar', () => {
 
   it('renders every top-level menu from SPEC 5.7', () => {
     render(<MenuBar />);
-    for (const name of ['File', 'Edit', 'View', 'Tuning', 'Playback', 'AI', 'Help']) {
+    for (const name of ['File', 'Edit', 'View', 'Tuning', 'Scales', 'Playback', 'AI', 'Help']) {
       expect(screen.getByRole('menuitem', { name })).toBeInTheDocument();
     }
     expect(screen.queryByRole('menu')).toBeNull();
@@ -90,5 +90,40 @@ describe('MenuBar', () => {
         ? standard.submenu?.find((i) => i.type === 'item' && i.id === 'tuning:Bb Standard')
         : undefined;
     expect(bb && bb.type === 'item' ? bb.checked : false).toBe(true);
+  });
+
+  it('offers the scale modes, scales, roots and color switches (Phase 9)', () => {
+    const { container } = render(<MenuBar />);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    expect(container.querySelector('[data-menu-item="scales.mode:off"]')).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    // Color switches only mean something in full color mode.
+    expect(container.querySelector('[data-menu-item="scales.color:roots"]')).toHaveAttribute(
+      'title',
+      'full color mode only',
+    );
+    fireEvent.click(container.querySelector('[data-menu-item="scales.mode:color"]')!);
+    expect(useStore.getState().scaleMode).toBe('color');
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    fireEvent.click(container.querySelector('[data-menu-item="scales.scale"]')!);
+    const names = [
+      ...container.querySelectorAll('[data-menu-item^="scales.scale:"] .menu__label'),
+    ].map((el) => el.textContent);
+    expect(names.slice(0, 2)).toEqual(['Minor Pentatonic', 'Blues']);
+    fireEvent.click(container.querySelector('[data-menu-item="scales.scale:blues"]')!);
+    expect(useStore.getState().scaleId).toBe('blues');
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    // The demo riff is in Bb Standard, so the root follows the low string.
+    expect(
+      container.querySelector('[data-menu-item="scales.root"] .menu__label'),
+    ).toHaveTextContent('Root: Bb');
+    fireEvent.click(container.querySelector('[data-menu-item="scales.root"]')!);
+    fireEvent.click(container.querySelector('[data-menu-item="scales.root:3"]')!);
+    expect(useStore.getState().scaleRoot).toBe(3);
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Scales' }));
+    fireEvent.click(container.querySelector('[data-menu-item="scales.color:roots"]')!);
+    expect(useStore.getState().scaleColors.roots).toBe(false);
   });
 });

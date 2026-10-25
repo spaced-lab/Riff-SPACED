@@ -131,3 +131,66 @@
   transform: translate(-50%, -100%);
   z-index: 2;
 }
+
+/*
+ * Scale overlay (Phase 9). One class per degree, each bound to a theme token, so the color
+ * mapping is a table in theme.css rather than code. Plain is the ring every scale note gets
+ * in mono mode, or when its color group is switched off.
+ */
+.fb-scale {
+  pointer-events: none;
+  fill: none;
+  stroke: var(--color-mid);
+  stroke-width: 1.5;
+  opacity: 0.9;
+}
+
+.fb-scale--root {
+  fill: var(--scale-root);
+  stroke: none;
+}
+.fb-scale--second {
+  fill: var(--scale-second);
+  stroke: none;
+}
+.fb-scale--third {
+  fill: var(--scale-third);
+  stroke: none;
+}
+.fb-scale--third-flat {
+  fill: var(--scale-third-flat);
+  stroke: none;
+}
+.fb-scale--fourth {
+  fill: var(--scale-fourth);
+  stroke: none;
+}
+.fb-scale--blue {
+  fill: var(--scale-blue);
+  stroke: none;
+}
+.fb-scale--fifth {
+  fill: var(--scale-fifth);
+  stroke: none;
+}
+.fb-scale--sixth {
+  fill: var(--scale-sixth);
+  stroke: none;
+}
+.fb-scale--sixth-flat {
+  fill: var(--scale-sixth-flat);
+  stroke: none;
+}
+.fb-scale--seventh {
+  fill: var(--scale-seventh);
+  stroke: none;
+}
+.fb-scale--seventh-flat {
+  fill: var(--scale-seventh-flat);
+  stroke: none;
+}
+
+/* Riff notes sit on top of scale dots; a sounding note still flashes over them. */
+.fb-scale--dimmed {
+  opacity: 0.25;
+}

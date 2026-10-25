@@ -10,6 +10,10 @@ import { DROP_PRESETS, SEVEN_STRING_PRESETS, STANDARD_PRESETS } from '@/music/tu
 import type { AppState } from '@/store';
 import { selectRedoLabel, selectUndoLabel } from '@/store/riffSlice';
 import { FRET_RANGE_PRESETS } from '@/store/viewSlice';
+import { nameOf } from '@/music/naming';
+import { COLOR_GROUPS, COLOR_GROUP_LABELS, ROOTS, SCALES } from '@/music/scales';
+import { selectScaleRoot } from '@/store/scaleSlice';
+import type { ScaleMode } from '@/store/scaleSlice';
 
 export type MenuItem =
   | { type: 'separator' }
@@ -444,6 +448,70 @@ export function buildMenus(s: AppState): Menu[] {
           reason: s.editing !== 'riff' ? 'open a riff first' : undefined,
           action: () => s.setEasierTuningOpen(true),
         },
+      ],
+    },
+    {
+      id: 'scales',
+      label: 'Scales',
+      items: [
+        ...(
+          [
+            ['off', 'Off'],
+            ['color', 'Full color'],
+            ['mono', 'Mono'],
+          ] as const
+        ).map(([mode, label]): MenuItem => ({
+          type: 'item',
+          id: `scales.mode:${mode}`,
+          label,
+          checked: s.scaleMode === mode,
+          action: () => s.setScaleMode(mode as ScaleMode),
+        })),
+        sep,
+        {
+          type: 'item',
+          id: 'scales.scale',
+          label: 'Scale',
+          submenu: SCALES.map((sc) => ({
+            type: 'item' as const,
+            id: `scales.scale:${sc.id}`,
+            label: sc.name,
+            checked: s.scaleId === sc.id,
+            action: () => s.setScaleId(sc.id),
+          })),
+        },
+        {
+          type: 'item',
+          id: 'scales.root',
+          label: `Root: ${nameOf(selectScaleRoot(s), s.accidentals, false)}`,
+          submenu: [
+            {
+              type: 'item' as const,
+              id: 'scales.root:follow',
+              label: `Follow tuning (${nameOf(s.riff.tuning.pitches[0] ?? 0, s.accidentals, false)})`,
+              checked: s.scaleRoot === null,
+              action: () => s.setScaleRoot(null),
+            },
+            sep,
+            ...ROOTS.map((pc) => ({
+              type: 'item' as const,
+              id: `scales.root:${pc}`,
+              label: nameOf(pc, s.accidentals, false),
+              checked: s.scaleRoot === pc,
+              action: () => s.setScaleRoot(pc),
+            })),
+          ],
+        },
+        sep,
+        ...COLOR_GROUPS.map((group): MenuItem => ({
+          type: 'item',
+          id: `scales.color:${group}`,
+          label: `Color ${COLOR_GROUP_LABELS[group]}`,
+          checked: s.scaleColors[group],
+          disabled: s.scaleMode !== 'color',
+          reason: s.scaleMode !== 'color' ? 'full color mode only' : undefined,
+          action: () => s.toggleScaleColor(group),
+        })),
       ],
     },
     {

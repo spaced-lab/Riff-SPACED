@@ -12,7 +12,11 @@ import demo from '@shared/fixtures/demo-library.json';
 import { migrateLibrary } from '@/model/migrate';
 import type { LibraryBundle } from '@/model/types';
 import { validateLibrary } from '@/model/validate';
+import { COLOR_GROUPS, SCALES } from '@/music/scales';
+import type { ColorGroup, ScaleId } from '@/music/scales';
 import { useStore } from './index';
+import { allColorsOn } from './scaleSlice';
+import type { ScaleMode } from './scaleSlice';
 import type { AppState } from './types';
 import { bundleToSave } from './librarySlice';
 
@@ -34,7 +38,14 @@ export type Prefs = {
   crt: boolean;
   retuneMode: 'keepShapes' | 'keepPitches';
   showDyadLabels: boolean;
+  /** Scale overlay (Phase 9): mode, scale, root and which degree groups are colored. */
+  scaleMode: ScaleMode;
+  scaleId: ScaleId;
+  scaleRoot: number | null;
+  scaleColors: Record<ColorGroup, boolean>;
 };
+
+const SCALE_MODES: readonly ScaleMode[] = ['off', 'color', 'mono'];
 
 /** The saved preferences, or nothing; a broken value is ignored rather than quarantined. */
 export function loadPrefs(storage: KeyValueStorage | null = defaultStorage()): Partial<Prefs> {
@@ -47,6 +58,21 @@ export function loadPrefs(storage: KeyValueStorage | null = defaultStorage()): P
     if (parsed.retuneMode === 'keepShapes' || parsed.retuneMode === 'keepPitches')
       out.retuneMode = parsed.retuneMode;
     if (typeof parsed.showDyadLabels === 'boolean') out.showDyadLabels = parsed.showDyadLabels;
+    if (SCALE_MODES.includes(parsed.scaleMode as ScaleMode)) out.scaleMode = parsed.scaleMode;
+    if (SCALES.some((sc) => sc.id === parsed.scaleId)) out.scaleId = parsed.scaleId;
+    if (
+      parsed.scaleRoot === null ||
+      (typeof parsed.scaleRoot === 'number' && Number.isInteger(parsed.scaleRoot))
+    )
+      out.scaleRoot = parsed.scaleRoot;
+    if (parsed.scaleColors && typeof parsed.scaleColors === 'object') {
+      const colors = allColorsOn();
+      for (const group of COLOR_GROUPS) {
+        const value = (parsed.scaleColors as Partial<Record<ColorGroup, unknown>>)[group];
+        if (typeof value === 'boolean') colors[group] = value;
+      }
+      out.scaleColors = colors;
+    }
     return out;
   } catch {
     return {};
@@ -60,16 +86,17 @@ export function startPrefsSave(storage: KeyValueStorage | null = defaultStorage(
     crt: s.crt,
     retuneMode: s.retuneMode,
     showDyadLabels: s.showDyadLabels,
+    scaleMode: s.scaleMode,
+    scaleId: s.scaleId,
+    scaleRoot: s.scaleRoot,
+    scaleColors: s.scaleColors,
   });
   return useStore.subscribe((state, previous) => {
     const next = pick(state);
     const before = pick(previous);
-    if (
-      next.crt === before.crt &&
-      next.retuneMode === before.retuneMode &&
-      next.showDyadLabels === before.showDyadLabels
-    )
-      return;
+    // Every field is a primitive or a slice-owned object replaced on change, so identity
+    // comparison is enough.
+    if ((Object.keys(next) as (keyof Prefs)[]).every((k) => next[k] === before[k])) return;
     try {
       storage.setItem(PREFS_KEY, JSON.stringify(next));
     } catch {

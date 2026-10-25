@@ -1,7 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { newNote } from '@/model/factories';
+import { degreesOf, scaleById } from '@/music/scales';
 import { DEFAULT_TUNING } from '@/music/tuning';
+import type { ScaleOverlay } from './ScaleDots';
 import { Fretboard } from './Fretboard';
 import { layout } from './geometry';
 
@@ -107,5 +109,80 @@ describe('Fretboard', () => {
     expect(screen.queryByRole('tooltip')).toBeNull();
     fireEvent.mouseEnter(container.querySelector('[data-cell][data-string="4"][data-fret="0"]')!);
     expect(screen.getByRole('tooltip')).toHaveTextContent('string 4 fret 0 = Ab2');
+  });
+
+  it('draws the scale overlay under the notes, colored by degree group or plain', () => {
+    // Bb minor pentatonic in Bb Standard: Bb Db Eb F Ab (10, 1, 3, 5, 8).
+    const scale = scaleById('minorPentatonic');
+    const colored = {
+      roots: true,
+      thirds: true,
+      fifths: true,
+      sevenths: true,
+      blue: true,
+      others: true,
+    };
+    const overlay: ScaleOverlay = {
+      table: degreesOf(scale, 10),
+      mode: 'color',
+      colored,
+      title: 'Bb Minor Pentatonic',
+    };
+    const { container, rerender } = render(<Fretboard {...base} notes={[]} scale={overlay} />);
+    const dots = container.querySelectorAll('[data-scale-dot]');
+    // 5 of 12 pitch classes over 6 strings x 13 frets: 13 frets cover each pitch class once
+    // plus one repeat at the octave, so 6 strings x (5 + the repeated open-string class if in scale).
+    expect(dots.length).toBeGreaterThan(30);
+    const open6 = container.querySelector('[data-scale-dot][data-string="6"][data-fret="0"]')!;
+    expect(open6).toHaveAttribute('data-degree', 'R');
+    expect(open6.getAttribute('class')).toContain('fb-scale--root');
+    const fret3 = container.querySelector('[data-scale-dot][data-string="6"][data-fret="3"]')!;
+    expect(fret3).toHaveAttribute('data-degree', 'b3');
+    expect(fret3.getAttribute('class')).toContain('fb-scale--third-flat');
+    expect(container.querySelector('[data-scale-dot][data-string="6"][data-fret="1"]')).toBeNull();
+
+    // Switching the thirds group off leaves the dot in place but plain.
+    rerender(
+      <Fretboard
+        {...base}
+        notes={[]}
+        scale={{ ...overlay, colored: { ...colored, thirds: false } }}
+      />,
+    );
+    expect(
+      container
+        .querySelector('[data-scale-dot][data-string="6"][data-fret="3"]')!
+        .getAttribute('class'),
+    ).toContain('fb-scale--plain');
+
+    // Mono: everything plain, roots still marked as roots.
+    rerender(<Fretboard {...base} notes={[]} scale={{ ...overlay, mode: 'mono' }} />);
+    const classes = [...container.querySelectorAll('[data-scale-dot]')].map((d) =>
+      d.getAttribute('class'),
+    );
+    expect(classes.every((c) => c?.includes('fb-scale--plain'))).toBe(true);
+    expect(classes.some((c) => c?.includes('fb-scale--is-root'))).toBe(true);
+
+    rerender(<Fretboard {...base} notes={[]} scale={null} />);
+    expect(container.querySelector('[data-testid="scale-dots"]')).toBeNull();
+  });
+
+  it('names the degree in the hover tooltip when a scale is shown', () => {
+    const overlay: ScaleOverlay = {
+      table: degreesOf(scaleById('blues'), 10),
+      mode: 'color',
+      colored: {
+        roots: true,
+        thirds: true,
+        fifths: true,
+        sevenths: true,
+        blue: true,
+        others: true,
+      },
+      title: 'Bb Blues',
+    };
+    const { container } = render(<Fretboard {...base} notes={[]} scale={overlay} />);
+    fireEvent.mouseEnter(container.querySelector('[data-cell][data-string="6"][data-fret="6"]')!);
+    expect(screen.getByText('string 6 fret 6 = E2, b5 of Bb Blues')).toBeInTheDocument();
   });
 });

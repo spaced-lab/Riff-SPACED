@@ -55,13 +55,29 @@
 }
 
 .shell__fretboard {
+  display: flex;
+  flex-direction: column;
   height: 240px;
   border: 1px solid var(--color-dim);
+}
+
+/* The legend (when a scale is shown) takes its own height; the board fills the rest. */
+.shell__fretboard:has(.scale-legend) {
+  height: 266px;
+}
+
+.shell__board {
+  flex: 1;
+  min-height: 0;
 }
 
 .shell__fretboard:has(.split-view) {
   height: 380px;
   border: none;
+}
+
+.shell__fretboard:has(.split-view):has(.scale-legend) {
+  height: 406px;
 }
 
 .shell__transport {

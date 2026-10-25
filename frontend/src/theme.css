@@ -13,6 +13,24 @@
   --color-error: #ff4040; /* errors only */
   --color-dot-text: #000000; /* letters inside filled dots */
 
+  /*
+   * Scale overlay degrees (Phase 9). Chosen to sit at about the brightness of the phosphor
+   * green so no degree shouts over the others: roots pink, blue note blue, fifths purple,
+   * sevenths cyan (teal when flat), thirds gold (orange when flat), sixths lime (olive when
+   * flat), seconds and fourths a pale green. The owner expects to tune these.
+   */
+  --scale-root: #ff5fd2;
+  --scale-second: #8cff8c;
+  --scale-third: #ffd23f;
+  --scale-third-flat: #ff8a3d;
+  --scale-fourth: #8cff8c;
+  --scale-blue: #4a8fff;
+  --scale-fifth: #b36bff;
+  --scale-sixth: #c8ff5a;
+  --scale-sixth-flat: #8fbf5a;
+  --scale-seventh: #33ffff;
+  --scale-seventh-flat: #1fc9b8;
+
   --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   --font-size: 14px;
   --line: 1px;

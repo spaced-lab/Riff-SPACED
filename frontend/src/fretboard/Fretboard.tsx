@@ -4,6 +4,7 @@ import { useElementSize } from '@/hooks/useElementSize';
 import type { Note } from '@/model/types';
 import { nameOf } from '@/music/naming';
 import type { Accidentals } from '@/music/naming';
+import { pitchClass } from '@/music/pitch';
 import { pitchOf } from '@/music/tuning';
 import type { Tuning } from '@/music/tuning';
 import type { FretRange } from '@/store/viewSlice';
@@ -12,6 +13,8 @@ import { FretNumbers } from './FretNumbers';
 import { FretWires } from './FretWires';
 import { FretboardNote } from './FretboardNote';
 import { Markers } from './Markers';
+import { ScaleDots } from './ScaleDots';
+import type { ScaleOverlay } from './ScaleDots';
 import { StringLines } from './StringLines';
 import { Tooltip } from './Tooltip';
 import type { TooltipState } from './Tooltip';
@@ -32,6 +35,8 @@ export type FretboardProps = {
   showLetters: boolean;
   accidentals: Accidentals;
   realisticSpacing?: boolean;
+  /** Scale overlay under the notes (Phase 9); null or undefined draws none. */
+  scale?: ScaleOverlay | null;
   onCellClick?: (cell: CellClick) => void;
   onNoteClick?: (noteId: string, event: { shiftKey: boolean; button: number }) => void;
   onNoteContextMenu?: (noteId: string) => void;
@@ -56,6 +61,7 @@ export function Fretboard(props: FretboardProps) {
     showLetters,
     accidentals,
     realisticSpacing = false,
+    scale = null,
     onCellClick,
     onNoteClick,
     onNoteContextMenu,
@@ -82,8 +88,12 @@ export function Fretboard(props: FretboardProps) {
   );
 
   const [tooltip, setTooltip] = useState<TooltipState>(null);
-  const describe = (string: number, fret: number) =>
-    `string ${string} fret ${fret} = ${nameOf(pitchOf(tuning, string, fret), accidentals, true)}`;
+  const describe = (string: number, fret: number) => {
+    const midi = pitchOf(tuning, string, fret);
+    const base = `string ${string} fret ${fret} = ${nameOf(midi, accidentals, true)}`;
+    const degree = scale?.table[pitchClass(midi)];
+    return degree ? `${base}, ${degree.label} of ${scale.title}` : base;
+  };
   const showTip = (string: number, fret: number) =>
     setTooltip({
       x: layout.noteX(fret),
@@ -136,6 +146,7 @@ export function Fretboard(props: FretboardProps) {
         <FretWires layout={layout} />
         <StringLines layout={layout} tuning={tuning} accidentals={accidentals} />
         <g data-testid="cells">{cells}</g>
+        {scale ? <ScaleDots layout={layout} tuning={tuning} overlay={scale} /> : null}
         <ChordConnectors layout={layout} notes={visible} soundingIds={highlight} />
         <g data-testid="notes">
           {visible.map((n) => (
