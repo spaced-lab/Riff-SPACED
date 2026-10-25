@@ -141,8 +141,16 @@ describe('Engine', () => {
   });
 
   it('playableFrom uses the solo section as the loop window', () => {
-    const riff = useStore.getState().riff;
-    expect(playableFrom({ riff, soloSectionId: null })).toMatchObject({
+    const base = useStore.getState();
+    const riff = base.riff;
+    const inputs = {
+      editing: 'riff' as const,
+      library: base.library,
+      currentArrangementId: null,
+      currentSongId: null,
+      currentRiffId: base.currentRiffId,
+    };
+    expect(playableFrom({ ...inputs, riff, soloSectionId: null })).toMatchObject({
       loopStartTick: 0,
       loopEndTick: 4 * 1920,
       bpm: 120,
@@ -154,7 +162,7 @@ describe('Engine', () => {
         { id: 'y', label: 'B', startBar: 1, lengthBars: 3, kind: 'other' as const },
       ],
     };
-    expect(playableFrom({ riff: split, soloSectionId: 'y' })).toMatchObject({
+    expect(playableFrom({ ...inputs, riff: split, soloSectionId: 'y' })).toMatchObject({
       loopStartTick: 1920,
       loopEndTick: 4 * 1920,
     });

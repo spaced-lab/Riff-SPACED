@@ -13,6 +13,7 @@
 import { TICKS_PER_BAR } from '@/music/time';
 import { useStore } from '@/store';
 import type { AppState } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 import { sameIds } from '@/store/selectionSlice';
 import { playhead } from '@/tab/playheadRef';
 import { getAudioContext, resumeAudio } from './context';
@@ -40,9 +41,24 @@ export type EngineDeps = {
 
 export const POSITION_UPDATES_PER_SECOND = 30;
 
-/** Build what the scheduler plays from the store: riff, loop window (solo), tempo. */
-export function playableFrom(state: Pick<AppState, 'riff' | 'soloSectionId'>): Playable {
-  const { riff, soloSectionId } = state;
+type PlayableInputs = Pick<
+  AppState,
+  | 'riff'
+  | 'soloSectionId'
+  | 'editing'
+  | 'library'
+  | 'currentArrangementId'
+  | 'currentSongId'
+  | 'currentRiffId'
+>;
+
+/**
+ * Build what the scheduler plays from the store: the open riff, or the flattened arrangement
+ * or song when one is being edited, with the solo section as the loop window.
+ */
+export function playableFrom(state: PlayableInputs): Playable {
+  const { soloSectionId } = state;
+  const riff = selectDisplayRiff(state).riff;
   const section = soloSectionId ? riff.sections.find((s) => s.id === soloSectionId) : undefined;
   const loopStartTick = section ? section.startBar * TICKS_PER_BAR : 0;
   const loopEndTick = section

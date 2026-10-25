@@ -159,3 +159,12 @@
   stroke-dasharray: 3 2;
   pointer-events: none;
 }
+
+.tab-ruler__marker {
+  stroke: var(--color-mid);
+  stroke-width: 2;
+}
+
+.tab[data-read-only='true'] .tab-note rect {
+  cursor: default;
+}

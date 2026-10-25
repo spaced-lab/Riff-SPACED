@@ -3,6 +3,7 @@ import { nameOf } from '@/music/naming';
 import { pitchOf } from '@/music/tuning';
 import { TICKS_PER_BAR, snapToGrid } from '@/music/time';
 import { useStore } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 import { ChordBrackets } from './ChordBrackets';
 import { EditCursor } from './EditCursor';
 import { GridLines } from './GridLines';
@@ -19,7 +20,9 @@ import './tab.css';
  * surface and owns scrolling and zoom. Drawing is delegated to small pure children.
  */
 export function TabLanes() {
-  const riff = useStore((s) => s.riff);
+  const display = useStore(selectDisplayRiff);
+  const riff = display.riff;
+  const readOnly = display.readOnly;
   const grid = useStore((s) => s.grid);
   const pxPerBar = useStore((s) => s.pxPerBar);
   const setPxPerBar = useStore((s) => s.setPxPerBar);
@@ -91,10 +94,11 @@ export function TabLanes() {
           viewBox={`0 0 ${width} ${height}`}
           data-testid="tab-svg"
           data-pointer-phase={pointer.phase}
-          onPointerDown={pointer.onBackgroundPointerDown}
-          onPointerMove={pointer.onPointerMove}
-          onPointerUp={pointer.onPointerUp}
-          onPointerCancel={pointer.onPointerUp}
+          data-read-only={readOnly ? 'true' : 'false'}
+          onPointerDown={readOnly ? undefined : pointer.onBackgroundPointerDown}
+          onPointerMove={readOnly ? undefined : pointer.onPointerMove}
+          onPointerUp={readOnly ? undefined : pointer.onPointerUp}
+          onPointerCancel={readOnly ? undefined : pointer.onPointerUp}
         >
           <rect
             className="tab-loop"
@@ -112,6 +116,7 @@ export function TabLanes() {
           <Ruler
             lengthBars={riff.lengthBars}
             sections={riff.sections}
+            markers={display.markers}
             pxPerBar={pxPerBar}
             onClickTick={(tick) => setEditCursorTick(snapToGrid(tick, grid))}
           />
@@ -136,9 +141,9 @@ export function TabLanes() {
                     pxPerBar={pxPerBar}
                     selected={isSelected}
                     sounding={sounding.has(n.id)}
-                    onPointerDown={pointer.onNotePointerDown}
+                    onPointerDown={readOnly ? undefined : pointer.onNotePointerDown}
                     onClick={(id, e) => select([id], e.shiftKey)}
-                    onContextMenu={(id) => removeNotes([id])}
+                    onContextMenu={readOnly ? undefined : (id) => removeNotes([id])}
                   />
                 </g>
               );

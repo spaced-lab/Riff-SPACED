@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { Note } from '@/model/types';
 import { TICKS_PER_BAR } from '@/music/time';
 import { useStore } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 import { Fretboard } from './Fretboard';
 import './splitView.css';
 
@@ -29,7 +30,7 @@ export function notesInBars(notes: readonly Note[], fromBar: number, toBar: numb
 }
 
 export function SplitView() {
-  const riff = useStore((s) => s.riff);
+  const riff = useStore(selectDisplayRiff).riff;
   const showLetters = useStore((s) => s.showLetters);
   const accidentals = useStore((s) => s.accidentals);
   const fretRange = useStore((s) => s.fretRange);

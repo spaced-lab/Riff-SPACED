@@ -5,7 +5,14 @@
  */
 import { newArrangement, newRiff, newSong, nowIso } from '@/model/factories';
 import { uuid } from '@/model/ids';
-import type { Arrangement, LibraryBundle, Riff, Song } from '@/model/types';
+import type {
+  Arrangement,
+  ArrangementEntry,
+  LibraryBundle,
+  Riff,
+  Song,
+  SongPart,
+} from '@/model/types';
 
 export type Tier = 'riffs' | 'arrangements' | 'songs';
 
@@ -185,4 +192,81 @@ export function createRiffIn(
 ): { library: LibraryBundle; riff: Riff } {
   const riff = newRiff(tuning, { name });
   return { library: { ...library, riffs: [...library.riffs, riff] }, riff };
+}
+
+export type EntryPatch = Partial<
+  Pick<ArrangementEntry, 'repeats' | 'transpose' | 'label' | 'riffId'>
+>;
+
+/** Replace an arrangement's entries after checking they share one tuning. */
+export function setArrangementEntries(
+  library: LibraryBundle,
+  arrangementId: string,
+  entries: ArrangementEntry[],
+): { library: LibraryBundle } | { error: string } {
+  const riffs = new Map(library.riffs.map((r) => [r.id, r]));
+  const tunings = new Set(
+    entries.map((e) => riffs.get(e.riffId)?.tuning.pitches.join()).filter(Boolean),
+  );
+  if (tunings.size > 1) {
+    return {
+      error:
+        'all riffs in an arrangement must share one tuning. Retune the odd one out (keep pitches) first; that tool lands in Phase 8.',
+    };
+  }
+  const clean = entries.map((e) => ({
+    ...e,
+    repeats: Math.max(1, Math.min(64, Math.round(e.repeats || 1))),
+    transpose: Math.max(-24, Math.min(24, Math.round(e.transpose ?? 0))),
+  }));
+  return {
+    library: {
+      ...library,
+      arrangements: library.arrangements.map((a) =>
+        a.id === arrangementId ? { ...a, entries: clean, updatedAt: nowIso() } : a,
+      ),
+    },
+  };
+}
+
+export function setArrangementTempo(
+  library: LibraryBundle,
+  arrangementId: string,
+  bpm: number,
+): LibraryBundle {
+  const clamped = Math.max(30, Math.min(300, Math.round(bpm)));
+  return {
+    ...library,
+    arrangements: library.arrangements.map((a) =>
+      a.id === arrangementId ? { ...a, tempo: { bpm: clamped }, updatedAt: nowIso() } : a,
+    ),
+  };
+}
+
+export function setSongParts(
+  library: LibraryBundle,
+  songId: string,
+  parts: SongPart[],
+): LibraryBundle {
+  return {
+    ...library,
+    songs: library.songs.map((s) => (s.id === songId ? { ...s, parts, updatedAt: nowIso() } : s)),
+  };
+}
+
+export function setSongNotes(library: LibraryBundle, songId: string, notes: string): LibraryBundle {
+  return {
+    ...library,
+    songs: library.songs.map((s) => (s.id === songId ? { ...s, notes, updatedAt: nowIso() } : s)),
+  };
+}
+
+/** Move an item within a list; returns the same list when nothing changes. */
+export function moveIndex<T>(list: readonly T[], from: number, to: number): T[] {
+  if (from === to || from < 0 || to < 0 || from >= list.length || to >= list.length)
+    return [...list];
+  const next = [...list];
+  const [item] = next.splice(from, 1);
+  next.splice(to, 0, item as T);
+  return next;
 }

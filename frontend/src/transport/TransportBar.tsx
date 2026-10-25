@@ -5,6 +5,7 @@
 import { formatPosition, GRID_NAMES, LOOP_LENGTHS } from '@/music/time';
 import type { GridName } from '@/music/time';
 import { useStore } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 import type { VoiceName } from '@/store/transportSlice';
 import './transport.css';
 
@@ -14,10 +15,27 @@ export function TransportBar() {
   const stop = useStore((s) => s.stop);
   const loopEnabled = useStore((s) => s.loopEnabled);
   const setLoopEnabled = useStore((s) => s.setLoopEnabled);
-  const bpm = useStore((s) => s.riff.tempo.bpm);
-  const setBpm = useStore((s) => s.setBpm);
-  const nudgeBpm = useStore((s) => s.nudgeBpm);
-  const lengthBars = useStore((s) => s.riff.lengthBars);
+  const display = useStore(selectDisplayRiff);
+  const bpm = display.riff.tempo.bpm;
+  const editing = useStore((s) => s.editing);
+  const currentArrangementId = useStore((s) => s.currentArrangementId);
+  const setArrangementTempo = useStore((s) => s.setArrangementTempo);
+  const setRiffBpm = useStore((s) => s.setBpm);
+  const nudgeRiffBpm = useStore((s) => s.nudgeBpm);
+  // Tempo lives in the riff, or in the arrangement when one is open; songs follow their first arrangement.
+  const setBpm = (value: number) =>
+    editing === 'arrangement' && currentArrangementId
+      ? setArrangementTempo(currentArrangementId, value)
+      : editing === 'riff'
+        ? setRiffBpm(value)
+        : undefined;
+  const nudgeBpm = (delta: number) =>
+    editing === 'arrangement'
+      ? setBpm(bpm + delta)
+      : editing === 'riff'
+        ? nudgeRiffBpm(delta)
+        : undefined;
+  const lengthBars = display.riff.lengthBars;
   const setLengthBars = useStore((s) => s.setLengthBars);
   const grid = useStore((s) => s.grid);
   const setGrid = useStore((s) => s.setGrid);
@@ -32,7 +50,7 @@ export function TransportBar() {
   const audioState = useStore((s) => s.audioState);
   const soloSectionId = useStore((s) => s.soloSectionId);
   const setSoloSection = useStore((s) => s.setSoloSection);
-  const sections = useStore((s) => s.riff.sections);
+  const sections = display.riff.sections;
   const quantize = useStore((s) => s.quantizeSelection);
   const selectedCount = useStore((s) => s.selectedNoteIds.length);
 

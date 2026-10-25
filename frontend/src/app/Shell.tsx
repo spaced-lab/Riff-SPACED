@@ -1,9 +1,11 @@
 import { Dialog } from '@/components/Dialog';
 import { Toasts } from '@/components/Toast';
 import { MenuBar } from '@/menu/MenuBar';
-import { Placeholder } from '@/components/Placeholder';
 import { Inspector } from '@/inspector/Inspector';
 import { LibraryPanel } from '@/library/LibraryPanel';
+import { ArrangementEditor } from '@/arrangement/ArrangementEditor';
+import { SongEditor } from '@/song/SongEditor';
+import { selectDisplayRiff } from '@/store/derived';
 import { TransportBar } from '@/transport/TransportBar';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { SplitView } from '@/fretboard/SplitView';
@@ -23,7 +25,8 @@ import './shell.css';
  *   status bar
  */
 export function Shell() {
-  const riff = useStore((s) => s.riff);
+  const display = useStore(selectDisplayRiff);
+  const riff = display.riff;
   const showLetters = useStore((s) => s.showLetters);
   const accidentals = useStore((s) => s.accidentals);
   const fretRange = useStore((s) => s.fretRange);
@@ -73,14 +76,8 @@ export function Shell() {
       ) : null}
 
       <main className="shell__center">
-        {editing !== 'riff' ? (
-          <section className="shell__editor-placeholder">
-            <Placeholder
-              name={editing === 'arrangement' ? 'Arrangement editor' : 'Song editor'}
-              phase={5}
-            />
-          </section>
-        ) : null}
+        {editing === 'arrangement' ? <ArrangementEditor /> : null}
+        {editing === 'song' ? <SongEditor /> : null}
         <section className="shell__fretboard" aria-label="fretboard area">
           {splitView ? (
             <SplitView />
@@ -95,11 +92,14 @@ export function Shell() {
               showLetters={showLetters}
               accidentals={accidentals}
               realisticSpacing={realisticSpacing}
-              onCellClick={({ string, fret, shiftKey }) =>
-                addNoteAtCursor(string, fret, { chord: shiftKey })
+              onCellClick={
+                display.readOnly
+                  ? undefined
+                  : ({ string, fret, shiftKey }) =>
+                      addNoteAtCursor(string, fret, { chord: shiftKey })
               }
               onNoteClick={(id, e) => select([id], e.shiftKey)}
-              onNoteContextMenu={(id) => removeNotes([id])}
+              onNoteContextMenu={display.readOnly ? undefined : (id) => removeNotes([id])}
             />
           )}
         </section>

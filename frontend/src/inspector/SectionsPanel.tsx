@@ -1,4 +1,5 @@
 import { useStore } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 import { SECTION_KIND_LIST, sortedSections } from '@/store/sectionOps';
 import type { SectionKind } from '@/model/types';
 
@@ -8,7 +9,9 @@ import type { SectionKind } from '@/model/types';
  * so the sections can never stop covering the loop.
  */
 export function SectionsPanel() {
-  const riff = useStore((s) => s.riff);
+  const display = useStore(selectDisplayRiff);
+  const riff = display.riff;
+  const readOnly = display.readOnly;
   const splitSection = useStore((s) => s.splitSection);
   const mergeWithNext = useStore((s) => s.mergeSectionWithNext);
   const updateSection = useStore((s) => s.updateSection);
@@ -48,11 +51,15 @@ export function SectionsPanel() {
               <input
                 aria-label={`section ${i + 1} label`}
                 value={s.label}
-                onChange={(e) => updateSection(s.id, { label: e.target.value })}
+                readOnly={readOnly}
+                onChange={(e) =>
+                  readOnly ? undefined : updateSection(s.id, { label: e.target.value })
+                }
               />
               <select
                 aria-label={`section ${i + 1} kind`}
                 value={s.kind}
+                disabled={readOnly}
                 onChange={(e) => updateSection(s.id, { kind: e.target.value as SectionKind })}
               >
                 {SECTION_KIND_LIST.map((k) => (
@@ -61,7 +68,7 @@ export function SectionsPanel() {
               </select>
               <button
                 type="button"
-                disabled={s.lengthBars < 2}
+                disabled={readOnly || s.lengthBars < 2}
                 onClick={() => splitSection(s.id, s.startBar + Math.floor(s.lengthBars / 2))}
                 title="split in half"
               >

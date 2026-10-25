@@ -1,5 +1,12 @@
 import type { StateCreator } from 'zustand';
-import type { Arrangement, LibraryBundle, Riff, Song } from '@/model/types';
+import type {
+  Arrangement,
+  ArrangementEntry,
+  LibraryBundle,
+  Riff,
+  Song,
+  SongPart,
+} from '@/model/types';
 import * as ops from './libraryOps';
 import type { Tier } from './libraryOps';
 import type { AppState } from './types';
@@ -34,6 +41,11 @@ export type LibrarySlice = {
   /** Returns an error message on tuning mismatch, else null. */
   appendRiffToArrangement: (arrangementId: string, riffId: string) => string | null;
   markRiffClean: (id: string) => void;
+  /** Returns an error message when the entries would mix tunings, else null. */
+  setArrangementEntries: (arrangementId: string, entries: ArrangementEntry[]) => string | null;
+  setArrangementTempo: (arrangementId: string, bpm: number) => void;
+  setSongParts: (songId: string, parts: SongPart[]) => void;
+  setSongNotes: (songId: string, notes: string) => void;
   /** Write the edited riff back into the bundle so the library reflects edits. */
   syncCurrentRiff: () => void;
   /** ISO time of the last autosave, for the status bar. */
@@ -186,6 +198,18 @@ export const createLibrarySlice: StateCreator<AppState, [], [], LibrarySlice> = 
   },
 
   markRiffClean: (id) => set((s) => ({ dirtyRiffIds: s.dirtyRiffIds.filter((d) => d !== id) })),
+
+  setArrangementEntries: (arrangementId, entries) => {
+    get().syncCurrentRiff();
+    const result = ops.setArrangementEntries(get().library, arrangementId, entries);
+    if ('error' in result) return result.error;
+    set({ library: result.library });
+    return null;
+  },
+  setArrangementTempo: (arrangementId, bpm) =>
+    set({ library: ops.setArrangementTempo(get().library, arrangementId, bpm) }),
+  setSongParts: (songId, parts) => set({ library: ops.setSongParts(get().library, songId, parts) }),
+  setSongNotes: (songId, notes) => set({ library: ops.setSongNotes(get().library, songId, notes) }),
 
   lastSavedAt: null,
   setLastSavedAt: (lastSavedAt) => set({ lastSavedAt }),

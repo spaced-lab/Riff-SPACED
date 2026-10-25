@@ -5,6 +5,7 @@ import { FLAT_NAMES, SHARP_NAMES, nameOf } from '@/music/naming';
 import { formatPosition } from '@/music/time';
 import { pitchOf } from '@/music/tuning';
 import { useStore } from '@/store';
+import { selectDisplayRiff } from '@/store/derived';
 
 /**
  * Selected note(s): position, pitch, timing, velocity, techniques, confidence. With exactly
@@ -12,7 +13,9 @@ import { useStore } from '@/store';
  * main vocabulary: P5 power chord, P4 inverted with the root on top, m3, TT.
  */
 export function NotePanel() {
-  const riff = useStore((s) => s.riff);
+  const display = useStore(selectDisplayRiff);
+  const riff = display.riff;
+  const readOnly = display.readOnly;
   const selectedNoteIds = useStore((s) => s.selectedNoteIds);
   const accidentals = useStore((s) => s.accidentals);
   const updateNote = useStore((s) => s.updateNote);
@@ -35,6 +38,7 @@ export function NotePanel() {
       : null;
 
   const toggleTechnique = (note: Note, technique: Technique) => {
+    if (readOnly) return;
     const current = note.techniques ?? [];
     const next = current.includes(technique)
       ? current.filter((t) => t !== technique)
@@ -80,6 +84,7 @@ export function NotePanel() {
               max={127}
               value={n.velocity ?? 100}
               aria-label={`velocity of ${n.id}`}
+              disabled={readOnly}
               onChange={(e) => updateNote(n.id, { velocity: Number(e.target.value) })}
             />
           </label>
@@ -96,6 +101,7 @@ export function NotePanel() {
                 <input
                   type="checkbox"
                   checked={n.techniques?.includes(t) ?? false}
+                  disabled={readOnly}
                   onChange={() => toggleTechnique(n, t)}
                 />
                 {t}

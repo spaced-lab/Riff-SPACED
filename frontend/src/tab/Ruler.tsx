@@ -5,12 +5,14 @@ import { RULER_HEIGHT, tickToX } from './geometry';
 type Props = {
   lengthBars: number;
   sections: readonly Section[];
+  /** Arrangement entry boundaries (read-only views), drawn as small ticks with labels. */
+  markers?: readonly { tick: number; label: string }[];
   pxPerBar: number;
   onClickTick?: (tick: number) => void;
 };
 
 /** Bar numbers (1-based) and section labels along the top; clicking moves the edit cursor. */
-export function Ruler({ lengthBars, sections, pxPerBar, onClickTick }: Props) {
+export function Ruler({ lengthBars, sections, markers = [], pxPerBar, onClickTick }: Props) {
   const bars = [];
   for (let b = 0; b < lengthBars; b++) {
     bars.push(
@@ -40,6 +42,17 @@ export function Ruler({ lengthBars, sections, pxPerBar, onClickTick }: Props) {
         }}
       />
       {bars}
+      {markers.map((m, i) => (
+        <g key={`m-${i}`} data-entry-marker={i}>
+          <line
+            className="tab-ruler__marker"
+            x1={tickToX(m.tick, pxPerBar)}
+            x2={tickToX(m.tick, pxPerBar)}
+            y1={0}
+            y2={RULER_HEIGHT}
+          />
+        </g>
+      ))}
       {sections.map((s) => (
         <text
           key={s.id}

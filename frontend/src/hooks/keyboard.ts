@@ -75,8 +75,11 @@ export function cancelPendingFret(deps: KeyboardDeps): void {
 export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
   const s = deps.getState();
   const mod = e.ctrlKey || e.metaKey;
+  // Arrangements and songs are read-only views; only transport keys apply there.
+  const readOnly = s.editing !== 'riff';
 
   if (/^[0-9]$/.test(e.key) && !mod) {
+    if (readOnly) return false;
     const next = (s.pendingFret ?? '') + e.key;
     if (digitTimer !== null) deps.clearTimeout(digitTimer);
     if (s.pendingFret !== null && Number(next) <= 24 && s.pendingFret.length === 1) {
@@ -107,6 +110,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       s.nudgeBpm(1);
       return true;
     case 'Enter':
+      if (readOnly) return false;
       commitPendingFret(deps);
       return true;
     case 'Escape':
@@ -129,6 +133,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return true;
     case 'Delete':
     case 'Backspace':
+      if (readOnly) return false;
       if (s.selectedNoteIds.length) s.removeNotes(s.selectedNoteIds);
       return true;
     case 'Tab':
@@ -149,6 +154,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return false;
     case 'z':
     case 'Z':
+      if (mod && readOnly) return false;
       if (mod) {
         if (e.shiftKey) s.redo();
         else s.undo();
@@ -157,6 +163,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return false;
     case 'y':
     case 'Y':
+      if (mod && readOnly) return false;
       if (mod) {
         s.redo();
         return true;
@@ -171,6 +178,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return false;
     case 'x':
     case 'X':
+      if (mod && readOnly) return false;
       if (mod) {
         s.cutSelection();
         return true;
@@ -178,6 +186,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return false;
     case 'v':
     case 'V':
+      if (mod && readOnly) return false;
       if (mod) {
         s.pasteAtCursor();
         return true;
@@ -185,6 +194,7 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
       return false;
     case 'd':
     case 'D':
+      if (mod && readOnly) return false;
       if (mod) {
         s.duplicateSelection();
         return true;
