@@ -5,7 +5,9 @@ from riffspaced.api import cors_origins, create_app
 
 
 def test_health_reports_status_version_and_ai_flag(monkeypatch):
+    # CI runs with RIFFSPACED_AI_FAKE=1 (DECISIONS 54); this test is about the bare default.
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("RIFFSPACED_AI_FAKE", raising=False)
     client = TestClient(create_app())
 
     response = client.get("/health")
