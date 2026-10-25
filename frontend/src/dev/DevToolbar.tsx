@@ -26,6 +26,8 @@ export function DevToolbar() {
   const setGhostNotes = useStore((s) => s.setGhostNotes);
   const followPlayhead = useStore((s) => s.followPlayhead);
   const setFollowPlayhead = useStore((s) => s.setFollowPlayhead);
+  const splitView = useStore((s) => s.splitView);
+  const setSplitView = useStore((s) => s.setSplitView);
 
   const rangeLabel = `${fretRange.from}-${fretRange.to}`;
   const presetName =
@@ -141,6 +143,15 @@ export function DevToolbar() {
           onChange={(e) => setFollowPlayhead(e.target.checked)}
         />
         Follow playhead
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          checked={splitView}
+          onChange={(e) => setSplitView(e.target.checked)}
+        />
+        Split view
       </label>
 
       <span className="dev-toolbar__status" data-testid="tuning-status">

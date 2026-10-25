@@ -4,6 +4,7 @@ import { Inspector } from '@/inspector/Inspector';
 import { TransportBar } from '@/transport/TransportBar';
 import { DevToolbar } from '@/dev/DevToolbar';
 import { Fretboard } from '@/fretboard/Fretboard';
+import { SplitView } from '@/fretboard/SplitView';
 import { TabLanes } from '@/tab/TabLanes';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { useStore } from '@/store';
@@ -28,6 +29,7 @@ export function Shell() {
   const selectedNoteIds = useStore((s) => s.selectedNoteIds);
   const highlightIds = useStore((s) => s.highlightIds);
   const panels = useStore((s) => s.panels);
+  const splitView = useStore((s) => s.splitView);
   const select = useStore((s) => s.select);
   const editCursorTick = useStore((s) => s.editCursorTick);
   const ghostNotes = useStore((s) => s.ghostNotes);
@@ -70,22 +72,26 @@ export function Shell() {
       <main className="shell__center">
         <DevToolbar />
         <section className="shell__fretboard" aria-label="fretboard area">
-          <Fretboard
-            tuning={riff.tuning}
-            notes={shown}
-            dimmedIds={dimmedIds}
-            selectedIds={selectedNoteIds}
-            highlightIds={highlightIds}
-            range={fretRange}
-            showLetters={showLetters}
-            accidentals={accidentals}
-            realisticSpacing={realisticSpacing}
-            onCellClick={({ string, fret, shiftKey }) =>
-              addNoteAtCursor(string, fret, { chord: shiftKey })
-            }
-            onNoteClick={(id, e) => select([id], e.shiftKey)}
-            onNoteContextMenu={(id) => removeNotes([id])}
-          />
+          {splitView ? (
+            <SplitView />
+          ) : (
+            <Fretboard
+              tuning={riff.tuning}
+              notes={shown}
+              dimmedIds={dimmedIds}
+              selectedIds={selectedNoteIds}
+              highlightIds={highlightIds}
+              range={fretRange}
+              showLetters={showLetters}
+              accidentals={accidentals}
+              realisticSpacing={realisticSpacing}
+              onCellClick={({ string, fret, shiftKey }) =>
+                addNoteAtCursor(string, fret, { chord: shiftKey })
+              }
+              onNoteClick={(id, e) => select([id], e.shiftKey)}
+              onNoteContextMenu={(id) => removeNotes([id])}
+            />
+          )}
         </section>
         <section className="shell__transport" aria-label="transport">
           <TransportBar />
