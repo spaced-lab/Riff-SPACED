@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T15:30:00Z
+Updated: 2026-10-25T16:30:00Z
 Phase: All phases complete (v0.8.0). Next: the owner's real-recording pass (see After Phase 8).
-Last completed task: P8.T8 Final verification and exit
-Next task: real-recording extraction to YAML (owner request, docs/BACKLOG.md); no plan phase remains
+Last completed task: real-recording pass, first round (YAML out, collision fix, measurements)
+Next task: none scheduled; waiting on the owner for a known-riff recording (see Owner follow-ups)
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -144,13 +144,13 @@ make down                                  # stop the containers; make check run
 ## Owner follow-ups
 
 - Open a MusicXML export in MuseScore or Guitar Pro once and report (P8.T3).
-- Tell the run which tuning the three recordings in `injest-raw/` were played in, and give a tab or description of one of them, so the analyzer's output can be scored.
+- Record one riff you can write down (four bars, looped three or four times, played the way you play), ideally captured from the interface or amp output rather than the phone, and say which tuning. Drop it in `injest-raw/`. That is what the analyzer needs next; the three takes there now show no repeat structure the pipeline can lock onto.
 - Create an `ANTHROPIC_API_KEY` when ready and run the live smoke test (recipe in docs/AI_LAYER.md).
 - Consider the backlog order in docs/BACKLOG.md; the real-recording pass is first by your request.
 
 ## After Phase 8 (owner request 2026-10-25)
 
-Run the three recordings in `injest-raw/` through the Python analysis (and the fake-client cleanup), tune until notes can be picked out, and write the result as YAML next to the riff JSON. Details in docs/BACKLOG.md.
+Done, first round: the three recordings went through the analysis and the fake-client cleanup, and the results are in `backend/riffs_out/*.riff.yaml` and `*.clean.riff.yaml` (gitignored). The notes cannot yet be picked out with confidence; the measurements and the reasons are in `docs/benchmarks/real-audio-notes.md` (second pass). Tuning stopped there on purpose: without one known riff there is nothing to score against.
 
 ## Waiting on owner (not blocking)
 
