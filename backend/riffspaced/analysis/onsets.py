@@ -21,7 +21,7 @@ frames.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
@@ -37,6 +37,8 @@ THRESHOLD_MARGIN = 0.12
 MIN_GAP_SECONDS = 0.05
 PITCH_JUMP_SEMITONES = 1.0
 PITCH_HOLD_FRAMES = 3
+# A pitch jump within this long after a flux onset is the same event settling, not a new one.
+PITCH_JUMP_GAP_SECONDS = 0.12
 PITCH_MAX_HZ = 1000.0
 PITCH_LOUDNESS_DB = -35.0
 ONSET_N_FFT = 1024
@@ -52,6 +54,8 @@ class Onsets:
     flux: np.ndarray
     threshold: np.ndarray
     frame_times: np.ndarray
+    origins: np.ndarray = field(default_factory=lambda: np.zeros(0, dtype=object))
+    """Per onset, 'flux' or 'pitch': which detector found it."""
 
 
 def spectral_flux(
@@ -148,7 +152,7 @@ def pitch_jump_onsets(spec: Spectrogram, existing_times: list[float]) -> list[fl
         if abs(float(np.median(after)) - float(np.median(before))) < PITCH_JUMP_SEMITONES:
             continue
         time = t * frame_seconds
-        if all(abs(time - e) >= MIN_GAP_SECONDS for e in existing_times + found):
+        if all(abs(time - e) >= PITCH_JUMP_GAP_SECONDS for e in existing_times + found):
             found.append(time)
     return found
 
@@ -168,10 +172,12 @@ def detect_onsets(
     peak_frames = pick_peaks(flux, threshold, frame_seconds)
     times = [f * frame_seconds for f in peak_frames]
     strengths = [float(flux[f]) for f in peak_frames]
+    origins = ["flux"] * len(times)
     pitch_spec = spec if spec is not None else frames(audio)
     for t in pitch_jump_onsets(pitch_spec, times):
         times.append(t)
         strengths.append(float(flux[min(len(flux) - 1, int(round(t / frame_seconds)))]))
+        origins.append("pitch")
     order = np.argsort(times)
     onsets = Onsets(
         times=np.array(times)[order] if times else np.zeros(0),
@@ -179,6 +185,7 @@ def detect_onsets(
         flux=flux,
         threshold=threshold,
         frame_times=short.times,
+        origins=np.array(origins, dtype=object)[order] if origins else np.zeros(0, dtype=object),
     )
     if debug_name and os.getenv("RIFFSPACED_DEBUG") == "1":
         save_debug_plot(pitch_spec, onsets, debug_name)

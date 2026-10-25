@@ -54,10 +54,18 @@ class RenderedNote:
     palm_mute: bool
 
 
+RING_DROP_DB = 40.0
+
+
 def damping_for(f0: float, ring_seconds: float) -> float:
-    """Per-period feedback gain so the string falls 60 dB in `ring_seconds`."""
+    """Per-period feedback gain so the string falls RING_DROP_DB in `ring_seconds`.
+
+    "Rings about 2.5 s" and "0.12 s palm-muted" describe what a listener hears, which is
+    closer to a 40 dB drop than to full silence; a 60 dB drop in 120 ms left the muted notes
+    with almost no pitched content to analyze, which no real palm mute does.
+    """
     periods = max(1.0, ring_seconds * f0)
-    return float(0.001 ** (1.0 / periods))
+    return float((10 ** (-RING_DROP_DB / 20)) ** (1.0 / periods))
 
 
 def karplus_strong(

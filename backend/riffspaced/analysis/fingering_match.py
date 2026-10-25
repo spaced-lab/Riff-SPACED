@@ -27,18 +27,52 @@ from riffspaced.music.fingering import Position, hand_span
 from riffspaced.music.pitch import freq_of
 from riffspaced.music.tuning import Tuning, pitch_of
 
-HARMONICS = 12
+# 24 harmonics so a low note's template covers the band it actually fills under distortion;
+# with 12 the uncovered highs rewarded any template that had extra lines.
+HARMONICS = 24
 HARMONIC_ROLLOFF = 0.8
-INHARMONICITY_B = 2e-4
+# Stiffness coefficient. 2e-5 is small; the test synth is perfectly harmonic and real heavy
+# strings may want more (SPEC says 2e-4). Tune against recordings, not the synth.
+INHARMONICITY_B = 2e-5
 INTERMOD_WEIGHT = 0.15
 # 0.8 bins: at 1.5 the fundamentals of B1 and Db2 (7.6 Hz apart) blur together; the margin
 # tests in test_fingering_match.py are how this was chosen.
 PEAK_WIDTH_BINS = 0.8
 BAND_LOW_HZ = 40.0
-BAND_HIGH_HZ = 6000.0
+BAND_HIGH_HZ = 2500.0
 ATTACK_SKIP_SECONDS = 0.02
-PEAK_BONUS = 0.05
-PEAK_TOLERANCE = 0.015
+PEAK_BONUS = 0.08
+# Peak tolerance in cents (plus a 2 Hz floor for the lowest notes, where a few cents is less
+# than the interpolation error).
+PEAK_TOLERANCE_CENTS = 35.0
+PEAK_TOLERANCE_FLOOR_HZ = 2.0
+# Spectral floor removal: the percentile of a segment's own spectrum treated as noise.
+FLOOR_PERCENTILE = 20.0
+# How many frames at the end of the previous segment stand for "what was already ringing".
+TAIL_FRAMES = 4
+# Peaks are gathered from this many of the loudest post-attack frames of a segment.
+PEAK_FRAMES = 3
+# What is new in a slice is identified from its first NOVEL_WINDOW_SECONDS after the attack
+# skip, as the mean over the loud frames: a short muted note next to a long ringing one
+# vanishes from a median over the whole slice, but survives a mean over the opening. The
+# sweep that chose these values (window 0, 0.1, 0.25, 0.3, 0.5; mean vs median; loud only)
+# is in the P6.T6 commit message.
+NOVEL_WINDOW_SECONDS = 0.3
+# Statistic over the identification frames: 'median' resists transients, 'mean' keeps a short
+# note that shares the slice with a long one.
+NOVEL_STATISTIC = "mean"
+# Restrict identification to frames carrying at least a quarter of the slice's peak energy.
+NOVEL_LOUD_ONLY = True
+# The peak bonus checks these harmonics of each candidate pitch against the gathered peaks.
+# Interpolated peaks resolve a few cents, far finer than the bins, so this is what tells
+# neighboring frets apart on the low strings.
+BONUS_HARMONICS = 6
+# Occam: a second note has to earn its place. Subtracted from every dyad score.
+DYAD_PENALTY = 0.01
+# Tried and rejected: penalizing a pitch whose fundamental is not among the top peaks. Under
+# distortion the top-24 peak list is often all upper partials and intermodulation, so real
+# second notes were punished (dyad accuracy fell from 0.54 to 0.13). Kept as a note so the next
+# person does not repeat it; the cosine score already encodes support through the comb.
 DEFAULT_STRINGS = (6, 5, 4, 3)
 DEFAULT_MAX_FRET = 12
 DEFAULT_MAX_SPAN = 4
@@ -167,26 +201,44 @@ def observed_vector(magnitude: np.ndarray, freqs: np.ndarray) -> np.ndarray:
 
 @dataclass(frozen=True)
 class Segment:
-    """One inter-onset slice: its median spectrum, its peaks, and its level."""
+    """One inter-onset slice.
+
+    `spectrum` is what is new in the slice (its spectrum minus the tail of the previous
+    slice, floor removed): that is what the matcher identifies. `full_spectrum` is the slice
+    as heard, used afterwards to decide whether the previous notes are still ringing.
+    """
 
     start: float
     end: float
     spectrum: np.ndarray
+    full_spectrum: np.ndarray
     peaks: np.ndarray
     energy_db: float
+
+
+def remove_floor(spectrum: np.ndarray, percentile: float = FLOOR_PERCENTILE) -> np.ndarray:
+    """Subtract the segment's own noise floor.
+
+    Broadband pick noise would otherwise reward templates with more lines.
+    """
+    floor = float(np.percentile(spectrum, percentile)) if spectrum.size else 0.0
+    return np.maximum(spectrum - floor, 0.0)
 
 
 def segment_spectra(
     spec: Spectrogram, onsets: Onsets, end_time: float | None = None
 ) -> list[Segment]:
-    """Median magnitude per inter-onset segment, skipping the first 20 ms (the attack transient)."""
+    """Per inter-onset segment: the new spectrum, the full spectrum, peaks, and level."""
     times = list(onsets.times)
     if not times:
         return []
     last = end_time if end_time is not None else float(spec.times[-1]) + spec.frame_seconds
     bounds = [(t, times[i + 1] if i + 1 < len(times) else last) for i, t in enumerate(times)]
-    top = float(np.max(spec.mag)) if spec.mag.size else 1.0
+    # Level reference: the loudest frame's RMS, so a full-level note reads near 0 dB.
+    frame_rms = np.sqrt(np.mean(spec.mag**2, axis=1)) if spec.mag.size else np.zeros(1)
+    top = float(np.max(frame_rms)) if frame_rms.size else 1.0
     segments: list[Segment] = []
+    previous_tail = np.zeros(spec.mag.shape[1])
     for start, end in bounds:
         lo = int(np.searchsorted(spec.times, start + ATTACK_SKIP_SECONDS))
         hi = int(np.searchsorted(spec.times, end))
@@ -194,24 +246,71 @@ def segment_spectra(
             lo = int(np.clip(np.searchsorted(spec.times, start), 0, len(spec.times) - 1))
             hi = lo + 1
         block = spec.mag[lo:hi]
-        spectrum = np.median(block, axis=0)
-        middle = min(len(spec.peaks) - 1, (lo + hi) // 2)
-        level = float(np.sqrt(np.mean(block**2))) / top if top > 0 else 0.0
+        # A palm-muted sixteenth is silent for most of its slot; take the median over the
+        # frames that still carry at least a quarter of the segment's peak energy.
+        frame_energy = np.sqrt(np.mean(block**2, axis=1))
+        loud = (
+            frame_energy >= 0.25 * float(np.max(frame_energy))
+            if len(frame_energy)
+            else np.ones(0, bool)
+        )
+        full = np.median(block[loud] if np.any(loud) else block, axis=0)
+        # Identification uses the opening of the slice, where every new note is still present.
+        window = (
+            int(round(NOVEL_WINDOW_SECONDS / spec.frame_seconds))
+            if NOVEL_WINDOW_SECONDS
+            else len(block)
+        )
+        opening = block[: max(1, window)]
+        if NOVEL_LOUD_ONLY and len(opening):
+            open_energy = np.sqrt(np.mean(opening**2, axis=1))
+            keep = open_energy >= 0.25 * float(np.max(open_energy))
+            opening = opening[keep] if np.any(keep) else opening
+        reduce = np.mean if NOVEL_STATISTIC == "mean" else np.median
+        novel = remove_floor(np.maximum(reduce(opening, axis=0) - previous_tail, 0.0))
+        loudest = lo + int(np.argmax(frame_energy)) if len(frame_energy) else lo
+        level = float(np.max(frame_energy)) / top if top > 0 and len(frame_energy) else 0.0
         energy_db = 20 * np.log10(max(level, 1e-6))
-        segments.append(Segment(start, end, spectrum, spec.peaks[middle], energy_db))
+        segments.append(
+            Segment(
+                start,
+                end,
+                novel,
+                remove_floor(full),
+                spec.peaks[min(loudest, len(spec.peaks) - 1)],
+                energy_db,
+            )
+        )
+        tail_lo = max(lo, hi - TAIL_FRAMES)
+        previous_tail = (
+            np.median(spec.mag[tail_lo:hi], axis=0) if hi > tail_lo else np.zeros(spec.mag.shape[1])
+        )
     return segments
 
 
 def peak_bonus(candidate: Candidate, peaks: np.ndarray) -> float:
-    """A small reward when a candidate's fundamentals appear as actual interpolated peaks."""
+    """Reward candidates whose first harmonics appear as actual interpolated peaks.
+
+    The fraction of the candidate's harmonics 1..BONUS_HARMONICS (per pitch) found within
+    PEAK_TOLERANCE_CENTS of a gathered peak, times PEAK_BONUS.
+    """
     if candidate.is_silence or len(peaks) == 0:
         return 0.0
+    ratio = 2 ** (PEAK_TOLERANCE_CENTS / 1200) - 1
+    peak_freqs = peaks[:, 0]
     hits = 0
+    total = 0
     for pitch in candidate.pitches:
         f0 = freq_of(pitch)
-        if np.any(np.abs(peaks[:, 0] - f0) <= PEAK_TOLERANCE * f0):
-            hits += 1
-    return PEAK_BONUS * hits / len(candidate.pitches)
+        for h in range(1, BONUS_HARMONICS + 1):
+            target = h * f0
+            if target > BAND_HIGH_HZ:
+                break
+            total += 1
+            tol = max(PEAK_TOLERANCE_FLOOR_HZ, target * ratio)
+            if np.any(np.abs(peak_freqs - target) <= tol):
+                hits += 1
+    return PEAK_BONUS * hits / total if total else 0.0
 
 
 def score(observed: np.ndarray, predicted: np.ndarray) -> float:
@@ -228,8 +327,30 @@ def score_matrix(
     templates = np.stack([predicted_spectrum(c, freqs) for c in candidates])
     observed = np.stack([observed_vector(s.spectrum, freqs) for s in segments])
     matrix = observed @ templates.T
+    dyad = np.array([DYAD_PENALTY if len(c.positions) > 1 else 0.0 for c in candidates])
+    matrix -= dyad[None, :]
     for i, seg in enumerate(segments):
         for j, cand in enumerate(candidates):
             if not cand.is_silence:
                 matrix[i, j] += peak_bonus(cand, seg.peaks)
     return matrix
+
+
+def sustain_evidence(
+    full_spectrum: np.ndarray, new: Candidate, previous: Candidate, freqs: np.ndarray
+) -> float:
+    """How much better the slice is explained with the previous pitches still ringing.
+
+    Positive means the union template fits the full spectrum better than the new event alone,
+    so the earlier notes should be extended through this slice.
+    """
+    union_pitches = tuple(sorted(set(new.pitches) | set(previous.pitches)))
+    if union_pitches == tuple(sorted(new.pitches)):
+        return 0.0
+    observed = observed_vector(full_spectrum, freqs)
+    alone = score(observed, predicted_spectrum(new, freqs))
+    together = score(
+        observed,
+        predicted_spectrum(Candidate(new.positions + previous.positions, union_pitches), freqs),
+    )
+    return together - alone

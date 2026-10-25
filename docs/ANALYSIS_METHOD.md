@@ -23,9 +23,13 @@ Each candidate has a **predicted spectrum**:
 - every line drawn as a Gaussian 0.8 bins wide (1.5 blurred B1 against Db2, whose fundamentals are 7.6 Hz apart);
 - plus a flat **silence** template so gaps and dead notes are an explicit answer rather than a wrong note.
 
-The **observed spectrum** of a segment is the median magnitude over its frames after the first 20 ms (skipping the attack transient). Both sides are compared in the same domain: square-root compression (so loud partials do not dominate) and a `1 / sqrt(f)` weighting (so the linear bins of the FFT do not over-represent the highs). The score is the cosine similarity of the two unit vectors, plus a small bonus when the candidate's fundamentals appear as actual interpolated peaks.
+The **observed spectrum** of a segment is what is *new* in it: the mean magnitude over the loud frames of its first 300 ms after a 20 ms attack skip, minus the tail of the previous segment (what was already ringing), with the segment's own noise floor removed so broadband pick noise does not reward busy templates. The mean over the opening is what keeps a short palm-muted note that shares its slice with a long ringing one; a median over the whole slice lost it. Both sides are compared in the same domain: square-root compression (so loud partials do not dominate) and a `1 / sqrt(f)` weighting (so the linear bins of the FFT do not over-represent the highs). The score is the cosine similarity of the two unit vectors, minus a small penalty for dyads (a second note has to earn its place), plus a **peak bonus**: the fraction of the candidate's first six harmonics that appear as interpolated peaks within 35 cents, gathered from the three loudest frames. The bins are 10.8 Hz wide but interpolated peaks resolve a few cents, and a semitone is 2.8 percent of frequency: the peak bonus is what tells neighboring frets apart on the low strings when the Gaussian cosine cannot.
 
 Templates do not depend on the audio, so they are computed once per candidate and cached.
+
+Whether the previous notes are *still ringing* through a segment is decided afterwards by evidence (`sustain_evidence`): if a template holding the previous pitches as well as the new ones explains the segment's full spectrum better than the new event alone, the earlier notes are extended instead of re-emitted. That is how the walkdown's held Ab2 becomes one note under eight moving low notes. Palm-muted notes are never extended; they are gone within 120 ms.
+
+One idea was tried and rejected: penalizing any pitch whose fundamental is not among the top peaks. Under distortion the peak list is mostly upper partials and intermodulation, so real second notes were punished and dyad accuracy fell from 0.54 to 0.13. The code carries a note so nobody repeats it.
 
 ## The pipeline, stage by stage
 
@@ -37,7 +41,7 @@ Templates do not depend on the audio, so they are computed once per candidate an
 | onsets | `onsets.py` | spectral flux on a short 1024/256 STFT (attack timing within a frame), adaptive threshold, 50 ms gap; a pitch-jump detector for slides and soft second notes |
 | tempo | `tempo.py` | autocorrelation of the flux; the tatum (shortest strong period) times 1, 2, 4 or 8, picked by a prior around 100 BPM |
 | match | `fingering_match.py` | the template matcher above: a segment by candidate score matrix |
-| decode | `decode.py` | Viterbi over segments: emission is the score, transition is hand movement, so the path prefers shapes a hand would actually move between |
+| decode | `decode.py` | Viterbi over segments: emissions are the scores rescaled by a temperature of 0.01 so a 0.02 margin is decisive and the hand-movement costs only break ties; the path prefers shapes a hand would actually move between |
 | quantize | `quantize.py` | snap to sixteenths at the chosen tempo, pick the downbeat, classify palm mutes by decay |
 | emit | `emit.py` | riff JSON with confidences, validated against the shared schema |
 
@@ -49,6 +53,9 @@ All in `fingering_match.py` as named constants:
 - `INHARMONICITY_B`: stiffer, heavier strings want a larger `B`.
 - `INTERMOD_WEIGHT`: how much fuzz the templates assume. More gain, more weight.
 - `PEAK_WIDTH_BINS`: tolerance for tuning drift and vibrato.
+- `PEAK_BONUS`, `BONUS_HARMONICS`, `PEAK_TOLERANCE_CENTS`: how much the interpolated peaks count and how many harmonics they check.
+- `DYAD_PENALTY`: how much a second note has to earn.
+- `SUSTAIN_MARGIN` (in `quantize.py`): how much better the union template must fit before a note is held through the next one.
 - `DEFAULT_STRINGS`, `DEFAULT_MAX_FRET`, `DEFAULT_MAX_SPAN`: the search space, which is also the statement of how he plays.
 
 And in `decode.py`, the transition costs: how much a fret jump, a string change, or repeating the previous shape should cost.
