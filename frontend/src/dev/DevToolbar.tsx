@@ -24,6 +24,8 @@ export function DevToolbar() {
   const setRealistic = useStore((s) => s.setRealisticSpacing);
   const ghostNotes = useStore((s) => s.ghostNotes);
   const setGhostNotes = useStore((s) => s.setGhostNotes);
+  const followPlayhead = useStore((s) => s.followPlayhead);
+  const setFollowPlayhead = useStore((s) => s.setFollowPlayhead);
 
   const rangeLabel = `${fretRange.from}-${fretRange.to}`;
   const presetName =
@@ -130,6 +132,15 @@ export function DevToolbar() {
           onChange={(e) => setGhostNotes(e.target.checked)}
         />
         Ghost notes
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          checked={followPlayhead}
+          onChange={(e) => setFollowPlayhead(e.target.checked)}
+        />
+        Follow playhead
       </label>
 
       <span className="dev-toolbar__status" data-testid="tuning-status">

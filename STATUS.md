@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T02:21:21Z
+Updated: 2026-10-25T02:26:09Z
 Phase: 4 Playback
-Last completed task: P4.T3 Transport and store integration
-Next task: P4.T4 Visual sync: fretboard flash and playhead
+Last completed task: P4.T4 Visual sync: fretboard flash and playhead
+Next task: P4.T5 Four-way split view
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -52,7 +52,7 @@ Phase 4:
 - [x] P4.T1 Audio engine core (no React)
 - [x] P4.T2 Voices
 - [x] P4.T3 Transport and store integration
-- [ ] P4.T4 Visual sync: fretboard flash and playhead
+- [x] P4.T4 Visual sync: fretboard flash and playhead
 - [ ] P4.T5 Four-way split view
 - [ ] P4.T6 Offline render and non-silence test
 - [ ] P4.T7 Chrome verification and phase exit

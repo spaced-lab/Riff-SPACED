@@ -131,6 +131,14 @@ describe('keyboard', () => {
   it('knows which targets are typing targets and lists the shortcut table', () => {
     const input = document.createElement('input');
     expect(isTypingTarget(input)).toBe(true);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    expect(isTypingTarget(checkbox)).toBe(false);
+    const number = document.createElement('input');
+    number.type = 'number';
+    expect(isTypingTarget(number)).toBe(true);
+    expect(isTypingTarget(document.createElement('select'))).toBe(false);
+    expect(isTypingTarget(document.createElement('textarea'))).toBe(true);
     expect(isTypingTarget(document.createElement('div'))).toBe(false);
     expect(isTypingTarget(null)).toBe(false);
     expect(SHORTCUTS.some((s) => s.keys === '0-9')).toBe(true);

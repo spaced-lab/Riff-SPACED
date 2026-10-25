@@ -23,6 +23,9 @@ export type ViewSlice = {
   splitView: boolean;
   /** Dim all other notes of the current bar behind the ones at the cursor (Phase 3). */
   ghostNotes: boolean;
+  /** Auto-scroll the tab lanes to keep the playhead within the middle of the view. */
+  followPlayhead: boolean;
+  setFollowPlayhead: (on: boolean) => void;
   panels: { library: boolean; inspector: boolean };
   /** Editor grid resolution: note entry duration and snapping (SPEC 3.4). */
   grid: GridName;
@@ -46,6 +49,8 @@ export const createViewSlice: StateCreator<AppState, [], [], ViewSlice> = (set) 
   realisticSpacing: false,
   splitView: false,
   ghostNotes: true,
+  followPlayhead: true,
+  setFollowPlayhead: (followPlayhead) => set({ followPlayhead }),
   panels: { library: true, inspector: true },
   grid: '1/16',
   pxPerBar: 320,

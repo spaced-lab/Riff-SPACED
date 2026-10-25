@@ -1,9 +1,10 @@
 .transport {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  height: 100%;
-  padding: 0 10px;
+  gap: 6px 14px;
+  min-height: 40px;
+  padding: 4px 10px;
   border: 1px solid var(--color-dim);
 }
 
@@ -12,6 +13,7 @@
   align-items: center;
   gap: 6px;
   color: var(--color-mid);
+  white-space: nowrap;
 }
 
 .transport__placeholder {

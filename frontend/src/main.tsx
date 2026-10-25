@@ -4,6 +4,8 @@ import { App } from './App';
 import { bootstrapStore } from './store';
 import { startAutosave } from './store/persist';
 import { startEngine } from './audio/engine';
+import { getAudioContext, hasAudioContext } from './audio/context';
+import { useStore } from './store';
 import './theme.css';
 
 const rootElement = document.getElementById('root');
@@ -16,6 +18,17 @@ if (!rootElement) {
 bootstrapStore(window.localStorage);
 startAutosave();
 startEngine();
+
+// A small hook for the Playwright suite: read the store and the audio state from tests.
+declare global {
+  interface Window {
+    riffspaced?: { store: typeof useStore; audioState: () => string };
+  }
+}
+window.riffspaced = {
+  store: useStore,
+  audioState: () => (hasAudioContext() ? getAudioContext().state : 'none'),
+};
 
 createRoot(rootElement).render(
   <StrictMode>

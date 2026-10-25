@@ -60,7 +60,7 @@
 }
 
 .shell__transport {
-  height: 40px;
+  flex: 0 0 auto;
 }
 
 .shell__tab {

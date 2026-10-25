@@ -10,6 +10,7 @@ import { Playhead } from './Playhead';
 import { Ruler } from './Ruler';
 import { TabNote } from './TabNote';
 import { GUTTER_WIDTH, LANE_HEIGHT, laneY, tabHeight, tabWidth, tickToX } from './geometry';
+import { playhead } from './playheadRef';
 import { useTabPointer } from './useTabPointer';
 import './tab.css';
 
@@ -30,6 +31,8 @@ export function TabLanes() {
   const select = useStore((s) => s.select);
   const removeNotes = useStore((s) => s.removeNotes);
   const pointer = useTabPointer();
+  const followPlayhead = useStore((s) => s.followPlayhead);
+  const isPlaying = useStore((s) => s.isPlaying);
 
   const stringCount = riff.tuning.pitches.length;
   const height = tabHeight(stringCount);
@@ -40,6 +43,14 @@ export function TabLanes() {
   // Ctrl/Cmd + wheel zooms, plain wheel scrolls horizontally. A native listener is needed
   // because React's onWheel is passive and cannot preventDefault the browser zoom.
   const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    playhead.setScroller(scrollRef.current);
+    return () => playhead.setScroller(null);
+  }, []);
+  useEffect(() => {
+    // Follow only while playing, so editing never fights the user's own scrolling.
+    playhead.setFollow(followPlayhead && isPlaying);
+  }, [followPlayhead, isPlaying]);
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;

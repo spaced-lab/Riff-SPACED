@@ -37,16 +37,22 @@ export function Shell() {
   const removeNotes = useStore((s) => s.removeNotes);
   const lastSavedAt = useStore((s) => s.lastSavedAt);
   const storageWarning = useStore((s) => s.storageWarning);
+  const isPlaying = useStore((s) => s.isPlaying);
+  const positionTick = useStore((s) => s.positionTick);
+  const syncJitterMs = useStore((s) => s.syncJitterMs);
   useKeyboard();
 
-  // The fretboard shows what sounds at the edit cursor, with the rest of the bar as ghosts.
+  // While editing the fretboard shows what sounds at the edit cursor (rest of the bar as
+  // ghosts); while playing it follows the playback position and the engine flashes the
+  // sounding notes through highlightIds.
+  const viewTick = isPlaying ? positionTick : editCursorTick;
   const { shown, dimmedIds } = useMemo(() => {
-    const atCursor = notesSoundingAt(riff, editCursorTick);
-    if (!ghostNotes) return { shown: atCursor, dimmedIds: [] as string[] };
-    const ids = new Set(atCursor.map((n) => n.id));
-    const ghosts = notesInBarOf(riff, editCursorTick).filter((n) => !ids.has(n.id));
-    return { shown: [...atCursor, ...ghosts], dimmedIds: ghosts.map((n) => n.id) };
-  }, [riff, editCursorTick, ghostNotes]);
+    const atTick = notesSoundingAt(riff, viewTick);
+    if (!ghostNotes) return { shown: atTick, dimmedIds: [] as string[] };
+    const ids = new Set(atTick.map((n) => n.id));
+    const ghosts = notesInBarOf(riff, viewTick).filter((n) => !ids.has(n.id));
+    return { shown: [...atTick, ...ghosts], dimmedIds: ghosts.map((n) => n.id) };
+  }, [riff, viewTick, ghostNotes]);
 
   return (
     <div className="shell" data-testid="shell">
@@ -99,6 +105,14 @@ export function Shell() {
       <footer className="shell__status" data-testid="status-bar">
         <span>{riff.tuning.name}</span>
         <span data-testid="status-lane">lane {activeLane}</span>
+        {syncJitterMs !== null ? (
+          <span
+            data-testid="status-sync"
+            title="max gap between scheduled audio time and the frame that drew it, last second"
+          >
+            sync ±{syncJitterMs} ms
+          </span>
+        ) : null}
         {pendingFret !== null ? (
           <span data-testid="status-pending">fret: {pendingFret}_</span>
         ) : null}

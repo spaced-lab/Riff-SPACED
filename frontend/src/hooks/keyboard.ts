@@ -195,11 +195,26 @@ export function handleKey(e: KeyInput, deps: KeyboardDeps): boolean {
   }
 }
 
-/** Shortcuts must not fire while typing in a form control. */
+const TEXT_INPUT_TYPES = new Set([
+  'text',
+  'number',
+  'search',
+  'email',
+  'url',
+  'password',
+  'tel',
+  '',
+]);
+
+/**
+ * Shortcuts must not fire while typing in a form control. Checkboxes, buttons, ranges and
+ * selects are not typing targets: Space on a focused checkbox should still play.
+ */
 export function isTypingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable === true) return true;
   const tag = target.tagName;
-  return (
-    tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable === true
-  );
+  if (tag === 'TEXTAREA') return true;
+  if (tag === 'INPUT') return TEXT_INPUT_TYPES.has((target as HTMLInputElement).type.toLowerCase());
+  return false;
 }
