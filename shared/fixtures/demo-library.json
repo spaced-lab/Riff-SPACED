@@ -1,0 +1,1237 @@
+{
+  "format": "riff-spaced/library",
+  "version": 1,
+  "exportedAt": "2026-10-24T20:00:00Z",
+  "riffs": [
+    {
+      "format": "riff-spaced/riff",
+      "version": 1,
+      "id": "demo-riff-walkdown",
+      "name": "Walkdown Turnaround",
+      "createdAt": "2026-10-24T20:00:00Z",
+      "updatedAt": "2026-10-24T20:00:00Z",
+      "tuning": {
+        "name": "Bb Standard",
+        "pitches": [34, 39, 44, 49, 53, 58]
+      },
+      "tempo": {
+        "bpm": 92
+      },
+      "timeSignature": {
+        "beats": 4,
+        "unit": 4
+      },
+      "ppq": 480,
+      "lengthBars": 4,
+      "sections": [
+        {
+          "id": "demo-walkdown-s1",
+          "label": "A",
+          "startBar": 0,
+          "lengthBars": 4,
+          "kind": "main"
+        }
+      ],
+      "notes": [
+        {
+          "id": "wd-n01",
+          "string": 6,
+          "fret": 0,
+          "start": 0,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n02",
+          "string": 6,
+          "fret": 3,
+          "start": 240,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c01"
+        },
+        {
+          "id": "wd-n03",
+          "string": 5,
+          "fret": 5,
+          "start": 240,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c01"
+        },
+        {
+          "id": "wd-n04",
+          "string": 6,
+          "fret": 3,
+          "start": 480,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c02"
+        },
+        {
+          "id": "wd-n05",
+          "string": 5,
+          "fret": 5,
+          "start": 480,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c02"
+        },
+        {
+          "id": "wd-n06",
+          "string": 6,
+          "fret": 3,
+          "start": 720,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c03"
+        },
+        {
+          "id": "wd-n07",
+          "string": 5,
+          "fret": 5,
+          "start": 720,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c03"
+        },
+        {
+          "id": "wd-n08",
+          "string": 6,
+          "fret": 3,
+          "start": 960,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c04"
+        },
+        {
+          "id": "wd-n09",
+          "string": 5,
+          "fret": 5,
+          "start": 960,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c04"
+        },
+        {
+          "id": "wd-n10",
+          "string": 6,
+          "fret": 3,
+          "start": 1200,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c05"
+        },
+        {
+          "id": "wd-n11",
+          "string": 5,
+          "fret": 5,
+          "start": 1200,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c05"
+        },
+        {
+          "id": "wd-n12",
+          "string": 6,
+          "fret": 3,
+          "start": 1440,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c06"
+        },
+        {
+          "id": "wd-n13",
+          "string": 5,
+          "fret": 5,
+          "start": 1440,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c06"
+        },
+        {
+          "id": "wd-n14",
+          "string": 5,
+          "fret": 5,
+          "start": 1680,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c07"
+        },
+        {
+          "id": "wd-n15",
+          "string": 4,
+          "fret": 5,
+          "start": 1680,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c07"
+        },
+        {
+          "id": "wd-n16",
+          "string": 6,
+          "fret": 3,
+          "start": 1920,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c08"
+        },
+        {
+          "id": "wd-n17",
+          "string": 5,
+          "fret": 5,
+          "start": 1920,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c08"
+        },
+        {
+          "id": "wd-n18",
+          "string": 6,
+          "fret": 3,
+          "start": 2160,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c09"
+        },
+        {
+          "id": "wd-n19",
+          "string": 5,
+          "fret": 5,
+          "start": 2160,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c09"
+        },
+        {
+          "id": "wd-n20",
+          "string": 6,
+          "fret": 3,
+          "start": 2400,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c10"
+        },
+        {
+          "id": "wd-n21",
+          "string": 5,
+          "fret": 5,
+          "start": 2400,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c10"
+        },
+        {
+          "id": "wd-n22",
+          "string": 6,
+          "fret": 3,
+          "start": 2640,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c11"
+        },
+        {
+          "id": "wd-n23",
+          "string": 5,
+          "fret": 5,
+          "start": 2640,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c11"
+        },
+        {
+          "id": "wd-n24",
+          "string": 6,
+          "fret": 3,
+          "start": 2880,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c12"
+        },
+        {
+          "id": "wd-n25",
+          "string": 5,
+          "fret": 5,
+          "start": 2880,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c12"
+        },
+        {
+          "id": "wd-n26",
+          "string": 6,
+          "fret": 3,
+          "start": 3120,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c13"
+        },
+        {
+          "id": "wd-n27",
+          "string": 5,
+          "fret": 5,
+          "start": 3120,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c13"
+        },
+        {
+          "id": "wd-n28",
+          "string": 6,
+          "fret": 3,
+          "start": 3360,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c14"
+        },
+        {
+          "id": "wd-n29",
+          "string": 5,
+          "fret": 5,
+          "start": 3360,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c14"
+        },
+        {
+          "id": "wd-n30",
+          "string": 5,
+          "fret": 5,
+          "start": 3600,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c15"
+        },
+        {
+          "id": "wd-n31",
+          "string": 4,
+          "fret": 5,
+          "start": 3600,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c15"
+        },
+        {
+          "id": "wd-n32",
+          "string": 6,
+          "fret": 3,
+          "start": 3840,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c16"
+        },
+        {
+          "id": "wd-n33",
+          "string": 5,
+          "fret": 5,
+          "start": 3840,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c16"
+        },
+        {
+          "id": "wd-n34",
+          "string": 6,
+          "fret": 3,
+          "start": 4080,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c17"
+        },
+        {
+          "id": "wd-n35",
+          "string": 5,
+          "fret": 5,
+          "start": 4080,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c17"
+        },
+        {
+          "id": "wd-n36",
+          "string": 6,
+          "fret": 3,
+          "start": 4320,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c18"
+        },
+        {
+          "id": "wd-n37",
+          "string": 5,
+          "fret": 5,
+          "start": 4320,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c18"
+        },
+        {
+          "id": "wd-n38",
+          "string": 6,
+          "fret": 3,
+          "start": 4560,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c19"
+        },
+        {
+          "id": "wd-n39",
+          "string": 5,
+          "fret": 5,
+          "start": 4560,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c19"
+        },
+        {
+          "id": "wd-n40",
+          "string": 6,
+          "fret": 3,
+          "start": 4800,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c20"
+        },
+        {
+          "id": "wd-n41",
+          "string": 5,
+          "fret": 5,
+          "start": 4800,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c20"
+        },
+        {
+          "id": "wd-n42",
+          "string": 6,
+          "fret": 3,
+          "start": 5040,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c21"
+        },
+        {
+          "id": "wd-n43",
+          "string": 5,
+          "fret": 5,
+          "start": 5040,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c21"
+        },
+        {
+          "id": "wd-n44",
+          "string": 6,
+          "fret": 3,
+          "start": 5280,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c22"
+        },
+        {
+          "id": "wd-n45",
+          "string": 5,
+          "fret": 5,
+          "start": 5280,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c22"
+        },
+        {
+          "id": "wd-n46",
+          "string": 5,
+          "fret": 5,
+          "start": 5520,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c23"
+        },
+        {
+          "id": "wd-n47",
+          "string": 4,
+          "fret": 5,
+          "start": 5520,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"],
+          "chordId": "wd-c23"
+        },
+        {
+          "id": "wd-n48",
+          "string": 5,
+          "fret": 5,
+          "start": 5760,
+          "duration": 1920,
+          "velocity": 100,
+          "techniques": ["letRing"]
+        },
+        {
+          "id": "wd-n49",
+          "string": 6,
+          "fret": 5,
+          "start": 5760,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n50",
+          "string": 6,
+          "fret": 5,
+          "start": 6000,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n51",
+          "string": 6,
+          "fret": 4,
+          "start": 6240,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n52",
+          "string": 6,
+          "fret": 4,
+          "start": 6480,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n53",
+          "string": 6,
+          "fret": 3,
+          "start": 6720,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n54",
+          "string": 6,
+          "fret": 3,
+          "start": 6960,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n55",
+          "string": 6,
+          "fret": 2,
+          "start": 7200,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "wd-n56",
+          "string": 6,
+          "fret": 2,
+          "start": 7440,
+          "duration": 240,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        }
+      ],
+      "tags": ["sludge", "turnaround", "palm-mute", "demo"],
+      "style": {
+        "genres": ["sludge", "doom"],
+        "notes": "Palm-muted Db power chords with the root-on-top fourth on the and of 4, then the signature turnaround: Ab2 held while the low string walks Eb D Db C down to the open Bb."
+      },
+      "namingPrefs": {
+        "accidentals": "flats"
+      },
+      "source": {
+        "type": "manual"
+      }
+    },
+    {
+      "format": "riff-spaced/riff",
+      "version": 1,
+      "id": "demo-riff-tritone",
+      "name": "Tritone Chug",
+      "createdAt": "2026-10-24T20:00:00Z",
+      "updatedAt": "2026-10-24T20:00:00Z",
+      "tuning": {
+        "name": "Bb Standard",
+        "pitches": [34, 39, 44, 49, 53, 58]
+      },
+      "tempo": {
+        "bpm": 80
+      },
+      "timeSignature": {
+        "beats": 4,
+        "unit": 4
+      },
+      "ppq": 480,
+      "lengthBars": 4,
+      "sections": [
+        {
+          "id": "demo-tritone-s1",
+          "label": "A",
+          "startBar": 0,
+          "lengthBars": 4,
+          "kind": "main"
+        }
+      ],
+      "notes": [
+        {
+          "id": "tc-n01",
+          "string": 6,
+          "fret": 0,
+          "start": 0,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n02",
+          "string": 6,
+          "fret": 0,
+          "start": 120,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n03",
+          "string": 6,
+          "fret": 0,
+          "start": 240,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n04",
+          "string": 6,
+          "fret": 0,
+          "start": 360,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n05",
+          "string": 6,
+          "fret": 0,
+          "start": 480,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n06",
+          "string": 6,
+          "fret": 0,
+          "start": 600,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n07",
+          "string": 6,
+          "fret": 0,
+          "start": 720,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n08",
+          "string": 6,
+          "fret": 0,
+          "start": 840,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n09",
+          "string": 6,
+          "fret": 0,
+          "start": 960,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n10",
+          "string": 6,
+          "fret": 0,
+          "start": 1080,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n11",
+          "string": 6,
+          "fret": 0,
+          "start": 1200,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n12",
+          "string": 6,
+          "fret": 0,
+          "start": 1320,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n13",
+          "string": 6,
+          "fret": 0,
+          "start": 1440,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n14",
+          "string": 6,
+          "fret": 0,
+          "start": 1560,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n15",
+          "string": 6,
+          "fret": 0,
+          "start": 1680,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n16",
+          "string": 6,
+          "fret": 0,
+          "start": 1800,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n17",
+          "string": 6,
+          "fret": 0,
+          "start": 1920,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n18",
+          "string": 6,
+          "fret": 0,
+          "start": 2040,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n19",
+          "string": 6,
+          "fret": 0,
+          "start": 2160,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n20",
+          "string": 6,
+          "fret": 0,
+          "start": 2280,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n21",
+          "string": 6,
+          "fret": 0,
+          "start": 2400,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n22",
+          "string": 6,
+          "fret": 0,
+          "start": 2520,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n23",
+          "string": 6,
+          "fret": 0,
+          "start": 2640,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n24",
+          "string": 6,
+          "fret": 0,
+          "start": 2760,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n25",
+          "string": 6,
+          "fret": 1,
+          "start": 2880,
+          "duration": 480,
+          "velocity": 100,
+          "techniques": ["letRing"],
+          "chordId": "tc-c01"
+        },
+        {
+          "id": "tc-n26",
+          "string": 5,
+          "fret": 2,
+          "start": 2880,
+          "duration": 480,
+          "velocity": 100,
+          "techniques": ["letRing"],
+          "chordId": "tc-c01"
+        },
+        {
+          "id": "tc-n27",
+          "string": 6,
+          "fret": 0,
+          "start": 3360,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n28",
+          "string": 6,
+          "fret": 0,
+          "start": 3480,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n29",
+          "string": 6,
+          "fret": 0,
+          "start": 3600,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n30",
+          "string": 6,
+          "fret": 0,
+          "start": 3720,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n31",
+          "string": 6,
+          "fret": 0,
+          "start": 3840,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n32",
+          "string": 6,
+          "fret": 0,
+          "start": 3960,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n33",
+          "string": 6,
+          "fret": 0,
+          "start": 4080,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n34",
+          "string": 6,
+          "fret": 0,
+          "start": 4200,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n35",
+          "string": 6,
+          "fret": 0,
+          "start": 4320,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n36",
+          "string": 6,
+          "fret": 0,
+          "start": 4440,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n37",
+          "string": 6,
+          "fret": 0,
+          "start": 4560,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n38",
+          "string": 6,
+          "fret": 0,
+          "start": 4680,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n39",
+          "string": 6,
+          "fret": 0,
+          "start": 4800,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n40",
+          "string": 6,
+          "fret": 0,
+          "start": 4920,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n41",
+          "string": 6,
+          "fret": 0,
+          "start": 5040,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n42",
+          "string": 6,
+          "fret": 0,
+          "start": 5160,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n43",
+          "string": 6,
+          "fret": 0,
+          "start": 5280,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n44",
+          "string": 6,
+          "fret": 0,
+          "start": 5400,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n45",
+          "string": 6,
+          "fret": 0,
+          "start": 5520,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n46",
+          "string": 6,
+          "fret": 0,
+          "start": 5640,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n47",
+          "string": 6,
+          "fret": 0,
+          "start": 5760,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n48",
+          "string": 6,
+          "fret": 0,
+          "start": 5880,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n49",
+          "string": 6,
+          "fret": 0,
+          "start": 6000,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n50",
+          "string": 6,
+          "fret": 0,
+          "start": 6120,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n51",
+          "string": 6,
+          "fret": 0,
+          "start": 6240,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n52",
+          "string": 6,
+          "fret": 0,
+          "start": 6360,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n53",
+          "string": 6,
+          "fret": 0,
+          "start": 6480,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n54",
+          "string": 6,
+          "fret": 0,
+          "start": 6600,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n55",
+          "string": 6,
+          "fret": 1,
+          "start": 6720,
+          "duration": 480,
+          "velocity": 100,
+          "techniques": ["letRing"],
+          "chordId": "tc-c02"
+        },
+        {
+          "id": "tc-n56",
+          "string": 5,
+          "fret": 2,
+          "start": 6720,
+          "duration": 480,
+          "velocity": 100,
+          "techniques": ["letRing"],
+          "chordId": "tc-c02"
+        },
+        {
+          "id": "tc-n57",
+          "string": 6,
+          "fret": 0,
+          "start": 7200,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n58",
+          "string": 6,
+          "fret": 0,
+          "start": 7320,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n59",
+          "string": 6,
+          "fret": 0,
+          "start": 7440,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        },
+        {
+          "id": "tc-n60",
+          "string": 6,
+          "fret": 0,
+          "start": 7560,
+          "duration": 120,
+          "velocity": 100,
+          "techniques": ["palmMute"]
+        }
+      ],
+      "tags": ["doom", "tritone", "demo"],
+      "style": {
+        "genres": ["doom"],
+        "notes": "Open Bb1 sixteenth chugs; a B1 + F2 tritone lands on beat 3 of bars 2 and 4 and is left hanging."
+      },
+      "namingPrefs": {
+        "accidentals": "flats"
+      },
+      "source": {
+        "type": "manual"
+      }
+    }
+  ],
+  "arrangements": [
+    {
+      "format": "riff-spaced/arrangement",
+      "version": 1,
+      "id": "demo-arr-verse",
+      "name": "Demo verse",
+      "tempo": {
+        "bpm": 92
+      },
+      "entries": [
+        {
+          "riffId": "demo-riff-walkdown",
+          "repeats": 3,
+          "transpose": 0,
+          "label": "Walkdown x3"
+        },
+        {
+          "riffId": "demo-riff-tritone",
+          "repeats": 1,
+          "transpose": 0,
+          "label": "Tritone"
+        }
+      ],
+      "tags": ["demo"],
+      "createdAt": "2026-10-24T20:00:00Z",
+      "updatedAt": "2026-10-24T20:00:00Z"
+    }
+  ],
+  "songs": [
+    {
+      "format": "riff-spaced/song",
+      "version": 1,
+      "id": "demo-song",
+      "title": "Demo song",
+      "tuning": {
+        "name": "Bb Standard",
+        "pitches": [34, 39, 44, 49, 53, 58]
+      },
+      "parts": [
+        {
+          "arrangementId": "demo-arr-verse",
+          "label": "Verse"
+        }
+      ],
+      "notes": "Two demo riffs showing the walkdown turnaround and an unresolved tritone.",
+      "tags": ["demo"],
+      "createdAt": "2026-10-24T20:00:00Z",
+      "updatedAt": "2026-10-24T20:00:00Z"
+    }
+  ]
+}
