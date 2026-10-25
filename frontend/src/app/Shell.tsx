@@ -2,7 +2,10 @@ import { Placeholder } from '@/components/Placeholder';
 import { DevToolbar } from '@/dev/DevToolbar';
 import { Fretboard } from '@/fretboard/Fretboard';
 import { TabLanes } from '@/tab/TabLanes';
+import { useKeyboard } from '@/hooks/useKeyboard';
 import { useStore } from '@/store';
+import { notesInBarOf, notesSoundingAt } from '@/store/riffOps';
+import { useMemo } from 'react';
 import './shell.css';
 
 /**
@@ -23,6 +26,22 @@ export function Shell() {
   const highlightIds = useStore((s) => s.highlightIds);
   const panels = useStore((s) => s.panels);
   const select = useStore((s) => s.select);
+  const editCursorTick = useStore((s) => s.editCursorTick);
+  const ghostNotes = useStore((s) => s.ghostNotes);
+  const pendingFret = useStore((s) => s.pendingFret);
+  const activeLane = useStore((s) => s.activeLane);
+  const addNoteAtCursor = useStore((s) => s.addNoteAtCursor);
+  const removeNotes = useStore((s) => s.removeNotes);
+  useKeyboard();
+
+  // The fretboard shows what sounds at the edit cursor, with the rest of the bar as ghosts.
+  const { shown, dimmedIds } = useMemo(() => {
+    const atCursor = notesSoundingAt(riff, editCursorTick);
+    if (!ghostNotes) return { shown: atCursor, dimmedIds: [] as string[] };
+    const ids = new Set(atCursor.map((n) => n.id));
+    const ghosts = notesInBarOf(riff, editCursorTick).filter((n) => !ids.has(n.id));
+    return { shown: [...atCursor, ...ghosts], dimmedIds: ghosts.map((n) => n.id) };
+  }, [riff, editCursorTick, ghostNotes]);
 
   return (
     <div className="shell" data-testid="shell">
@@ -42,14 +61,19 @@ export function Shell() {
         <section className="shell__fretboard" aria-label="fretboard area">
           <Fretboard
             tuning={riff.tuning}
-            notes={riff.notes}
+            notes={shown}
+            dimmedIds={dimmedIds}
             selectedIds={selectedNoteIds}
             highlightIds={highlightIds}
             range={fretRange}
             showLetters={showLetters}
             accidentals={accidentals}
             realisticSpacing={realisticSpacing}
+            onCellClick={({ string, fret, shiftKey }) =>
+              addNoteAtCursor(string, fret, { chord: shiftKey })
+            }
             onNoteClick={(id, e) => select([id], e.shiftKey)}
+            onNoteContextMenu={(id) => removeNotes([id])}
           />
         </section>
         <section className="shell__transport">
@@ -68,6 +92,10 @@ export function Shell() {
 
       <footer className="shell__status" data-testid="status-bar">
         <span>{riff.tuning.name}</span>
+        <span data-testid="status-lane">lane {activeLane}</span>
+        {pendingFret !== null ? (
+          <span data-testid="status-pending">fret: {pendingFret}_</span>
+        ) : null}
         <span>backend: not checked (phase 6)</span>
         <span>autosave: phase 3</span>
       </footer>

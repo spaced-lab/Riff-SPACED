@@ -4,6 +4,7 @@
  * keyboard handler) reads `useStore.getState()` and subscribes with `useStore.subscribe`.
  */
 import { create } from 'zustand';
+import { createEditorSlice } from './editorSlice';
 import { createLibrarySlice } from './librarySlice';
 import { loadInitialLibrary } from './persist';
 import { createRiffSlice } from './riffSlice';
@@ -18,6 +19,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createViewSlice(...a),
   ...createSelectionSlice(...a),
   ...createLibrarySlice(...a),
+  ...createEditorSlice(...a),
 }));
 
 /** Load the startup library once. Called from main.tsx, and by tests that want fresh state. */

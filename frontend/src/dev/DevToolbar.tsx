@@ -21,6 +21,8 @@ export function DevToolbar() {
   const setFretRange = useStore((s) => s.setFretRange);
   const realistic = useStore((s) => s.realisticSpacing);
   const setRealistic = useStore((s) => s.setRealisticSpacing);
+  const ghostNotes = useStore((s) => s.ghostNotes);
+  const setGhostNotes = useStore((s) => s.setGhostNotes);
 
   const rangeLabel = `${fretRange.from}-${fretRange.to}`;
   const presetName =
@@ -110,6 +112,15 @@ export function DevToolbar() {
           onChange={(e) => setRealistic(e.target.checked)}
         />
         Realistic spacing
+      </label>
+
+      <label>
+        <input
+          type="checkbox"
+          checked={ghostNotes}
+          onChange={(e) => setGhostNotes(e.target.checked)}
+        />
+        Ghost notes
       </label>
 
       <span className="dev-toolbar__status" data-testid="tuning-status">
