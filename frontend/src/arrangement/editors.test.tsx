@@ -46,7 +46,7 @@ describe('ArrangementEditor', () => {
     expect(display.riff.lengthBars).toBe(8);
   });
 
-  it('refuses a mismatched tuning through the store and keeps the loop select disabled', () => {
+  it('refuses a mismatched tuning through the store and offers to retune from the select', () => {
     const s = useStore.getState();
     const eRiff = {
       ...s.library.riffs[0]!,
@@ -61,7 +61,19 @@ describe('ArrangementEditor', () => {
     ]);
     expect(error).toMatch(/share one tuning/);
     render(<ArrangementEditor />);
-    expect(screen.getByLabelText('add riff to arrangement')).not.toHaveTextContent('E riff');
+    // The riff in E Standard is offered; choosing it asks to retune (keep pitches) first.
+    fireEvent.change(screen.getByLabelText('add riff to arrangement'), { target: { value: 'e' } });
+    expect(useStore.getState().dialog?.title).toBe('retune to match the arrangement?');
+    act(() => useStore.getState().confirmDialog());
+    const after = useStore.getState();
+    expect(after.library.arrangements[0]!.entries.map((e) => e.riffId)).toEqual([
+      'demo-riff-walkdown',
+      'demo-riff-tritone',
+      'e',
+    ]);
+    const retuned = after.library.riffs.find((r) => r.id === 'e')!;
+    expect(retuned.tuning.name).toBe('Bb Standard');
+    expect(retuned.notes.filter((n) => n.unplayable)).toHaveLength(0);
   });
 });
 

@@ -156,6 +156,16 @@ export function createSongIn(
   return { library: { ...library, songs: [...library.songs, song] }, song };
 }
 
+/** The tuning of an arrangement's first riff, or null when it has no entries. */
+export function arrangementTuningOf(
+  arrangement: Arrangement,
+  library: LibraryBundle,
+): Riff['tuning'] | null {
+  const first = arrangement.entries[0];
+  const riff = first && library.riffs.find((r) => r.id === first.riffId);
+  return riff ? riff.tuning : null;
+}
+
 /** Drag-append: add a riff at the end of an arrangement. Returns null on a tuning mismatch. */
 export function appendRiffToArrangement(
   library: LibraryBundle,
@@ -170,7 +180,7 @@ export function appendRiffToArrangement(
     const existing = library.riffs.find((r) => r.id === first.riffId);
     if (existing && existing.tuning.pitches.join() !== riff.tuning.pitches.join()) {
       return {
-        error: `tuning mismatch: "${arrangement.name}" is in ${existing.tuning.name}, "${riff.name}" is in ${riff.tuning.name}. Retune the riff (keep pitches) first; that tool lands in Phase 8.`,
+        error: `tuning mismatch: "${arrangement.name}" is in ${existing.tuning.name}, "${riff.name}" is in ${riff.tuning.name}.`,
       };
     }
   }
@@ -211,7 +221,7 @@ export function setArrangementEntries(
   if (tunings.size > 1) {
     return {
       error:
-        'all riffs in an arrangement must share one tuning. Retune the odd one out (keep pitches) first; that tool lands in Phase 8.',
+        'all riffs in an arrangement must share one tuning. Retune the odd one out (keep pitches) first: Tuning menu with retune mode set to keep pitches.',
     };
   }
   const clean = entries.map((e) => ({

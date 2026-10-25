@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T09:20:00Z
-Phase: 7 AI layer (complete, tag v0.7.0, fake client; live test waits for a key), Phase 8 next
-Last completed task: P7.T7 Chrome verification and phase exit
-Next task: P8.T1 Transpose and retune tools
+Updated: 2026-10-25T10:30:00Z
+Phase: 8 Polish and backlog promotion (in progress)
+Last completed task: P8.T1 Transpose and retune tools
+Next task: P8.T2 Find easier tuning
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -91,7 +91,7 @@ Phase 7 (tag v0.7.0):
 - [x] P7.T7 Chrome verification and phase exit (Chrome tools could not inject into the page; verified with e2e/ai-real.spec.ts against the fake backend, see Known issues)
 
 Phase 8:
-- [ ] P8.T1 Transpose and retune tools
+- [x] P8.T1 Transpose and retune tools
 - [ ] P8.T2 Find easier tuning
 - [ ] P8.T3 MusicXML export
 - [ ] P8.T4 WAV export and heavy voice (heavy voice shipped in Phase 4, DECISIONS 48)

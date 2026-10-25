@@ -26,7 +26,7 @@ export function LibraryPanel() {
   const duplicateRiff = useStore((s) => s.duplicateRiff);
   const renameItem = useStore((s) => s.renameItem);
   const deleteItem = useStore((s) => s.deleteItem);
-  const appendRiff = useStore((s) => s.appendRiffToArrangement);
+  const appendRiff = useStore((s) => s.appendRiffOrOfferRetune);
   const openDialog = useStore((s) => s.openDialog);
   const toast = useStore((s) => s.toast);
   const createRiff = useStore((s) => s.createRiff);
@@ -104,9 +104,7 @@ export function LibraryPanel() {
     setDropTarget(null);
     const riffId = e.dataTransfer.getData('application/x-riffspaced-riff');
     if (!riffId) return;
-    const error = appendRiff(arrangementId, riffId);
-    if (error) toast(error, 'warn');
-    else toast('added to arrangement');
+    appendRiff(arrangementId, riffId);
   };
 
   const isCurrent = (tier: Tier, id: string) =>

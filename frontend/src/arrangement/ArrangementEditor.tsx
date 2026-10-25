@@ -8,7 +8,7 @@ import './arrangement.css';
 /**
  * Arrangement editor (SPEC 4.2, P5.T3): an ordered list of riff entries with repeats,
  * transpose, and a label; reorder with the arrows, add from the library, remove. Every
- * riff must share the arrangement's tuning; the store refuses a mismatch with a message.
+ * riff must share the arrangement's tuning; on a mismatch the store offers to retune it.
  * The tab lanes below show the flattened result read-only.
  */
 export function ArrangementEditor() {
@@ -24,12 +24,12 @@ export function ArrangementEditor() {
     [arrangement, library],
   );
   const riffsById = useMemo(() => new Map(library.riffs.map((r) => [r.id, r])), [library.riffs]);
+  const appendRiff = useStore((s) => s.appendRiffOrOfferRetune);
 
   if (!arrangement) return null;
   const totalBars = arrangementLengthBars(arrangement, library);
-  const candidates = library.riffs.filter(
-    (r) => !tuning || r.tuning.pitches.join() === tuning.pitches.join(),
-  );
+  // Every riff is offered; one in another tuning triggers the retune offer (P8.T1).
+  const candidates = library.riffs;
 
   const apply = (entries: ArrangementEntry[]) => {
     const error = setEntries(arrangement.id, entries);
@@ -134,15 +134,11 @@ export function ArrangementEditor() {
             aria-label="add riff to arrangement"
             value=""
             onChange={(ev) => {
-              const r = riffsById.get(ev.target.value);
-              if (r)
-                apply([
-                  ...arrangement.entries,
-                  { riffId: r.id, repeats: 1, transpose: 0, label: r.name },
-                ]);
+              // Through the store's append so a riff in another tuning gets the retune offer.
+              if (riffsById.has(ev.target.value)) appendRiff(arrangement.id, ev.target.value);
             }}
           >
-            <option value="">choose a riff{tuning ? ` in ${tuning.name}` : ''}</option>
+            <option value="">choose a riff</option>
             {candidates.map((r) => (
               <option key={r.id} value={r.id}>
                 {r.name}
@@ -150,11 +146,6 @@ export function ArrangementEditor() {
             ))}
           </select>
         </label>
-        {tuning && candidates.length < library.riffs.length ? (
-          <span className="arr__hint">
-            riffs in other tunings are hidden (retune, keep pitches, arrives in Phase 8)
-          </span>
-        ) : null}
       </div>
     </section>
   );

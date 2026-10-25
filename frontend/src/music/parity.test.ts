@@ -7,6 +7,6 @@ import { caseCount, fixture } from './fixture';
  */
 describe('fixture parity', () => {
   it('counts every case in music-conventions.json', () => {
-    expect(caseCount(fixture)).toBe(90);
+    expect(caseCount(fixture)).toBe(93);
   });
 });

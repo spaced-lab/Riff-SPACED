@@ -4,6 +4,7 @@
  * `Phase N` tooltip so the whole tree exists from Phase 5 on and fills in later.
  */
 import { openAiSettings } from '@/ai/aiSettings';
+import { openCustomRetuneDialog, openTransposeDialog } from '@/music/transposeDialogs';
 import { SHORTCUTS } from '@/hooks/keyboard';
 import { DROP_PRESETS, SEVEN_STRING_PRESETS, STANDARD_PRESETS } from '@/music/tuning';
 import type { AppState } from '@/store';
@@ -59,7 +60,10 @@ export function buildMenus(s: AppState): Menu[] {
     id: `tuning:${name}`,
     label: name,
     checked: pitches.join() === tuningKey,
-    action: () => s.setTuning({ name, pitches: [...pitches] }),
+    action: () => {
+      const flagged = s.setTuning({ name, pitches: [...pitches] });
+      if (flagged) s.toast(`${name}: ${flagged} notes flagged unplayable`, 'warn');
+    },
   });
 
   // AI items need the backend up with a key (or the fake) and an open riff (SPEC 9).
@@ -264,7 +268,14 @@ export function buildMenus(s: AppState): Menu[] {
           action: () => s.removeNotes(s.selectedNoteIds),
         },
         sep,
-        later('edit.transpose', 'Transpose...', 8),
+        {
+          type: 'item',
+          id: 'edit.transpose',
+          label: 'Transpose...',
+          disabled: s.editing !== 'riff',
+          reason: s.editing !== 'riff' ? 'open a riff first' : undefined,
+          action: () => openTransposeDialog(s),
+        },
         {
           type: 'item',
           id: 'edit.quantize',
@@ -395,8 +406,20 @@ export function buildMenus(s: AppState): Menu[] {
           submenu: SEVEN_STRING_PRESETS.map((t) => presetItem(t.name, t.pitches)),
         },
         sep,
-        later('tuning.custom', 'Custom retune...', 8),
-        later('tuning.mode', 'Retune mode: keep shapes', 8),
+        {
+          type: 'item',
+          id: 'tuning.custom',
+          label: 'Custom retune...',
+          action: () => openCustomRetuneDialog(s),
+        },
+        {
+          type: 'item',
+          id: 'tuning.mode',
+          label: `Retune mode: ${s.retuneMode === 'keepPitches' ? 'keep pitches' : 'keep shapes'}`,
+          checked: s.retuneMode === 'keepPitches',
+          action: () =>
+            s.setRetuneMode(s.retuneMode === 'keepPitches' ? 'keepShapes' : 'keepPitches'),
+        },
         later('tuning.easier', 'Find easier tuning...', 8),
       ],
     },

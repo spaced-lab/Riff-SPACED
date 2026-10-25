@@ -7,6 +7,7 @@ import type {
   Song,
   SongPart,
 } from '@/model/types';
+import { retuneRiff } from '@/music/transpose';
 import * as ops from './libraryOps';
 import type { Tier } from './libraryOps';
 import type { AppState } from './types';
@@ -40,6 +41,13 @@ export type LibrarySlice = {
   createSong: (title?: string) => Song;
   /** Returns an error message on tuning mismatch, else null. */
   appendRiffToArrangement: (arrangementId: string, riffId: string) => string | null;
+  /**
+   * Append, and on a tuning mismatch offer to retune the riff (keep pitches) to the
+   * arrangement's tuning through the themed dialog, then append (SPEC 3.7, P8.T1).
+   */
+  appendRiffOrOfferRetune: (arrangementId: string, riffId: string) => void;
+  /** Retune a library riff in place (keep pitches); the open riff goes through commit. */
+  retuneLibraryRiff: (riffId: string, tuning: Riff['tuning']) => number;
   markRiffClean: (id: string) => void;
   /** Returns an error message when the entries would mix tunings, else null. */
   setArrangementEntries: (arrangementId: string, entries: ArrangementEntry[]) => string | null;
@@ -195,6 +203,56 @@ export const createLibrarySlice: StateCreator<AppState, [], [], LibrarySlice> = 
     if ('error' in result) return result.error;
     set({ library: result.library });
     return null;
+  },
+
+  appendRiffOrOfferRetune: (arrangementId, riffId) => {
+    const error = get().appendRiffToArrangement(arrangementId, riffId);
+    if (!error) {
+      get().toast('added to arrangement');
+      return;
+    }
+    const arrangement = get().library.arrangements.find((a) => a.id === arrangementId);
+    const riff = get().library.riffs.find((r) => r.id === riffId);
+    const target = arrangement && ops.arrangementTuningOf(arrangement, get().library);
+    if (!error.startsWith('tuning mismatch') || !riff || !target) {
+      get().toast(error, 'warn');
+      return;
+    }
+    const preview = retuneRiff(riff, target, 'keepPitches');
+    get().openDialog({
+      kind: 'confirm',
+      title: 'retune to match the arrangement?',
+      message: `"${riff.name}" is in ${riff.tuning.name}; "${arrangement.name}" is in ${target.name}. Retune the riff keeping its pitches${
+        preview.unplayable ? ` (${preview.unplayable} notes would be flagged unplayable)` : ''
+      }, then add it?`,
+      confirmLabel: 'retune and add',
+      onConfirm: () => {
+        get().retuneLibraryRiff(riffId, target);
+        const again = get().appendRiffToArrangement(arrangementId, riffId);
+        if (again) get().toast(again, 'warn');
+        else get().toast(`retuned "${riff.name}" to ${target.name} and added it`);
+      },
+    });
+  },
+
+  retuneLibraryRiff: (riffId, tuning) => {
+    const s = get();
+    if (riffId === s.currentRiffId) {
+      const flagged = s.setTuning(tuning, 'keepPitches');
+      get().syncCurrentRiff();
+      return flagged;
+    }
+    const riff = s.library.riffs.find((r) => r.id === riffId);
+    if (!riff) return 0;
+    const result = retuneRiff(riff, tuning, 'keepPitches');
+    const updated = { ...result.riff, updatedAt: new Date().toISOString() };
+    set({
+      library: {
+        ...s.library,
+        riffs: s.library.riffs.map((r) => (r.id === riffId ? updated : r)),
+      },
+    });
+    return result.unplayable;
   },
 
   markRiffClean: (id) => set((s) => ({ dirtyRiffIds: s.dirtyRiffIds.filter((d) => d !== id) })),

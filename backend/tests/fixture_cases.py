@@ -14,7 +14,7 @@ CONVENTIONS = json.loads((FIXTURES_DIR / "music-conventions.json").read_text())
 def cases(section: str) -> list:
     t = CONVENTIONS
     match section:
-        case "pitchNames" | "frequencies" | "pitchOf" | "dyads":
+        case "pitchNames" | "frequencies" | "pitchOf" | "dyads" | "transpose":
             return t[section]
         case "standard" | "drop" | "sevenString" | "validity":
             return t["tunings"][section]
@@ -43,6 +43,7 @@ SECTIONS = (
     "find",
     "best",
     "handSpan",
+    "transpose",
 )
 
 

@@ -19,4 +19,4 @@ def test_every_fixture_section_is_consumed(conventions):
 
 
 def test_case_count_matches_the_typescript_side():
-    assert total_cases() == 90
+    assert total_cases() == 93

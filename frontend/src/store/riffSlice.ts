@@ -1,6 +1,8 @@
 import type { StateCreator } from 'zustand';
 import { newRiff } from '@/model/factories';
 import type { Note, Riff } from '@/model/types';
+import { retuneRiff, transposeRiff } from '@/music/transpose';
+import type { RetuneMode } from '@/music/transpose';
 import type { Tuning } from '@/music/tuning';
 import { emptyHistory, pushHistory, redo as redoHistory, undo as undoHistory } from './history';
 import type { History } from './history';
@@ -23,10 +25,13 @@ export type RiffSlice = {
   updateNote: (id: string, patch: Partial<Omit<Note, 'id'>>) => void;
   removeNotes: (ids: readonly string[]) => void;
   /**
-   * Change tuning keeping shapes (SPEC 3.7): every (string, fret) stays, pitches move.
-   * Pitch-preserving retune arrives in Phase 8.
+   * Change tuning (SPEC 3.7) in the store's retune mode, or the given one: keepShapes keeps
+   * every (string, fret) and the pitches move; keepPitches refingers the same notes on the
+   * new tuning and flags what cannot be reached. One undo step; returns the flagged count.
    */
-  setTuning: (tuning: Tuning) => void;
+  setTuning: (tuning: Tuning, mode?: RetuneMode) => number;
+  /** Shift every pitch and refinger (SPEC 3.7). One undo step; returns the flagged count. */
+  transpose: (semitones: number) => number;
   undo: () => void;
   redo: () => void;
 };
@@ -65,12 +70,21 @@ export const createRiffSlice: StateCreator<AppState, [], [], RiffSlice> = (set, 
 
   addNote: (note) => get().commit('add note', (riff) => ops.addNote(riff, note)),
   updateNote: (id, patch) => get().commit('edit note', (riff) => ops.updateNote(riff, id, patch)),
-  setTuning: (tuning) =>
-    get().commit('change tuning', (riff) =>
-      riff.tuning.name === tuning.name && riff.tuning.pitches.join() === tuning.pitches.join()
-        ? riff
-        : { ...riff, tuning: { name: tuning.name, pitches: [...tuning.pitches] } },
-    ),
+  setTuning: (tuning, mode = get().retuneMode) => {
+    const current = get().riff.tuning;
+    if (current.name === tuning.name && current.pitches.join() === tuning.pitches.join()) return 0;
+    const result = retuneRiff(get().riff, tuning, mode);
+    const label = mode === 'keepPitches' ? 'retune (keep pitches)' : 'change tuning';
+    get().commit(label, () => result.riff);
+    return result.unplayable;
+  },
+  transpose: (semitones) => {
+    const result = transposeRiff(get().riff, semitones);
+    if (result.riff === get().riff) return 0;
+    const sign = semitones > 0 ? '+' : '';
+    get().commit(`transpose ${sign}${semitones}`, () => result.riff);
+    return result.unplayable;
+  },
 
   undo: () =>
     set((state) => {

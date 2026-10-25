@@ -25,6 +25,7 @@ export function caseCount(fx: Conventions = fixture): number {
     fx.dyads.length +
     fx.fingerings.find.length +
     fx.fingerings.best.length +
-    fx.fingerings.handSpan.length
+    fx.fingerings.handSpan.length +
+    fx.transpose.length
   );
 }
