@@ -1,0 +1,23 @@
+# `docker compose up --build` serves the frontend on 8080 and the backend on 8000.
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      # The backend image needs the repo-level shared/ folder, so its context is the repo root.
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      RIFFSPACED_CORS_ORIGINS: http://localhost:8080,http://localhost:5173
+    # Secrets such as ANTHROPIC_API_KEY come from backend/.env (gitignored) when it exists.
+    env_file:
+      - path: ./backend/.env
+        required: false
