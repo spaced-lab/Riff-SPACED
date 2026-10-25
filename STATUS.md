@@ -1,9 +1,9 @@
 # STATUS
 
-Updated: 2026-10-25T03:54:14Z
+Updated: 2026-10-25T03:54:44Z
 Phase: 6 Analysis backend
-Last completed task: P6.T9 Frontend import flow
-Next task: P6.T10 Real recordings (skips if backend/audio_in is empty)
+Last completed task: P6.T10 Real recordings (skipped: backend/audio_in empty, DECISIONS 39)
+Next task: P6.T11 Chrome verification and phase exit
 
 ## Preflight
 claude: 2.1.310 | node: v26.0.0 | npm: 11.12.1 | python3: 3.14.7 (backend pins 3.12 via uv) | uv: 0.12.5 | gh: 2.92.0, logged in as RidleyDiSiena, https | git: 2.54.0 | docker: 29.4.1 (daemon running) | ffmpeg: 9.0.1 | chrome tools: available (console reads work, screenshot injection times out on the dev page, see Known issues)
@@ -103,4 +103,4 @@ docker compose up --build                  # frontend :8080, backend :8000
 ## Waiting on owner
 (none)
 
-Heads-up for later: Phase 7 needs ANTHROPIC_API_KEY in the shell or in backend/.env (gitignored). Phase 6's real-recording task will skip and continue if backend/audio_in/ is empty (DECISIONS 39).
+Heads-up: Phase 7 needs ANTHROPIC_API_KEY in the shell or in backend/.env (gitignored); the run will stop at Phase 7 if it is missing. Real recordings: drop WAV or FLAC files into backend/audio_in/ any time and run the ingest recipe in docs/BACKLOG.md.
